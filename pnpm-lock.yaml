@@ -14,10 +14,17 @@ specifiers:
   '@prisma/client': ^4.11.0
   '@reduxjs/toolkit': ^1.9.3
   '@tabler/icons-react': ^2.11.0
+  '@types/eslint-scope': ^3.7.4
+  '@types/estree': ^1.0.0
+  '@types/glob': ^8.1.0
+  '@types/json-schema': ^7.0.11
   '@types/jsonwebtoken': ^9.0.1
   '@types/node': 18.15.10
+  '@types/parse-json': ^4.0.0
   '@types/react': 18.0.29
   '@types/react-dom': 18.0.11
+  '@types/react-is': ^17.0.3
+  '@types/resolve': ^1.20.2
   bcryptjs-react: ^2.4.6
   embla-carousel-react: ^7.1.0
   eslint: 8.36.0
@@ -46,10 +53,17 @@ dependencies:
   '@prisma/client': 4.11.0_prisma@4.11.0
   '@reduxjs/toolkit': 1.9.3_k4ae6lp43ej6mezo3ztvx6pykq
   '@tabler/icons-react': 2.11.0_react@18.2.0
+  '@types/eslint-scope': 3.7.4
+  '@types/estree': 1.0.0
+  '@types/glob': 8.1.0
+  '@types/json-schema': 7.0.11
   '@types/jsonwebtoken': 9.0.1
   '@types/node': 18.15.10
+  '@types/parse-json': 4.0.0
   '@types/react': 18.0.29
   '@types/react-dom': 18.0.11
+  '@types/react-is': 17.0.3
+  '@types/resolve': 1.20.2
   bcryptjs-react: 2.4.6
   embla-carousel-react: 7.1.0_react@18.2.0
   eslint: 8.36.0
@@ -813,11 +827,40 @@ packages:
     resolution: {integrity: sha512-KPESQnvHoSpbAdgzDdrSmeZ9AE8fSU12fU3Cag79uXJCUkC8f741fcvPJPsFMDe0S96VSq3mMYF8JnA7a570uQ==}
     dev: false
 
+  /@types/eslint-scope/3.7.4:
+    resolution: {integrity: sha512-9K4zoImiZc3HlIp6AVUDE4CWYx22a+lhSZMYNpbjW04+YF0KWj4pJXnEMjdnFTiQibFFmElcsasJXDbdI/EPhA==}
+    dependencies:
+      '@types/eslint': 8.21.3
+      '@types/estree': 1.0.0
+    dev: false
+
+  /@types/eslint/8.21.3:
+    resolution: {integrity: sha512-fa7GkppZVEByMWGbTtE5MbmXWJTVbrjjaS8K6uQj+XtuuUv1fsuPAxhygfqLmsb/Ufb3CV8deFCpiMfAgi00Sw==}
+    dependencies:
+      '@types/estree': 1.0.0
+      '@types/json-schema': 7.0.11
+    dev: false
+
+  /@types/estree/1.0.0:
+    resolution: {integrity: sha512-WulqXMDUTYAXCjZnk6JtIHPigp55cVtDgDrO2gHRwhyJto21+1zbVCtOYB2L1F9w4qCQ0rOGWBnBe0FNTiEJIQ==}
+    dev: false
+
+  /@types/glob/8.1.0:
+    resolution: {integrity: sha512-IO+MJPVhoqz+28h1qLAcBEH2+xHMK6MTyHJc7MTnnYb6wsoLR29POVGJ7LycmVXIqyy/4/2ShP5sUwTXuOwb/w==}
+    dependencies:
+      '@types/minimatch': 5.1.2
+      '@types/node': 18.15.10
+    dev: false
+
   /@types/hoist-non-react-statics/3.3.1:
     resolution: {integrity: sha512-iMIqiko6ooLrTh1joXodJK5X9xeEALT1kM5G3ZLhD3hszxBdIEd5C75U834D9mLcINgD4OyZf5uQXjkuYydWvA==}
     dependencies:
       '@types/react': 18.0.29
       hoist-non-react-statics: 3.3.2
+    dev: false
+
+  /@types/json-schema/7.0.11:
+    resolution: {integrity: sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==}
     dev: false
 
   /@types/json5/0.0.29:
@@ -828,6 +871,10 @@ packages:
     resolution: {integrity: sha512-c5ltxazpWabia/4UzhIoaDcIza4KViOQhdbjRlfcIGVnsE3c3brkz9Z+F/EeJIECOQP7W7US2hNE930cWWkPiw==}
     dependencies:
       '@types/node': 18.15.10
+    dev: false
+
+  /@types/minimatch/5.1.2:
+    resolution: {integrity: sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA==}
     dev: false
 
   /@types/node/18.15.10:
@@ -848,12 +895,22 @@ packages:
       '@types/react': 18.0.29
     dev: false
 
+  /@types/react-is/17.0.3:
+    resolution: {integrity: sha512-aBTIWg1emtu95bLTLx0cpkxwGW3ueZv71nE2YFBpL8k/z5czEW8yYpOo8Dp+UUAFAtKwNaOsh/ioSeQnWlZcfw==}
+    dependencies:
+      '@types/react': 18.0.29
+    dev: false
+
   /@types/react/18.0.29:
     resolution: {integrity: sha512-wXHktgUABxplw1+UnljseDq4+uztQyp2tlWZRIxHlpchsCFqiYkvaDS8JR7eKOQm8wziTH/el5qL7D6gYNkYcw==}
     dependencies:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.3
       csstype: 3.1.1
+    dev: false
+
+  /@types/resolve/1.20.2:
+    resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
     dev: false
 
   /@types/scheduler/0.16.3:

@@ -1,10 +1,9 @@
 import { Question } from "@prisma/client"
 import Questioncard from "./Card"
-import CarouselCards from "./Carousel"
 
 async function getQuestions() {
 
-  const returnValue = await fetch(`http://localhost:3000/api/questions`, {
+  const returnValue = await fetch(`${process.env.SERVER}/api/questions`, {
     method: "GET",
     cache: "no-cache"
   })
