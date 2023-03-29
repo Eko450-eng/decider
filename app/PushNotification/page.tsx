@@ -32,8 +32,27 @@ export default function Push() {
       })
   }
 
+  function sw() {
+    console.log("test")
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/firebase-messaging-sw.js").then(
+        function(registration) {
+          console.log(
+            "Service Worker registration successful with scope: ",
+            registration.scope
+          );
+        },
+        function(err) {
+          console.log("Service Worker registration failed: ", err);
+        }
+      );
+    }
+  }
+
+
   return (
     <div className="flex-center">
+      <Button onClick={() => sw()}>Enable sw</Button>
       <Button onClick={() => handleSubscription()}>Enable notification</Button>
       <Input
         onChange={(v) => setMessage({ ...message, title: v.target.value })}

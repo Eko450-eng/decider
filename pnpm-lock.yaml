@@ -28,10 +28,12 @@ specifiers:
   '@types/resolve': ^1.20.2
   bcryptjs-react: ^2.4.6
   cypress: ^12.9.0
+  dotenv: ^16.0.3
   embla-carousel-react: ^7.1.0
   eslint: 8.36.0
   eslint-config-next: 13.2.4
   firebase: ^9.18.0
+  fs: 0.0.1-security
   jsonwebtoken: ^9.0.0
   next: 13.2.4
   prisma: ^4.11.0
@@ -70,10 +72,12 @@ dependencies:
   '@types/resolve': 1.20.2
   bcryptjs-react: 2.4.6
   cypress: 12.9.0
+  dotenv: 16.0.3
   embla-carousel-react: 7.1.0_react@18.2.0
   eslint: 8.36.0
   eslint-config-next: 13.2.4_j4766f7ecgqbon3u7zlxn5zszu
   firebase: 9.18.0
+  fs: 0.0.1-security
   jsonwebtoken: 9.0.0
   next: 13.2.4_5y7qh6ykubtj2qr2evk3di7hpa
   prisma: 4.11.0
@@ -3772,6 +3776,11 @@ packages:
       domhandler: 4.3.1
     dev: false
 
+  /dotenv/16.0.3:
+    resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
+    engines: {node: '>=12'}
+    dev: false
+
   /duplexer2/0.1.4:
     resolution: {integrity: sha512-asLFVfWWtJ90ZyOUHMqk7/S2w2guQKxUI2itj3d92ADHhxUSbCMGi1f1cBcJ7xM1To+pE/Khbwo1yuNbMEPKeA==}
     dependencies:
@@ -4433,6 +4442,10 @@ packages:
 
   /fs.realpath/1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
+    dev: false
+
+  /fs/0.0.1-security:
+    resolution: {integrity: sha512-3XY9e1pP0CVEUCdj5BmfIZxRBTSDycnbqhIOGec9QYtmVH2fbLpj86CFWkrNOkt/Fvty4KZG5lTglL9j/gJ87w==}
     dev: false
 
   /fsevents/2.3.2:

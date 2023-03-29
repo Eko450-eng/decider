@@ -6,6 +6,7 @@ import { Provider } from "react-redux"
 import Navigation from "./(navigation)"
 import { MantineProvider } from "@mantine/core"
 import { Notifications } from "@mantine/notifications"
+import Head from './head'
 
 // export const metadata = {
 //   title: 'Decider',
@@ -16,6 +17,7 @@ export default function RootLayout({ children, }: { children: React.ReactNode })
 
   return (
     <html lang="en">
+      <Head />
       <Provider store={store}>
         <body>
           <MantineProvider
