@@ -1,35 +1,36 @@
 'use client'
 import { Question } from "@prisma/client"
 import Questioncard from "./Card"
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
+import Loading from "./loading"
 
-async function getQuestions() {
-  const res = await fetch(`/api/questions`, {
-    method: "GET",
-    cache: "no-cache",
-  })
-  return await res.json()
-}
 
 export default function Page() {
-  // const data: Question[] = await getQuestions()
-  const [data, setData] = useState<Question[] | null>(null)
+  const [data, setData] = useState<null | Question[]>(null)
 
-  async function getQuestion() {
-    const question = await getQuestions()
-    setData(question)
+  async function getQuestions() {
+    const res = await fetch(`/api/questions`, {
+      method: "GET",
+      cache: "no-cache",
+    })
+    const result = await res.json()
+    if (!result) return
+    setData(result)
   }
+
   useEffect(() => {
-    getQuestion()
+    getQuestions()
   }, [])
 
   return (
     <div className="cards">
-      {data && data.map((v: Question, k: number) => {
-        return (
-          <Questioncard key={`renderQuestion${k}`} question={v} />
-        )
-      })}
+      <Suspense fallback={<Loading />}>
+        {data && data.map((v: Question, k: number) => {
+          return (
+            <Questioncard key={`renderQuestion${k}`} question={v} />
+          )
+        })}
+      </Suspense>
     </div>
   )
 } 
