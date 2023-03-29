@@ -11,7 +11,7 @@ export default function Page() {
   async function getQuestions() {
     const res = await fetch(`/api/questions`, {
       method: "GET",
-      cache: "no-cache",
+      cache: "no-store",
     })
     const result = await res.json()
     if (!result) return
