@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import prisma from "../prisma"
-import { Question } from "@prisma/client"
 
 export async function POST(request: Request) {
   const body = await request.json()
@@ -11,7 +10,7 @@ export async function POST(request: Request) {
 
   const user = await prisma.profile.findUnique({ where: { id: body.user.id } })
 
-  if (!user) return NextResponse.json({ status: 400, title: "Whoops", message: "Are you sure you are logged in?", color: "red" })
+  if (!user) return NextResponse.json({ status: 400, notification: { title: "Whoops", message: "Are you sure you are logged in?", color: "red" } })
 
   await prisma.question.create({
     data: {
@@ -30,5 +29,5 @@ export async function POST(request: Request) {
     }
   })
 
-  return NextResponse.json({ status: 200, title: "Good question!", message: `Askening has been done`, color: "green" })
+  return NextResponse.json({ status: 200, notification: { title: "Good question!", message: `Askening has been done`, color: "green" } })
 }

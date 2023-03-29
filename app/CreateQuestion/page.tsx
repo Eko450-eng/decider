@@ -22,7 +22,7 @@ export default function Page() {
   })
 
   async function createQuestion(question: { title: string, desc: string, option1: string, option2: string }) {
-    if (!user.email) showNotification({ title: "Whoops", message: "Please login to like a vote", color: "red" })
+    if (!user.email) showNotification({ title: "Whoops", message: "Please login to create a question", color: "red" })
     await fetch('/api/createQuestion', {
       method: "POST",
       body: JSON.stringify({
@@ -32,7 +32,7 @@ export default function Page() {
     }).then(async (e: any) => {
       const returnValue = await e.json()
 
-      showNotification(returnValue)
+      showNotification(returnValue.notification)
       router.push("/")
     })
   }

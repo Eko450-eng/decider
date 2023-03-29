@@ -11,11 +11,12 @@ datasource db {
 }
 
 model Profile {
-  id       Int    @id @unique @default(autoincrement())
-  username String @unique @db.VarChar(100)
-  role     Int
-  password String
-  email    String @unique
+  id        Int      @id @unique @default(autoincrement())
+  username  String   @unique @db.VarChar(100)
+  role      Int
+  password  String
+  email     String   @unique
+  createdAt DateTime @default(now())
 
   questions    Question[]
   push_devices Pushdevices[]
@@ -23,9 +24,10 @@ model Profile {
 }
 
 model Question {
-  id    Int    @id @default(autoincrement())
-  title String @db.VarChar(30)
-  desc  String @db.VarChar(100)
+  id        Int      @id @default(autoincrement())
+  title     String   @db.VarChar(30)
+  desc      String   @db.VarChar(100)
+  createdAt DateTime @default(now())
 
   option1 String @db.VarChar(30)
   option2 String @db.VarChar(30)
@@ -41,8 +43,9 @@ model Question {
 }
 
 model Comment {
-  id      Int    @id @default(autoincrement())
-  message String @db.VarChar(200)
+  id        Int      @id @default(autoincrement())
+  message   String   @db.VarChar(200)
+  createdAt DateTime @default(now())
 
   commentor   Profile @relation(fields: [commentorId], references: [id])
   commentorId Int
@@ -52,8 +55,9 @@ model Comment {
 }
 
 model Pushdevices {
-  id     Int    @id @default(autoincrement())
-  device String @unique
+  id        Int      @id @default(autoincrement())
+  device    String   @unique
+  createdAt DateTime @default(now())
 
   profile   Profile @relation(fields: [profileId], references: [id])
   profileId Int

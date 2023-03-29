@@ -3,6 +3,7 @@
 import { logout } from "@/redux/reducers/user"
 import { RootState } from "@/redux/userState"
 import { ActionIcon, Affix, Button, Center, Group, Stack } from "@mantine/core"
+import { IconSettingsFilled } from "@tabler/icons-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useDispatch, useSelector } from "react-redux"
@@ -45,6 +46,7 @@ export default function Navigation() {
               <>
                 <LinkButton link="/CreateQuestion" icon={<Plus />} />
                 <ActionIcon onClick={() => signOut()} ><Logout /></ActionIcon>
+                <LinkButton link="/PushNotification" icon={<IconSettingsFilled />} />
               </>
           }
         </Group>

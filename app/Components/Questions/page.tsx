@@ -1,17 +1,27 @@
+'use client'
 import { Question } from "@prisma/client"
 import Questioncard from "./Card"
+import { useEffect, useState } from "react"
 
 async function getQuestions() {
-
-  const returnValue = await fetch(`${process.env.SERVER}/api/questions`, {
+  const res = await fetch(`/api/questions`, {
     method: "GET",
-    cache: "no-cache"
+    cache: "no-cache",
   })
-  return await returnValue.json()
+  return await res.json()
 }
 
-export default async function Page() {
-  const data: Question[] = await getQuestions()
+export default function Page() {
+  // const data: Question[] = await getQuestions()
+  const [data, setData] = useState<Question[] | null>(null)
+
+  async function getQuestion() {
+    const question = await getQuestions()
+    setData(question)
+  }
+  useEffect(() => {
+    getQuestion()
+  }, [])
 
   return (
     <div className="cards">

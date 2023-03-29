@@ -6,9 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "cypress open"
   },
   "dependencies": {
+    "@ducanh2912/next-pwa": "^8.0.0",
     "@emotion/react": "^11.10.6",
     "@emotion/server": "^11.10.0",
     "@mantine/carousel": "^6.0.5",
@@ -34,19 +36,21 @@
     "@types/react-is": "^17.0.3",
     "@types/resolve": "^1.20.2",
     "bcryptjs-react": "^2.4.6",
+    "cypress": "^12.9.0",
     "embla-carousel-react": "^7.1.0",
     "eslint": "8.36.0",
     "eslint-config-next": "13.2.4",
+    "firebase": "^9.18.0",
     "jsonwebtoken": "^9.0.0",
     "next": "13.2.4",
     "prisma": "^4.11.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-redux": "^8.0.5",
-    "tabler-icons-react": "^1.56.0",
-    "typescript": "5.0.2"
+    "tabler-icons-react": "^1.56.0"
   },
   "devDependencies": {
-    "sass": "^1.60.0"
+    "sass": "^1.60.0",
+    "typescript": "5.0.2"
   }
 }

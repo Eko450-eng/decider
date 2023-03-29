@@ -7,7 +7,6 @@ import { showNotification } from '@mantine/notifications'
 import { useRouter } from 'next/navigation'
 import { useDispatch } from 'react-redux'
 import { login } from '@/redux/reducers/user'
-import { useEffect } from 'react'
 
 export default function Page() {
   const router = useRouter()
@@ -21,17 +20,17 @@ export default function Page() {
   })
 
   async function handleLogin(values: Profile) {
-    await loginUser(values).then((returnValue: any) => {
-      if (returnValue.status === 400) {
-        showNotification(returnValue)
-      } else {
-        showNotification(returnValue.notifications)
-        getUsers(values.username).then((res: any) => {
-          dispatch(login(res))
-        })
-        setTimeout(() => router.push("/"), 250)
-      }
-    })
+    await loginUser(values)
+      .then((res: any) => {
+        if (res.status === 200) {
+          showNotification(res.notification)
+          getUsers(values.username).then((res: Profile) => {
+            dispatch(login(res))
+          }).then(() => router.push("/"))
+        } else {
+          showNotification(res.notification)
+        }
+      })
   }
 
   return (

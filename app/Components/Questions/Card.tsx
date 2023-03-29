@@ -9,9 +9,12 @@ import { IconHeartFilled } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { like, vote } from "./logic";
 
 export default function Questioncard({ question }: { question: Question }) {
   const dispatch = useDispatch()
+  const router = useRouter()
+  const user = useSelector((state: RootState) => state.user)
 
   useEffect(() => {
     if (!localStorage.getItem("token")) return
@@ -20,43 +23,20 @@ export default function Questioncard({ question }: { question: Question }) {
     dispatch(loginWithToken(token))
   }, [])
 
-  const router = useRouter()
-  const user = useSelector((state: RootState) => state.user)
-
-  async function vote(number: number) {
-    if (!user.email) showNotification({ title: "Whoops", message: "Please login to vote", color: "red" })
-    await fetch('/api/vote', {
-      method: "POST",
-      body: JSON.stringify({
-        id: question.id,
-        user: user,
-        vote: number
+  function handleLike() {
+    like(question, user)
+      .then((res: any) => {
+        showNotification(res.notification)
+        if (res.status == 200) router.refresh()
       })
-    }).then(async (e: any) => {
-      const returnValue = await e.json()
-
-      if (returnValue.status == 200) {
-        showNotification(returnValue)
-        router.refresh()
-      }
-    })
   }
 
-  async function like() {
-    if (!user.email) showNotification({ title: "Whoops", message: "Please login to like a vote", color: "red" })
-    await fetch('/api/like', {
-      method: "POST",
-      body: JSON.stringify({
-        id: question.id,
-        user: user,
+  function handleVote(number: number) {
+    vote(question, user, number)
+      .then((res: any) => {
+        showNotification(res.notification)
+        if (res.status === 200) router.refresh()
       })
-    }).then(async (e: any) => {
-      const res = await e.json()
-      if (res.status !== 200) {
-        showNotification(res)
-      }
-      router.refresh()
-    })
   }
 
   return (
@@ -65,11 +45,11 @@ export default function Questioncard({ question }: { question: Question }) {
         <Text fw="bold" fz="lg">{question.title}</Text>
         <Text>{question.desc}</Text>
         <Group spacing="sm">
-          <Button onClick={() => vote(1)}>{question.option1}: {question.votes1.length}</Button>
-          <Button onClick={() => vote(2)}>{question.option2}: {question.votes2.length}</Button>
+          <Button id="vote1" onClick={() => handleVote(1)}>{question.option1}: {question.votes1.length}</Button>
+          <Button id="vote2" onClick={() => handleVote(2)}>{question.option2}: {question.votes2.length}</Button>
         </Group>
         <Group position="right" spacing="xxs">
-          <ActionIcon onClick={like}>
+          <ActionIcon onClick={handleLike}>
             <IconHeartFilled className="like" color="red" />
           </ActionIcon>
           <Text>

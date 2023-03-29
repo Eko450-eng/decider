@@ -34,4 +34,10 @@ export const user = createSlice({
 })
 
 export const { login, loginWithToken, logout } = user.actions
+export type UserState = {
+  email: string,
+  id: number,
+  username: string,
+  role: number,
+}
 export default user.reducer

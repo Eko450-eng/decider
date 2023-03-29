@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server"
-import { PrismaClient, Profile } from '@prisma/client'
-const prisma = new PrismaClient()
+import prisma from "../prisma"
 
-export async function GET(request: Request) {
-  const questions = await prisma.question.findMany()
+export async function GET() {
+  const questions = await prisma.question.findMany({
+    orderBy: {
+      createdAt: "desc"
+    }
+  })
 
   return NextResponse.json(questions)
 

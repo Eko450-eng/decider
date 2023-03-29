@@ -13,12 +13,6 @@ export default function Page() {
   const dispatch = useDispatch()
   const [confirmPassword, setConfirmPassword] = useState("")
   const router = useRouter()
-  const regex = [
-    { re: /[0-9]/, label: 'Includes number' },
-    { re: /[a-z]/, label: 'Includes lowercase letter' },
-    { re: /[A-Z]/, label: 'Includes uppercase letter' },
-    { re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: 'Includes special symbol' },
-  ]
 
   const form = useForm({
     initialValues: {
@@ -65,10 +59,9 @@ export default function Page() {
       body: JSON.stringify(data)
     }).then(async (e: Response) => {
       const res = (await e.json())
-      showNotification(res)
+      showNotification(res.notification)
       if (res.status === 200) router.push("/Signin")
     })
-
   }
 
   return (
@@ -88,7 +81,7 @@ export default function Page() {
           {...form.getInputProps("password")}
         />
         <PasswordInput
-          label="Confirmpassword"
+          label="Confirm password"
           value={confirmPassword}
           onChange={(v: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(v.target.value)}
         />
