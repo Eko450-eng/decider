@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import prisma from "../prisma"
-import { Question } from "@prisma/client"
+import { Pushdevices, Question } from "@prisma/client"
+import { sendPush } from "@/app/PushNotification/messaging"
 
 export async function POST(request: Request) {
   const body = await request.json()
@@ -20,7 +21,26 @@ export async function POST(request: Request) {
         push: body.user.id,
       }
     }
+  }).then(async (res: any) => {
+    const resolved: Question = await res
+    await prisma.pushdevices.findMany({
+      where: {
+        profileId: resolved.posterId
+      }
+    }).then(async (res: any) => {
+      const question: Question | null = await prisma.question.findUnique({ where: { id: body.id } })
+      res.forEach((device: Pushdevices) => {
+        if (!question) return
+        sendPush("Hey, listen!", `You got a new like on ${question.title}`, device.device)
+      })
+    })
   })
+
+  // await fetch(`/api/pushDevices?username=${body.user.username}`, {
+  //   method: "GET"
+  // })
+  //   .then(async (e: any) => {
+  //   })
 
   return NextResponse.json({ status: 200, notification: { title: "Ok", message: `You liked this question`, color: "green" } })
 }

@@ -25,47 +25,32 @@ export default function Push() {
     })
       .then(async (e: any) => {
         const devices: Pushdevices[] = await e.json()
-        console.log("Devices", devices)
         devices.forEach((device: Pushdevices) => {
           sendPush(message.title, message.msg, device.device)
         })
       })
   }
 
-  function sw() {
-    console.log("test")
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/firebase-messaging-sw.js").then(
-        function(registration) {
-          console.log(
-            "Service Worker registration successful with scope: ",
-            registration.scope
-          );
-        },
-        function(err) {
-          console.log("Service Worker registration failed: ", err);
-        }
-      );
-    }
-  }
-
-
   return (
     <div className="flex-center">
-      <Button onClick={() => sw()}>Enable sw</Button>
       <Button onClick={() => handleSubscription()}>Enable notification</Button>
-      <Input
-        onChange={(v) => setMessage({ ...message, title: v.target.value })}
-        placeholder="Title"
-        value={message.title}
-      />
+      {
+        user.role > 8 &&
+        <>
+          <Input
+            onChange={(v) => setMessage({ ...message, title: v.target.value })}
+            placeholder="Title"
+            value={message.title}
+          />
 
-      <Input
-        onChange={(v) => setMessage({ ...message, msg: v.target.value })}
-        placeholder="Title"
-        value={message.msg}
-      />
-      <Button onClick={() => sendMsg()}>Test notification</Button>
+          <Input
+            onChange={(v) => setMessage({ ...message, msg: v.target.value })}
+            placeholder="Title"
+            value={message.msg}
+          />
+          <Button onClick={() => sendMsg()}>Test notification</Button>
+        </>
+      }
     </div>
   )
 }
