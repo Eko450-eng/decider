@@ -12,6 +12,9 @@ export default function Page() {
     const res = await fetch(`/api/questions`, {
       method: "GET",
       cache: "no-store",
+      next: {
+        revalidate: 1
+      }
     })
     const result = await res.json()
     if (!result) return
