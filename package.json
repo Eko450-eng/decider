@@ -10,7 +10,7 @@
     "test": "cypress open"
   },
   "dependencies": {
-    "@ducanh2912/next-pwa": "^8.0.0",
+    "@ducanh2912/next-pwa": "^8.2.0",
     "@emotion/react": "^11.10.6",
     "@emotion/server": "^11.10.0",
     "@mantine/carousel": "^6.0.5",
