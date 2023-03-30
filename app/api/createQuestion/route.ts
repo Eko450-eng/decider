@@ -1,16 +1,17 @@
 import { NextResponse } from "next/server"
 import prisma from "../prisma"
+import { ENoLogon, ENoOption1, ENoOption2, ENoTitle, SCreateQuestion } from "../messages"
 
 export async function POST(request: Request) {
   const body = await request.json()
 
-  if (!body.title) return NextResponse.json({ status: 400, title: "Whoops", message: "Please enter a title", color: "red" })
-  if (!body.option1) return NextResponse.json({ status: 400, title: "Whoops", message: "Please enter option one", color: "red" })
-  if (!body.option2) return NextResponse.json({ status: 400, title: "Whoops", message: "Please enter option two", color: "red" })
+  if (!body.title) return NextResponse.json(ENoTitle)
+  if (!body.option1) return NextResponse.json(ENoOption1)
+  if (!body.option2) return NextResponse.json(ENoOption2)
 
   const user = await prisma.profile.findUnique({ where: { id: body.user.id } })
 
-  if (!user) return NextResponse.json({ status: 400, notification: { title: "Whoops", message: "Are you sure you are logged in?", color: "red" } })
+  if (!user) return NextResponse.json(ENoLogon)
 
   await prisma.question.create({
     data: {
@@ -29,5 +30,5 @@ export async function POST(request: Request) {
     }
   })
 
-  return NextResponse.json({ status: 200, notification: { title: "Good question!", message: `Askening has been done`, color: "green" } })
+  return NextResponse.json(SCreateQuestion)
 }

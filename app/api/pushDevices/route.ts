@@ -19,6 +19,7 @@ export async function GET(request: Request) {
       profileId: user.id
     }
   })
+
   return NextResponse.json(devices)
 }
 
@@ -41,5 +42,6 @@ export async function POST(request: Request) {
       }
     }
   })
+
   return NextResponse.json({ message: "hi" })
 }
