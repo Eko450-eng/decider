@@ -1,8 +1,7 @@
-import { Question } from "@prisma/client"
 import Questioncard from "./Card"
 import prisma from '../../api/prisma'
 export const dynamic = "force-dynamic"
-export const revalidate = 0
+export const revalidate = 2
 
 export async function getQuestions() {
   const questions = await prisma.question.findMany({
@@ -10,6 +9,7 @@ export async function getQuestions() {
       createdAt: "desc"
     }
   })
+  // This totally breaks typesafety but until I have a solution to turn JSDate into plain Object this has to do
   return questions.map(({ createdAt, ...rest }) => ({ ...rest, createdAt: createdAt.toDateString() }))
 }
 

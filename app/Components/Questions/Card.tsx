@@ -68,7 +68,10 @@ export default function Questioncard({ question }: { question: Question }) {
         >
           <Group spacing="xl">
             <Button color="red" onClick={() => setModal(false)}><X />No</Button>
-            <Button color="nord_success" onClick={handleDelete}><Trash />Yes</Button>
+            <Button color="nord_success" onClick={() => {
+              handleDelete()
+              setModal(false)
+            }}><Trash />Yes</Button>
           </Group>
         </Modal>
 
@@ -76,7 +79,7 @@ export default function Questioncard({ question }: { question: Question }) {
           <Group position="apart">
             <Text fw="bold" fz="lg">{question.title}</Text>
             {
-              question.posterId === user.id &&
+              (question.posterId === user.id || (user.role >= 5)) &&
               <ActionIcon
                 onClick={() => setModal(true)}
               ><Trash className="red_icon" /></ActionIcon>

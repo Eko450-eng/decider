@@ -23,7 +23,8 @@ export async function sendPush(title: string, message: string, key: string) {
 export async function sendNewVote(vote: string, message: string, key: string) {
   const headers = {
     "Content-Type": "application/json",
-    "Authorization": `${process.env.NEXT_PUBLIC_AUTHORIZATIONKEY}`
+    "Authorization": `${process.env.NEXT_PUBLIC_AUTHORIZATIONKEY}`,
+    "Access-Control-Allow-Origin": "no-cors"
   }
 
   const body = {
