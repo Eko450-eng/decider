@@ -1,39 +1,28 @@
-'use client'
 import { Question } from "@prisma/client"
 import Questioncard from "./Card"
-import { Suspense, useEffect, useState } from "react"
-import Loading from "./loading"
+import prisma from '../../api/prisma'
+export const dynamic = "force-dynamic"
+export const revalidate = 0
 
+export async function getQuestions() {
+  const questions = await prisma.question.findMany({
+    orderBy: {
+      createdAt: "desc"
+    }
+  })
+  return questions.map(({ createdAt, ...rest }) => ({ ...rest, createdAt: createdAt.toDateString() }))
+}
 
-export default function Page() {
-  const [data, setData] = useState<null | Question[]>(null)
-
-  async function getQuestions() {
-    const res = await fetch(`/api/questions`, {
-      method: "GET",
-      cache: "no-store",
-      next: {
-        revalidate: 1
-      }
-    })
-    const result = await res.json()
-    if (!result) return
-    setData(result)
-  }
-
-  useEffect(() => {
-    getQuestions()
-  }, [])
+export default async function Page() {
+  const data = await getQuestions()
 
   return (
     <div className="cards">
-      <Suspense fallback={<Loading />}>
-        {data && data.map((v: Question, k: number) => {
-          return (
-            <Questioncard key={`renderQuestion${k}`} question={v} />
-          )
-        })}
-      </Suspense>
+      {data && data.map((v: any, k: number) => {
+        return (
+          <Questioncard key={`renderQuestion${k}`} question={v} data-superjson />
+        )
+      })}
     </div>
   )
 } 

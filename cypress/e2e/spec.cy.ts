@@ -1,6 +1,7 @@
 const email = "ekrem@outlook.de"
 const password = "TestTest1."
 const username = "Hellolo"
+const title = "test3"
 
 describe('template spec', () => {
   before(() => {
@@ -21,7 +22,7 @@ describe('template spec', () => {
 
   it("Can create a question", () => {
     cy.get('a[href="/CreateQuestion"]').click()
-    cy.get("label").contains("Title").type(username)
+    cy.get("label").contains("Title").type(title)
     // cy.get("label").contains("Desc").type(password)
     cy.get("label").contains("Option One").type(password)
     cy.get("label").contains("Option Two").type(password)

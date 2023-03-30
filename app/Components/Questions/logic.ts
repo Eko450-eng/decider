@@ -32,3 +32,17 @@ export async function like(question: Question, user: UserState) {
   })
   return returnValue
 }
+
+export async function deleteQuestion(question: Question, user: UserState) {
+  const res = await fetch('/api/deleteQuestion', {
+    method: "POST",
+    body: JSON.stringify({
+      question: question,
+      user: user,
+    })
+  }).then(async (e: any) => {
+    const returnValue = await e.json()
+    return (returnValue)
+  })
+  return res
+}

@@ -19,7 +19,6 @@ export async function GET(request: Request) {
       profileId: user.id
     }
   })
-  console.log(devices)
   return NextResponse.json(devices)
 }
 
