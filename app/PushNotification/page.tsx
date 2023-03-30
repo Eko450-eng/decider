@@ -1,49 +1,46 @@
 'use client'
-import { Button, Center, Group, Stack } from "@mantine/core";
+import { Button, Center, Stack, Switch } from "@mantine/core";
 import { Input } from '@mantine/core'
 import { useState } from "react";
-import { sendPush } from "./messaging";
 import { saveMessagingDeviceToken } from "@/public/firebase/messaging";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/userState";
-import { Pushdevices } from "@prisma/client";
 import { useRouter } from "next/navigation";
+import { saveSubscription, sendMsg, sendMsgToAll } from "./logic";
+import { messaging } from "@/public/firebase/config";
+import { getMessaging } from "firebase/messaging";
+
+interface ISubscriptions {
+  name: string
+  state: boolean
+}
 
 export default function Push() {
   const user = useSelector((state: RootState) => state.user)
   const router = useRouter()
+  const [subscriptions, setSubscriptions] = useState<ISubscriptions[]>([
+    { name: "likes", state: false },
+    { name: "comments", state: false },
+    { name: "votes", state: false },
+    { name: "newQuestions", state: false },
+    { name: "newFeatures", state: false },
+    { name: "generallNotification", state: false },
+    { name: "systemUpdates", state: false }
+  ])
   const [message, setMessage] = useState({
     title: "",
     msg: ""
   })
 
   async function handleSubscription() {
-    saveMessagingDeviceToken(user)
-      .then(() => router.refresh())
+    saveMessagingDeviceToken(user).then(() => router.refresh())
   }
 
-  async function sendMsgToAll() {
-    await fetch(`/api/pushAllDevices`, {
-      method: "GET"
-    })
-      .then(async (e: any) => {
-        const devices: Pushdevices[] = await e.json()
-        devices.forEach((device: Pushdevices) => {
-          sendPush(message.title, message.msg, device.device)
-        })
-      })
-  }
+  async function handleTopic() {
 
-  async function sendMsg() {
-    await fetch(`/api/pushDevices?username=${user.username}`, {
-      method: "GET"
+    subscriptions.forEach(topic => {
+      if (topic.state) saveSubscription({ user: user, topic: topic.name })
     })
-      .then(async (e: any) => {
-        const devices: Pushdevices[] = await e.json()
-        devices.forEach((device: Pushdevices) => {
-          sendPush(message.title, message.msg, device.device)
-        })
-      })
   }
 
   return (
@@ -51,6 +48,28 @@ export default function Push() {
       <Center>
         <Button sx={{ margin: "1rem" }} onClick={() => handleSubscription()}>Enable notification</Button>
       </Center>
+
+      {
+        subscriptions.map((v: any, k: number) => {
+          return (
+            <Switch
+              sx={{ marginBottom: "1rem" }}
+              key={`notifications${k}`}
+              label={v.name}
+              checked={v.state}
+              onChange={(e: any) => {
+                const newSub = [{ name: v.name, state: e.currentTarget.checked }]
+                const newSubscriptions = subscriptions.map(sub => newSub.find(o => o.name === sub.name) || sub)
+                setSubscriptions(newSubscriptions)
+              }}
+            />
+          )
+        })
+      }
+      <Button onClick={handleTopic}>Save</Button>
+
+
+      {/* Send messages as admin */}
       {
         user.role > 8 &&
         <>
@@ -70,8 +89,8 @@ export default function Push() {
 
           <Center>
             <Stack sx={{ margin: "1rem" }}>
-              <Button onClick={() => sendMsg()}>Send notification to your devices</Button>
-              <Button color="red" onClick={() => sendMsgToAll()}>Send notification to all</Button>
+              <Button onClick={() => sendMsg({ title: message.title, msg: message.msg, user: user })}>Send notification to your devices</Button>
+              <Button color="red" onClick={() => sendMsgToAll({ title: message.title, msg: message.msg })}>Send notification to all</Button>
             </Stack>
           </Center>
         </>
