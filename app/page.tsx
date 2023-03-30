@@ -4,7 +4,7 @@ import prisma from "./api/prisma"
 export const dynamic = "force-dynamic"
 export const revalidate = 2
 
-export async function getQuestions() {
+async function getQuestions() {
   const questions = await prisma.question.findMany({
     orderBy: {
       createdAt: "desc"
