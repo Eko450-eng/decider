@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import prisma from "../prisma"
-import { Pushdevices, Question } from "@prisma/client"
+import { Profile, Pushdevices, Question } from "@prisma/client"
 import { sendPush } from "@/app/PushNotification/messaging"
 import { EAlreadyVoted } from "../messages"
 
@@ -27,8 +27,13 @@ export async function POST(request: Request) {
         await prisma.pushdevices.findMany({
           where: {
             profileId: resolved.posterId
+          },
+          include: {
+            profile: true
           }
         }).then(async (res: any) => {
+          const user = await res[0].profile as Profile
+          if (!user.topics.includes("Votes")) return
           const question: Question | null = await prisma.question.findUnique({ where: { id: body.id } })
           res.forEach((device: Pushdevices) => {
             if (!question) return
@@ -50,8 +55,13 @@ export async function POST(request: Request) {
         await prisma.pushdevices.findMany({
           where: {
             profileId: resolved.posterId
+          },
+          include: {
+            profile: true
           }
         }).then(async (res: any) => {
+          const user = await res[0].profile as Profile
+          if (!user.topics.includes("Votes")) return
           const question: Question | null = await prisma.question.findUnique({ where: { id: body.id } })
           res.forEach((device: Pushdevices) => {
             if (!question) return
@@ -61,5 +71,6 @@ export async function POST(request: Request) {
       })
   }
 
+  await fetch(`/api/revalidate?token=${process.env.NEXT_PUBLIC_SECRETKEY}`)
   return NextResponse.json({ status: 200, notification: { title: "Ok", message: `You have voted for ${(body.vote === 1 ? question.option1 : question.option2)}`, color: "green" } })
 }

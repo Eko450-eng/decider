@@ -23,5 +23,6 @@ export async function POST(request: Request) {
     })
   } else return NextResponse.json(ENoPerm)
 
+  await fetch(`/api/revalidate?token=${process.env.NEXT_PUBLIC_SECRETKEY}`)
   return NextResponse.json(SDeleteQuestion)
 }

@@ -24,3 +24,4 @@ export const SUserCreated = { status: 200, notification: { title: "Welcome", mes
 export const SCreateQuestion: MessageType = { status: 200, notification: { title: "Good question!", message: `Askening has been done`, color: "green" } }
 export const SDeleteQuestion = { status: 200, notification: { title: "Was it that bad?", message: `Question has been deleted`, color: "green" } }
 export const SLike = { status: 200, notification: { title: "Ok", message: `You liked this question`, color: "green" } }
+export const SSettingsUpdated = { status: 200, notification: { title: "Ok", message: `Settings updated`, color: "green" } }

@@ -26,25 +26,13 @@ export async function sendMsg({ title, msg, user }: { title: string, msg: string
     })
 }
 
-export async function saveSubscription({ topic, user }: { topic: string, user: UserState }) {
-  let token: string[] = []
-
-  await fetch(`/api/pushDevices?username=${user.username}`, {
-    method: "GET"
-  })
-    .then(async (e: any) => {
-      const devices: Pushdevices[] = await e.json()
-      devices.forEach((device: Pushdevices) => {
-        token.push(device.device)
-      })
-
-      await fetch('/api/subscription', {
-        method: "POST",
-        body: JSON.stringify({
-          token: token,
-          topic: topic,
-          user: user
-        })
-      })
+export async function subscribeToTopic(user: UserState, topic: string, subscribed: boolean) {
+  await fetch(`/api/topics`, {
+    method: "POST",
+    body: JSON.stringify({
+      user: user,
+      topic: topic,
+      subscribed: subscribed
     })
+  })
 }
