@@ -9,5 +9,6 @@ module.exports = withPWA({
   reactStrictMode: true,
   experimental: {
     appDir: true,
+    enableUndici: true
   }
 })

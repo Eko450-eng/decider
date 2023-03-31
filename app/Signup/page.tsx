@@ -66,7 +66,6 @@ export default function Page() {
 
   return (
     <div>
-      <Button onClick={getUsers}>Get users</Button>
       <form onSubmit={form.onSubmit((values) => createUser(values as Profile))}>
         <TextInput
           label="Email"

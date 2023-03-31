@@ -27,6 +27,6 @@ export async function POST(request: Request) {
 
       return NextResponse.json({ status: 200, user: e[0], token: token, notification: { title: "Welcome", message: "Hope you enjoy your stay", color: "green" } })
     })
-  await fetch(`/api/revalidate?token=${process.env.NEXT_PUBLIC_SECRETKEY}`)
+  await fetch(`${process.env.API_SERVER}/api/revalidate?token=${process.env.NEXT_PUBLIC_SECRETKEY}`)
   return user
 }
