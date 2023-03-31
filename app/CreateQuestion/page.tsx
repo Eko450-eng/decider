@@ -33,6 +33,7 @@ export default function Page() {
       const returnValue = await e.json()
 
       showNotification(returnValue.notification)
+      await fetch(`/api/revalidate?token=${process.env.NEXT_PUBLIC_SECRETKEY}`)
       if (returnValue.status === 200) router.push("/")
     })
   }

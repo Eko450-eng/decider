@@ -71,6 +71,6 @@ export async function POST(request: Request) {
       })
   }
 
-  await fetch(`${process.env.API_SERVER}/api/revalidate?token=${process.env.NEXT_PUBLIC_SECRETKEY}`)
+  await fetch(`/api/revalidate?token=${process.env.NEXT_PUBLIC_SECRETKEY}`)
   return NextResponse.json({ status: 200, notification: { title: "Ok", message: `You have voted for ${(body.vote === 1 ? question.option1 : question.option2)}`, color: "green" } })
 }

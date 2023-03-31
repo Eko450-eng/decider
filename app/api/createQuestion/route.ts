@@ -30,6 +30,5 @@ export async function POST(request: Request) {
     }
   })
 
-  await fetch(`${process.env.API_SERVER}/api/revalidate?token=${process.env.NEXT_PUBLIC_SECRETKEY}`)
   return NextResponse.json(SCreateQuestion)
 }

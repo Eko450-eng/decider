@@ -30,6 +30,7 @@ export async function like(question: Question, user: UserState) {
     const res = await e.json()
     return res
   })
+  await fetch(`/api/revalidate?token=${process.env.NEXT_PUBLIC_SECRETKEY}`)
   return returnValue
 }
 
@@ -44,5 +45,6 @@ export async function deleteQuestion(question: Question, user: UserState) {
     const returnValue = await e.json()
     return (returnValue)
   })
+  await fetch(`/api/revalidate?token=${process.env.NEXT_PUBLIC_SECRETKEY}`)
   return res
 }

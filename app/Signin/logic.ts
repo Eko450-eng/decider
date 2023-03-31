@@ -27,6 +27,7 @@ export async function loginUser(user: { username: string, password: string }) {
     if (e.status !== 200) return returnValue
     localStorage.setItem("token", returnValue.token)
 
+    await fetch(`/api/revalidate?token=${process.env.NEXT_PUBLIC_SECRETKEY}`)
     return returnValue
   })
   return returnValue

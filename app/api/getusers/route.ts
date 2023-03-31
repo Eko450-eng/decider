@@ -26,7 +26,6 @@ export async function POST(request: Request) {
       if (!process.env.JWT_TOKEN) return NextResponse.json({ status: 501, notification: { title: "Big woops", message: "That's my bad please contact me about this", color: "red" } })
       const token = jwt.sign(e[0], process.env.JWT_TOKEN)
 
-      await fetch(`${process.env.API_SERVER}/api/revalidate?token=${process.env.NEXT_PUBLIC_SECRETKEY}`)
       return NextResponse.json({ status: 200, user: e[0], token: token, notification: { title: "Welcome", message: "Hope you enjoy your stay", color: "green" } })
     })
 }
