@@ -19,7 +19,7 @@ export default function Page() {
     }
   })
 
-  async function handleLogin(values: Profile) {
+  async function handleLogin(values: { username: string, password: string }) {
     await loginUser(values)
       .then((res: any) => {
         if (res.status === 200) {
@@ -35,7 +35,7 @@ export default function Page() {
 
   return (
     <div>
-      <form onSubmit={form.onSubmit((values) => handleLogin(values as Profile))}>
+      <form onSubmit={form.onSubmit((values) => handleLogin(values))}>
         <TextInput
           label="Username"
           {...form.getInputProps("username")}

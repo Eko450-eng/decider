@@ -12,7 +12,7 @@ export async function getUsers(username: string) {
   return returnValue
 }
 
-export async function loginUser(user: Profile) {
+export async function loginUser(user: { username: string, password: string }) {
   const { password, username } = user
   const data = {
     password: password,
