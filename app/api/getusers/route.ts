@@ -10,22 +10,23 @@ export async function POST(request: Request) {
   const { username, password } = body
 
 
-  const user = await prisma.profile.findMany({
+  const res = await prisma.profile.findUnique({
     where: {
       username: username
     }
   })
     .then(async (e: any) => {
-      if (e.length <= 0) return NextResponse.json(EWrongUsername)
-      const user = await e[0] as Profile
+      if (!e) return EWrongUsername
+      const user = await e as Profile
       const comparedPass = bcrypt.compareSync(password, user.password)
-      if (!comparedPass) return NextResponse.json(EWrongPassword)
+      if (!comparedPass) return EWrongPassword
 
-      if (e.length < 1) return NextResponse.json(ENoNo)
+      if (e.length < 1) return ENoNo
 
-      if (!process.env.JWT_TOKEN) return NextResponse.json({ status: 501, notification: { title: "Big woops", message: "That's my bad please contact me about this", color: "red" } })
-      const token = jwt.sign(e[0], process.env.JWT_TOKEN)
+      if (!process.env.JWT_TOKEN) return { status: 501, notification: { title: "Big woops", message: "That's my bad please contact me about this", color: "red" } }
+      const token = jwt.sign(e, process.env.JWT_TOKEN)
 
-      return NextResponse.json({ status: 200, user: e[0], token: token, notification: { title: "Welcome", message: "Hope you enjoy your stay", color: "green" } })
+      return { status: 200, user: e, token: token, notification: { title: "Welcome", message: "Hope you enjoy your stay", color: "green" } }
     })
+  return NextResponse.json(res)
 }
