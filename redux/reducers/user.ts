@@ -18,7 +18,7 @@ export const user = createSlice({
       state.role = actions.payload.role!
     },
     loginWithToken: (state, actions: PayloadAction<string>) => {
-      const { loggedIn, email, id, username, role } = jwt.decode(actions.payload) as any
+      const { email, id, username, role } = jwt.decode(actions.payload) as any
       state.id = id
       state.username = username
       state.email = email
@@ -29,7 +29,7 @@ export const user = createSlice({
       state.id = 0
       state.username = ""
       state.role = 0
-    }
+    },
   }
 })
 

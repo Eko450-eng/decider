@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import prisma from "../prisma"
-import { Pushdevices, Question } from "@prisma/client"
+import { Profile, Pushdevices, Question } from "@prisma/client"
 import { sendPush } from "@/app/PushNotification/messaging"
 import { ELiked, SLike } from "../messages"
 
@@ -27,8 +27,11 @@ export async function POST(request: Request) {
     await prisma.pushdevices.findMany({
       where: {
         profileId: resolved.posterId
-      }
+      },
+      include: { profile: true }
     }).then(async (res: any) => {
+      const user = await res[0].profile as Profile
+      if (!user.topics.includes("Likes")) return
       const question: Question | null = await prisma.question.findUnique({ where: { id: body.id } })
       res.forEach((device: Pushdevices) => {
         if (!question) return
@@ -36,5 +39,6 @@ export async function POST(request: Request) {
       })
     })
   })
+  await fetch(`/api/revalidate?token=${process.env.NEXT_PUBLIC_SECRETKEY}`)
   return NextResponse.json(SLike)
 }

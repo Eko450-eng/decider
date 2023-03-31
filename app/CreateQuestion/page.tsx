@@ -33,7 +33,7 @@ export default function Page() {
       const returnValue = await e.json()
 
       showNotification(returnValue.notification)
-      router.push("/")
+      if (returnValue.status === 200) router.push("/")
     })
   }
 

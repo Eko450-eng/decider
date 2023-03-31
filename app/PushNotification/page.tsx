@@ -1,32 +1,21 @@
 'use client'
-import { Button, Center, Stack, Switch } from "@mantine/core";
+import { Button, Center, Stack, Switch, Text } from "@mantine/core";
 import { Input } from '@mantine/core'
 import { useState } from "react";
 import { saveMessagingDeviceToken } from "@/public/firebase/messaging";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/userState";
 import { useRouter } from "next/navigation";
-import { saveSubscription, sendMsg, sendMsgToAll } from "./logic";
-import { messaging } from "@/public/firebase/config";
-import { getMessaging } from "firebase/messaging";
-
-interface ISubscriptions {
-  name: string
-  state: boolean
-}
+import { subscribeToTopic, sendMsg, sendMsgToAll } from "./logic";
+import { changeSubscritpion } from "@/redux/reducers/topics";
 
 export default function Push() {
   const user = useSelector((state: RootState) => state.user)
   const router = useRouter()
-  const [subscriptions, setSubscriptions] = useState<ISubscriptions[]>([
-    { name: "likes", state: false },
-    { name: "comments", state: false },
-    { name: "votes", state: false },
-    { name: "newQuestions", state: false },
-    { name: "newFeatures", state: false },
-    { name: "generallNotification", state: false },
-    { name: "systemUpdates", state: false }
-  ])
+  const topicOverview = ["Likes", "Comments", "Votes", "New Questions", "New Features", "System Notifications"]
+  const subscribed = useSelector((state: RootState) => state.topics)
+  const dispatch = useDispatch()
+
   const [message, setMessage] = useState({
     title: "",
     msg: ""
@@ -36,38 +25,31 @@ export default function Push() {
     saveMessagingDeviceToken(user).then(() => router.refresh())
   }
 
-  async function handleTopic() {
-
-    subscriptions.forEach(topic => {
-      if (topic.state) saveSubscription({ user: user, topic: topic.name })
-    })
+  async function handleTopic(topic: string, subscribed: boolean) {
+    dispatch(changeSubscritpion({ topic: topic, subscribed: subscribed }))
+    subscribeToTopic(user, topic, subscribed)
   }
 
   return (
     <div className="flex-center">
       <Center>
-        <Button sx={{ margin: "1rem" }} onClick={() => handleSubscription()}>Enable notification</Button>
+        <Button sx={{ margin: "1rem" }} onClick={() => handleSubscription()}>Allow notifications</Button>
       </Center>
 
+      <Text>Get notifications for:</Text>
       {
-        subscriptions.map((v: any, k: number) => {
+        topicOverview.map((topic: string, k: number) => {
           return (
             <Switch
               sx={{ marginBottom: "1rem" }}
               key={`notifications${k}`}
-              label={v.name}
-              checked={v.state}
-              onChange={(e: any) => {
-                const newSub = [{ name: v.name, state: e.currentTarget.checked }]
-                const newSubscriptions = subscriptions.map(sub => newSub.find(o => o.name === sub.name) || sub)
-                setSubscriptions(newSubscriptions)
-              }}
+              label={topic}
+              checked={subscribed.topics.includes(topic)}
+              onChange={(e: any) => handleTopic(topic, e.currentTarget.checked)}
             />
           )
         })
       }
-      <Button onClick={handleTopic}>Save</Button>
-
 
       {/* Send messages as admin */}
       {
