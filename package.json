@@ -45,6 +45,7 @@
     "firebase": "^9.18.0",
     "firebase-admin": "^11.5.0",
     "fs": "0.0.1-security",
+    "gyp": "^0.5.0",
     "jsonwebtoken": "^9.0.0",
     "next": "13.2.4",
     "next-superjson-plugin": "^0.5.6",
