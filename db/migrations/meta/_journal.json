@@ -1,0 +1,42 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1680595172329,
+      "tag": "0000_clumsy_obadiah_stane"
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1680596372063,
+      "tag": "0001_clammy_sway"
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1680602462414,
+      "tag": "0002_cuddly_ego"
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1680602674347,
+      "tag": "0003_shiny_terror"
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1680602757730,
+      "tag": "0004_fair_stark_industries"
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1680604746859,
+      "tag": "0005_low_mac_gargan"
+    }
+  ]
+}

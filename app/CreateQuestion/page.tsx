@@ -1,16 +1,18 @@
 'use client'
 
-import { RootState } from "@/redux/userState"
 import { Button, TextInput } from "@mantine/core"
 import { useForm } from "@mantine/form"
 import { showNotification } from "@mantine/notifications"
 import { useRouter } from "next/navigation"
-import { useSelector } from "react-redux"
 import { PleaseLogin } from "../(PleaseLogin)"
+import { useAuth, useUser } from "@clerk/nextjs"
+import { useEffect } from "react"
 
 export default function Page() {
-  const user = useSelector((state: RootState) => state.user)
   const router = useRouter()
+  const user = useUser()
+  const auth = useAuth()
+  const { userId } = auth
 
   const form = useForm({
     initialValues: {
@@ -22,12 +24,12 @@ export default function Page() {
   })
 
   async function createQuestion(question: { title: string, desc: string, option1: string, option2: string }) {
-    if (!user.email) showNotification({ title: "Whoops", message: "Please login to create a question", color: "red" })
-    await fetch('/api/createQuestion', {
+    if (!user.isSignedIn) showNotification({ title: "Whoops", message: "Please login to create a question", color: "red" })
+    await fetch('/api/questions/createQuestion', {
       method: "POST",
       body: JSON.stringify({
         ...question,
-        user: user
+        userId: userId
       })
     }).then(async (e: any) => {
       const returnValue = await e.json()
@@ -41,7 +43,7 @@ export default function Page() {
   return (
     <>
       {
-        user.email ?
+        user.isSignedIn ?
           <form onSubmit={form.onSubmit((values) => createQuestion(values))}>
             <TextInput
               label="Title"

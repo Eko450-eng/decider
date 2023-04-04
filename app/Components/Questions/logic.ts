@@ -1,14 +1,11 @@
-import { UserState } from "@/redux/reducers/user";
-import { Question } from "@prisma/client"
+import { Question } from "@/db/schema/schema"
 
-export async function vote(question: Question, user: UserState, number: number) {
-  if (!user.email) return ({ status: 400, title: "Whoops", message: "Please login to vote", color: "red" })
-
-  const res = await fetch('/api/vote', {
+export async function vote(question: Question, userid: string, number: number) {
+  const res = await fetch('/api/questions/vote', {
     method: "POST",
     body: JSON.stringify({
-      id: question.id,
-      user: user,
+      questionId: question.id,
+      userId: userid,
       vote: number
     })
   }).then(async (e: any) => {
@@ -18,13 +15,12 @@ export async function vote(question: Question, user: UserState, number: number) 
   return res
 }
 
-export async function like(question: Question, user: UserState) {
-  if (!user.email) return ({ status: 400, notification: { title: "Whoops", message: "Please login to like a vote", color: "red" } })
-  const returnValue = await fetch('/api/like', {
+export async function like(question: Question, user: string) {
+  const returnValue = await fetch('/api/questions/like', {
     method: "POST",
     body: JSON.stringify({
-      id: question.id,
-      user: user,
+      questionId: question.id,
+      userId: user,
     })
   }).then(async (e: any) => {
     const res = await e.json()
@@ -34,12 +30,12 @@ export async function like(question: Question, user: UserState) {
   return returnValue
 }
 
-export async function deleteQuestion(question: Question, user: UserState) {
-  const res = await fetch('/api/deleteQuestion', {
+export async function deleteQuestion(question: Question, userId: string) {
+  const res = await fetch('/api/questions/deleteQuestion', {
     method: "POST",
     body: JSON.stringify({
-      question: question,
-      user: user,
+      questionId: question.id,
+      userId: userId,
     })
   }).then(async (e: any) => {
     const returnValue = await e.json()

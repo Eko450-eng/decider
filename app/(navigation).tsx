@@ -1,15 +1,13 @@
 'use client'
 
-import { loginWithToken, logout } from "@/redux/reducers/user"
-import { RootState } from "@/redux/userState"
 import { ActionIcon, Affix, Center, Group, Modal } from "@mantine/core"
 import { IconSettingsFilled } from "@tabler/icons-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { useState } from "react"
 import { Home, Login, Logout, Plus, Reload, UserPlus } from 'tabler-icons-react'
 import Push from "./PushNotification/page"
+import { useAuth } from "@clerk/nextjs"
 
 function LinkButton({ link, icon }: { link: any, icon: any }) {
   return (
@@ -21,25 +19,9 @@ function LinkButton({ link, icon }: { link: any, icon: any }) {
   )
 }
 
-
-
 export default function Navigation() {
-  const user = useSelector((state: RootState) => state.user)
   const router = useRouter()
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    if (!localStorage.getItem("token")) return
-    const token = localStorage.getItem("token")
-    if (!token) return
-    dispatch(loginWithToken(token))
-  }, [])
-
-  function signOut() {
-    localStorage.removeItem("token")
-    dispatch(logout())
-    router.push("/Signup")
-  }
+  const user = useAuth()
 
   async function revalidationHandler() {
     await fetch(`/api/revalidate?token=${process.env.NEXT_PUBLIC_SECRETKEY}`)
@@ -61,7 +43,7 @@ export default function Navigation() {
           <Group>
             <LinkButton link="/" icon={<Home />} />
             {
-              !user.id ?
+              !user.isSignedIn ?
                 <>
                   <LinkButton link="/Signup" icon={<UserPlus />} />
                   <LinkButton link="/Signin" icon={<Login />} />
@@ -69,7 +51,7 @@ export default function Navigation() {
                 :
                 <>
                   <LinkButton link="/CreateQuestion" icon={<Plus />} />
-                  <ActionIcon onClick={() => signOut()} ><Logout /></ActionIcon>
+                  <ActionIcon onClick={() => user.signOut()} ><Logout /></ActionIcon>
                   <ActionIcon onClick={() => setModal(true)}><IconSettingsFilled /></ActionIcon>
                   <ActionIcon onClick={() => revalidationHandler()} ><Reload /></ActionIcon>
                 </>

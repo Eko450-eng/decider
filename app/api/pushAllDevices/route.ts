@@ -1,9 +1,10 @@
+import db from "@/db/db";
+import { Question } from "@/db/schema/schema";
 import { NextResponse } from "next/server";
-import prisma from "../prisma";
 
 
 export async function GET() {
-  const devices = await prisma.pushdevices.findMany({})
+  const devices = await db.select().from(Question)
   return NextResponse.json(devices)
 }
 

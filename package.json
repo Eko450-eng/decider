@@ -6,10 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "test": "cypress open"
+    "lint": "next lint"
   },
   "dependencies": {
+    "@clerk/nextjs": "^4.14.1",
+    "@clerk/themes": "^1.5.1",
+    "@clerk/types": "^3.33.0",
     "@ducanh2912/next-pwa": "^8.2.0",
     "@emotion/react": "^11.10.6",
     "@emotion/server": "^11.10.0",
@@ -21,8 +23,6 @@
     "@mantine/next": "^6.0.4",
     "@mantine/notifications": "^6.0.5",
     "@mantine/prism": "^6.0.5",
-    "@prisma/client": "^4.11.0",
-    "@reduxjs/toolkit": "^1.9.3",
     "@tabler/icons-react": "^2.11.0",
     "@types/eslint-scope": "^3.7.4",
     "@types/estree": "^1.0.0",
@@ -31,12 +31,13 @@
     "@types/jsonwebtoken": "^9.0.1",
     "@types/node": "18.15.10",
     "@types/parse-json": "^4.0.0",
+    "@types/pg": "^8.6.6",
     "@types/react": "18.0.29",
     "@types/react-dom": "18.0.11",
     "@types/react-is": "^17.0.3",
     "@types/resolve": "^1.20.2",
     "bcryptjs-react": "^2.4.6",
-    "cypress": "^12.9.0",
+    "drizzle-orm": "^0.23.5",
     "embla-carousel-react": "^7.1.0",
     "eslint": "8.36.0",
     "eslint-config-next": "13.2.4",
@@ -47,15 +48,15 @@
     "next": "13.2.4",
     "next-superjson-plugin": "^0.5.6",
     "pg": "^8.10.0",
-    "prisma": "^4.11.0",
+    "pg-native": "^3.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-redux": "^8.0.5",
     "superjson": "^1.12.2",
     "tabler-icons-react": "^1.56.0",
     "webpack": "^5.77.0"
   },
   "devDependencies": {
+    "drizzle-kit": "^0.17.3",
     "sass": "^1.60.0",
     "typescript": "5.0.2"
   }

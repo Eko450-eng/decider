@@ -1,4 +1,3 @@
-import { Profile } from "@prisma/client"
 
 export type NotificationResult = {
   status: number,
@@ -12,7 +11,7 @@ export type NotificationResult = {
 export type UserNotificationResult = {
 
   status: number
-  user: Profile
+  user: any
   token: string
   notifications: {
     title: string

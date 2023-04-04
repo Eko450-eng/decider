@@ -1,20 +1,21 @@
 'use client'
 
-import { RootState } from "@/redux/userState";
+import { useUser } from '@clerk/nextjs'
 import { Button, Card, Group, Text, Stack, ActionIcon, Modal, MantineProvider } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
-import { Question } from "@prisma/client";
 import { IconHeartFilled } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import { like, vote, deleteQuestion } from "./logic";
 import { Trash, X } from "tabler-icons-react";
+import { ENoLogon } from '@/app/api/messages';
+import { Question } from "@/db/schema/schema"
 
 export default function Questioncard({ question }: { question: Question }) {
   const router = useRouter()
-  const user = useSelector((state: RootState) => state.user)
   const [modal, setModal] = useState(false)
+  const user = useUser()
+
 
   function displayMessage(res: any) {
     showNotification(res.notification)
@@ -22,15 +23,18 @@ export default function Questioncard({ question }: { question: Question }) {
   }
 
   function handleLike() {
-    like(question, user).then((res: any) => displayMessage(res))
+    if (!user.isSignedIn) return showNotification(ENoLogon.notification)
+    like(question, user.user.id).then((res: any) => displayMessage(res))
   }
 
   function handleVote(number: number) {
-    vote(question, user, number).then((res: any) => displayMessage(res))
+    if (!user.isSignedIn) return showNotification(ENoLogon.notification)
+    vote(question, user.user.id, number).then((res: any) => displayMessage(res))
   }
 
   function handleDelete() {
-    deleteQuestion(question, user).then((res: any) => displayMessage(res))
+    if (!user.isSignedIn) return showNotification(ENoLogon.notification)
+    deleteQuestion(question, user.user.id).then((res: any) => displayMessage(res))
   }
 
   return (
@@ -79,7 +83,7 @@ export default function Questioncard({ question }: { question: Question }) {
           <Group position="apart">
             <Text fw="bold" fz="lg">{question.title}</Text>
             {
-              (question.posterId === user.id || (user.role >= 5)) &&
+              question.posterId === user.user?.id &&
               <ActionIcon
                 onClick={() => setModal(true)}
               ><Trash className="red_icon" /></ActionIcon>

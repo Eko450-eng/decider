@@ -1,17 +1,14 @@
+import db from "@/db/db"
 import Questioncard from "./Components/Questions/Card"
-import prisma from "./api/prisma"
+import { Question } from "@/db/schema/schema"
+import { desc } from "drizzle-orm/expressions"
 
 export const dynamic = "force-dynamic"
 export const revalidate = 2
 
 async function getQuestions() {
-  const questions = await prisma.question.findMany({
-    orderBy: {
-      createdAt: "desc"
-    }
-  })
-  // This totally breaks typesafety but until I have a solution to turn JSDate into plain Object this has to do
-  return questions.map(({ createdAt, ...rest }) => ({ ...rest, createdAt: createdAt.toDateString() }))
+  const questions = await db.select().from(Question).orderBy(desc(Question.createdAt))
+  return questions
 }
 
 export default async function Home() {
