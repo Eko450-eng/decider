@@ -3,11 +3,11 @@ import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import { Pool } from 'pg';
 
 const pool = new Pool({
-  host: '192.168.0.205',
+  host: `${process.env.HOST}`,
   port: 5432,
-  user: 'postgres',
-  password: 'postgres',
-  database: 'decider',
+  user: `${process.env.POSTGRES_USER}`,
+  password: `${process.env.POSTGRES_PASS}`,
+  database: `${process.env.POSTGRES_DB}`,
 });
 
 const db = drizzle(pool);
