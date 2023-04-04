@@ -37,6 +37,7 @@
     "@types/react-is": "^17.0.3",
     "@types/resolve": "^1.20.2",
     "bcryptjs-react": "^2.4.6",
+    "cypress": "^12.9.0",
     "drizzle-orm": "^0.23.5",
     "embla-carousel-react": "^7.1.0",
     "eslint": "8.36.0",
