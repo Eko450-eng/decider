@@ -31,7 +31,7 @@ export const Question = pgTable("Question", {
   votes1: text("votes1").array().notNull(),
   votes2: text("votes2").array().notNull(),
 
-  likes: text("likes").array().notNull().default([]),
+  likes: text("likes").array().notNull(),
 
   // poster   Profile   @relation(fields: [posterId], references: [id])
   posterId: text("posterId").notNull(),

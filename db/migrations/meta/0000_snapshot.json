@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "a50b7626-9313-496d-bd53-49b90ce4ff3d",
+  "id": "d301513f-91f8-4cde-9070-df19bd21b820",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "Comment": {
@@ -33,13 +33,13 @@
           "name": "username",
           "type": "varchar(20)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "email": {
           "name": "email",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "role": {
           "name": "role",
@@ -51,7 +51,7 @@
           "name": "password",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "createdAt": {
           "name": "createdAt",
@@ -94,7 +94,7 @@
         },
         "profileId": {
           "name": "profileId",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         }
@@ -117,7 +117,7 @@
           "name": "title",
           "type": "varchar(100)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "desc": {
           "name": "desc",
@@ -135,37 +135,37 @@
           "name": "option1",
           "type": "varchar(30)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "option2": {
           "name": "option2",
           "type": "varchar(30)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "votes1": {
           "name": "votes1",
-          "type": "integer[]",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "votes2": {
           "name": "votes2",
-          "type": "integer[]",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "likes": {
           "name": "likes",
-          "type": "integer[]",
+          "type": "text[]",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "posterId": {
           "name": "posterId",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "comments": {
           "name": "comments",
