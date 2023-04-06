@@ -13,6 +13,7 @@ export async function POST(request: Request) {
   const initial = initialRaw[0]
   const posterPushdevices = await db.select().from(Pushdevices).where(eq(Pushdevices.profileId, initial.posterId))
 
+  // Remove like
   if (initial.likes.includes(userId)) {
     const newLikeArray = initial.likes.filter(users => {
       return users !== userId
@@ -25,6 +26,7 @@ export async function POST(request: Request) {
     return NextResponse.json(SLiked)
   }
 
+  // Append like
   if (!initial.likes.includes(userId)) {
     await db.update(Question)
       .set({ likes: [...initial.likes, `${userId}`] })

@@ -6,7 +6,6 @@ import { showNotification } from "@mantine/notifications"
 import { useRouter } from "next/navigation"
 import { PleaseLogin } from "../(PleaseLogin)"
 import { useAuth, useUser } from "@clerk/nextjs"
-import { useEffect } from "react"
 
 export default function Page() {
   const router = useRouter()
@@ -35,8 +34,10 @@ export default function Page() {
       const returnValue = await e.json()
 
       showNotification(returnValue.notification)
-      await fetch(`/api/revalidate?token=${process.env.NEXT_PUBLIC_SECRETKEY}`)
-      if (returnValue.status === 200) router.push("/")
+      if (returnValue.status === 200) {
+        router.push("/")
+        router.refresh()
+      }
     })
   }
 

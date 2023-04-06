@@ -16,8 +16,32 @@ export async function POST(request: Request) {
   const votes1: string[] = question.votes1
   const votes2: string[] = question.votes2
 
-  if ((votes1.includes(userId)) || (votes2.includes(userId))) return NextResponse.json(EAlreadyVoted)
+  // Remove vote
+  if ((votes1.includes(userId)) || (votes2.includes(userId))) {
+    const newVotes1 = votes1.filter(users => {
+      return users !== userId
+    })
 
+    const newVotes2 = votes2.filter(users => {
+      return users !== userId
+    })
+
+    if (votes1.includes(userId)) {
+      await db.update(Question)
+        .set({ votes1: newVotes1 })
+        .where(eq(Question.id, questionId))
+    }
+
+    else if (votes2.includes(userId)) {
+      await db.update(Question)
+        .set({ votes2: newVotes2 })
+        .where(eq(Question.id, questionId))
+    }
+
+    return NextResponse.json({ status: 200 })
+  }
+
+  // Append vote
   if (vote === 2) {
     await db.update(Question)
       .set({ votes2: [...question.votes2, `${userId}`] })
@@ -40,6 +64,5 @@ export async function POST(request: Request) {
     })
   }
 
-  await fetch(`/api/revalidate?token=${process.env.NEXT_PUBLIC_SECRETKEY}`)
   return NextResponse.json({ status: 200, notification: { title: "Ok", message: `You have voted for ${(vote === 1 ? question.option1 : question.option2)}`, color: "green" } })
 }

@@ -6,7 +6,7 @@ export async function vote(question: Question, userid: string, number: number) {
     body: JSON.stringify({
       questionId: question.id,
       userId: userid,
-      vote: number
+      vote: number ? number : 0
     })
   }).then(async (e: any) => {
     const returnValue = await e.json()
@@ -16,7 +16,7 @@ export async function vote(question: Question, userid: string, number: number) {
 }
 
 export async function like(question: Question, user: string) {
-  const returnValue = await fetch('/api/questions/like', {
+  const res = await fetch('/api/questions/like', {
     method: "POST",
     body: JSON.stringify({
       questionId: question.id,
@@ -26,8 +26,7 @@ export async function like(question: Question, user: string) {
     const res = await e.json()
     return res
   })
-  await fetch(`/api/revalidate?token=${process.env.NEXT_PUBLIC_SECRETKEY}`)
-  return returnValue
+  return res
 }
 
 export async function deleteQuestion(question: Question, userId: string) {
@@ -41,6 +40,5 @@ export async function deleteQuestion(question: Question, userId: string) {
     const returnValue = await e.json()
     return (returnValue)
   })
-  await fetch(`/api/revalidate?token=${process.env.NEXT_PUBLIC_SECRETKEY}`)
   return res
 }

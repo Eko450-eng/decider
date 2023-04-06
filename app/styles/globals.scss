@@ -3,6 +3,11 @@
   height: 1.2rem;
 }
 
+.gray_icon{
+  color: #CECECE;
+  height: 1.2rem;
+}
+
 form{
   margin: 0 auto;
   width: 50%;
@@ -17,4 +22,16 @@ form{
 
 .cl-rootBox{
   margin: 1rem auto;
+}
+
+.border{
+  border: 2px solid white;
+}
+
+.noBorder{
+  border: 0px solid white;
+}
+
+.avatar{
+  border-radius: 25px;
 }

@@ -33,7 +33,7 @@ export default function Push() {
         <Button sx={{ margin: "1rem" }} onClick={() => handleSubscription()}>Allow notifications</Button>
       </Center>
 
-      <Text>Get notifications for:</Text>
+      {/* <Text>Get notifications for:</Text> */}
       {
         // topicOverview.map((topic: string, k: number) => {
         //   return (
