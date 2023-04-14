@@ -7,7 +7,6 @@ specifiers:
   '@ducanh2912/next-pwa': ^8.2.0
   '@emotion/react': ^11.10.6
   '@emotion/server': ^11.10.0
-  '@mantine/carousel': ^6.0.5
   '@mantine/core': ^6.0.5
   '@mantine/form': ^6.0.4
   '@mantine/hooks': ^6.0.5
@@ -33,16 +32,13 @@ specifiers:
   cypress: ^12.9.0
   drizzle-kit: ^0.17.3
   drizzle-orm: ^0.23.5
-  embla-carousel-react: ^7.1.0
   eslint: 8.36.0
   eslint-config-next: 13.2.4
   firebase: ^9.18.0
   firebase-admin: ^11.5.0
   fs: 0.0.1-security
   gyp: ^0.5.0
-  jsonwebtoken: ^9.0.0
   next: 13.2.4
-  next-superjson-plugin: ^0.5.6
   pg: ^8.10.0
   react: 18.2.0
   react-dom: 18.2.0
@@ -59,7 +55,6 @@ dependencies:
   '@ducanh2912/next-pwa': 8.2.0_xwa6347mqebhven5mqcrnfc5em
   '@emotion/react': 11.10.6_k4en7uapxoluuejoeg6o3ic2aa
   '@emotion/server': 11.10.0
-  '@mantine/carousel': 6.0.5_j34ffmzhv75qrpzc3zbeymcif4
   '@mantine/core': 6.0.5_7nyu3unnmbfk6vzzebi3d23dxq
   '@mantine/form': 6.0.4_react@18.2.0
   '@mantine/hooks': 6.0.5_react@18.2.0
@@ -84,16 +79,13 @@ dependencies:
   browser-image-compression: 2.0.2
   cypress: 12.9.0
   drizzle-orm: 0.23.5_@types+pg@8.6.6+pg@8.10.0
-  embla-carousel-react: 7.1.0_react@18.2.0
   eslint: 8.36.0
   eslint-config-next: 13.2.4_j4766f7ecgqbon3u7zlxn5zszu
   firebase: 9.18.0
   firebase-admin: 11.5.0
   fs: 0.0.1-security
   gyp: 0.5.0
-  jsonwebtoken: 9.0.0
   next: 13.2.4_lpxbxhvdj65gzxdpbrqknapd3i
-  next-superjson-plugin: 0.5.6_75m7oggamdjnfhhmgkdxdhs2c4
   pg: 8.10.0
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
@@ -2244,21 +2236,6 @@ packages:
       lodash: 4.17.21
     dev: false
     optional: true
-
-  /@mantine/carousel/6.0.5_j34ffmzhv75qrpzc3zbeymcif4:
-    resolution: {integrity: sha512-Znuq1euiFFQGLwvjyfUkgkh+qecJqY+jeMFizjRdZFfYT3po3BCGhzs3vw6Fcqc1+KdF74sCV3pp1BANHxXoWw==}
-    peerDependencies:
-      '@mantine/core': 6.0.5
-      '@mantine/hooks': 6.0.5
-      embla-carousel-react: ^7.0.0
-      react: '>=16.8.0'
-    dependencies:
-      '@mantine/core': 6.0.5_7nyu3unnmbfk6vzzebi3d23dxq
-      '@mantine/hooks': 6.0.5_react@18.2.0
-      '@mantine/utils': 6.0.5_react@18.2.0
-      embla-carousel-react: 7.1.0_react@18.2.0
-      react: 18.2.0
-    dev: false
 
   /@mantine/core/6.0.5_7nyu3unnmbfk6vzzebi3d23dxq:
     resolution: {integrity: sha512-jmP47Fcdw+UvcX1gDG5dNEhdF0QPeMnFZkB6JNAzaIuXKk8AVDh0rXXki0kWHx88gh/f5bGvOoRnKUb6v7UtDQ==}
@@ -4489,19 +4466,6 @@ packages:
 
   /electron-to-chromium/1.4.342:
     resolution: {integrity: sha512-dTei3VResi5bINDENswBxhL+N0Mw5YnfWyTqO75KGsVldurEkhC9+CelJVAse8jycWyP8pv3VSj4BSyP8wTWJA==}
-    dev: false
-
-  /embla-carousel-react/7.1.0_react@18.2.0:
-    resolution: {integrity: sha512-tbYRPRZSDNd2QLNqYDcArAakGIxtUbhS7tkP0dGXktXHGgcX+3ji3VrOUTOftBiujZrMV8kRxtrRUe/1soloIQ==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.1 || ^18.0.0
-    dependencies:
-      embla-carousel: 7.1.0
-      react: 18.2.0
-    dev: false
-
-  /embla-carousel/7.1.0:
-    resolution: {integrity: sha512-Bh8Pa8NWzgugLkf8sAGexQlBCNDFaej5BXiKgQdRJ1mUC9NWBrw9Z23YVPVGkguWoz5LMjZXXFVGCobl3UPt/Q==}
     dev: false
 
   /emoji-regex/8.0.0:
@@ -6883,17 +6847,6 @@ packages:
 
   /neo-async/2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
-    dev: false
-
-  /next-superjson-plugin/0.5.6_75m7oggamdjnfhhmgkdxdhs2c4:
-    resolution: {integrity: sha512-vokzkgtr3axon5uXobhXJWN6/YlPOHdcAb/BeR+d0rXA3h1b5h98A+V0TgMUf+vcy9RvBqte/ppaJfkOwi4NGA==}
-    peerDependencies:
-      next: ^13
-      superjson: ^1
-    dependencies:
-      hoist-non-react-statics: 3.3.2
-      next: 13.2.4_lpxbxhvdj65gzxdpbrqknapd3i
-      superjson: 1.12.2
     dev: false
 
   /next-tick/1.1.0:
