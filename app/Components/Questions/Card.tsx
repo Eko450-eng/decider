@@ -1,21 +1,25 @@
 'use client'
 
 import { useAuth } from '@clerk/nextjs'
-import { Button, Card, Group, Text, Stack, ActionIcon, Modal } from "@mantine/core";
+import { Button, Card, Group, Text, Stack, ActionIcon, Modal, Center } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { IconHeartFilled } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { ReactNode, createRef, useEffect, useState } from "react";
 import { like, vote, deleteQuestion } from "./logic";
 import { Trash, X } from "tabler-icons-react";
 import { ENoLogon } from '@/app/api/messages';
 import { Question } from "@/db/schema/schema"
+import Image from 'next/image'
 
 export default function Questioncard({ question }: { question: Question }) {
   const router = useRouter()
   const [modal, setModal] = useState(false)
+  const [imageModal, setImageModal] = useState("")
   const [voteStatus, setVoteStatus] = useState(0)
   const [likeStatus, setLikeStatus] = useState(false)
+  const [imageByte1, setImage1] = useState<string>("")
+  const [imageByte2, setImage2] = useState<string>("")
   const user = useAuth()
 
 
@@ -51,6 +55,25 @@ export default function Questioncard({ question }: { question: Question }) {
     else if (!question.likes.includes(user.userId)) setLikeStatus(false)
   }
 
+  async function getImages() {
+    const images: string[] = []
+    if (question.image1) {
+      const imageSrc1 = `data:image/png;base64,${question.image1?.toString()}`
+      setImage1(imageSrc1)
+    }
+    if (question.image2) {
+      const imageSrc2 = `data:image/png;base64,${question.image2?.toString()}`
+      setImage2(imageSrc2)
+    }
+    return images
+  }
+
+
+  useEffect(() => {
+    getImages()
+  }, [])
+
+
   useEffect(() => {
     getVoteStatus()
   })
@@ -71,6 +94,17 @@ export default function Questioncard({ question }: { question: Question }) {
         </Group>
       </Modal>
 
+      <Modal
+        opened={imageModal !== ""}
+        size="auto"
+        onClose={() => setImageModal("")}
+        title="Are you sure?"
+      >
+        <Center>
+          <Image src={`${imageModal}`} alt="Second Image" width={500} height={500} />
+        </Center>
+      </Modal>
+
       <Stack>
         <Group position="apart">
           <Text fw="bold" fz="lg">{question.title}</Text>
@@ -83,8 +117,14 @@ export default function Questioncard({ question }: { question: Question }) {
         </Group>
         <Text>{question.desc}</Text>
         <Group spacing="sm">
-          <Button id="vote1" className={`${voteStatus == 1 ? "border" : "noBorder"}`} onClick={() => handleVote(1)}>{question.option1}: {question.votes1.length}</Button>
-          <Button id="vote2" className={`${voteStatus == 2 ? "border" : "noBorder"}`} onClick={() => handleVote(2)}>{question.option2}: {question.votes2.length}</Button>
+          <Stack>
+            {imageByte1 && <Image src={`${imageByte1}`} alt="Second Image" width={100} height={100} onClick={() => setImageModal(imageByte1)} />}
+            <Button id="vote1" className={`${voteStatus == 1 ? "border" : "noBorder"}`} onClick={() => handleVote(1)}>{question.option1}: {question.votes1.length}</Button>
+          </Stack>
+          <Stack>
+            {imageByte2 && <Image src={`${imageByte2}`} alt="Second Image" width={100} height={100} onClick={() => setImageModal(imageByte2)} />}
+            <Button id="vote2" className={`${voteStatus == 2 ? "border" : "noBorder"}`} onClick={() => handleVote(2)}>{question.option2}: {question.votes2.length}</Button>
+          </Stack>
         </Group>
         <Group position="right" spacing="xxs">
           <ActionIcon onClick={handleLike}>

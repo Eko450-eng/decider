@@ -16,6 +16,8 @@ export async function POST(request: Request) {
     desc: body.desc,
     option1: body.option1,
     option2: body.option2,
+    image1: body.image1,
+    image2: body.image2,
     votes1: [],
     votes2: [],
     likes: [],

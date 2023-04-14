@@ -25,6 +25,9 @@ export const Question = pgTable("Question", {
   desc: varchar("desc", { length: 100 }),
   createdAt: date("createdAt"),
 
+  image1: text("image1"),
+  image2: text("image2"),
+
   option1: varchar("option1", { length: 30 }).notNull(),
   option2: varchar("option2", { length: 30 }).notNull(),
 

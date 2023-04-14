@@ -7,6 +7,12 @@
       "version": "5",
       "when": 1680726589361,
       "tag": "0000_quick_selene"
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1681467247806,
+      "tag": "0001_handy_fenris"
     }
   ]
 }
