@@ -69,13 +69,8 @@ export default function Questioncard({ question }: { question: Question }) {
     return images
   }
 
-
   useEffect(() => {
     getImages()
-  }, [])
-
-
-  useEffect(() => {
     getVoteStatus()
   })
 

@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation"
 import { PleaseLogin } from "../(PleaseLogin)"
 import { useUser } from "@clerk/nextjs"
 import { useState } from "react"
-import { compressImage, convertToBase64, createQuestion } from "./logic"
+import { convertToBase64, createQuestion } from "./logic"
 
 export interface ImageState {
   image1: string | undefined | null
