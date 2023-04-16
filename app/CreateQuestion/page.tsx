@@ -5,11 +5,11 @@ import { useForm } from "@mantine/form"
 import { showNotification } from "@mantine/notifications"
 import { useRouter } from "next/navigation"
 import { PleaseLogin } from "../(PleaseLogin)"
-import { useAuth, useUser } from "@clerk/nextjs"
-import imageCompression from 'browser-image-compression'
+import { useUser } from "@clerk/nextjs"
 import { useState } from "react"
+import { compressImage, convertToBase64, createQuestion } from "./logic"
 
-interface ImageState {
+export interface ImageState {
   image1: string | undefined | null
   image2: string | undefined | null
 }
@@ -17,11 +17,10 @@ interface ImageState {
 export default function Page() {
   const router = useRouter()
   const user = useUser()
-  const auth = useAuth()
-  const { userId } = auth
+
   const [images, setImages] = useState<ImageState>({
     image1: "",
-    image2: ""
+    image2: "",
   })
 
   const form = useForm({
@@ -33,72 +32,33 @@ export default function Page() {
     }
   })
 
-  async function createQuestion(question: { title: string, desc: string, option1: string, option2: string }) {
-    if (!user.isSignedIn) showNotification({ title: "Whoops", message: "Please login to create a question", color: "red" })
-    await fetch('/api/questions/createQuestion', {
-      method: "POST",
-      body: JSON.stringify({
-        ...question,
-        image1: images.image1,
-        image2: images.image2,
-        userId: userId
-      })
-    }).then(async (e: any) => {
-      const returnValue = await e.json()
-
-      showNotification(returnValue.notification)
-      if (returnValue.status === 200) {
-        router.push("/")
-        router.refresh()
-      }
-    })
-  }
-
-  async function convertToBlob(file: File | null): Promise<ArrayBuffer | null> {
-    if (!file) return null
-    const options = {
-      maxSizeMB: 3,
-      maxWidthOrHeight: 1920
-    }
-
-    const compressedFile = await imageCompression(file, options);
-
-    return compressedFile.arrayBuffer()
-  }
 
   async function saveImage(option: 1 | 2, image: File | null) {
     if (!image) return
 
-    const res = await convertToBlob(image)
+    try {
+      const base64String = await convertToBase64(image)
 
-    process.nextTick(() => {
-
-      if (!res) return
-      try {
-        const base64String = btoa(new Uint8Array(res).reduce(function(data, byte) {
-          return data + String.fromCharCode(byte);
-        }, ''));
-
-        process.nextTick(() => {
-          if (option === 1) {
-            setImages({ ...images, image1: base64String })
-          } else {
-            setImages({ ...images, image2: base64String })
-          }
-        })
-      } catch (e: any) {
-        console.trace()
-        console.log()
-        showNotification({ title: "Well uhhh", message: "Seems like that image is tooo big", color: "red" })
+      if (option === 1) {
+        setImages({ ...images, image1: base64String })
+      } else {
+        setImages({ ...images, image2: base64String })
       }
-    })
+    } catch (e: any) {
+      showNotification({ title: "Well uhhh", message: "Seems like that image is tooo big", color: "red" })
+    }
   }
 
   return (
     <>
       {
         user.isSignedIn ?
-          <form onSubmit={form.onSubmit((values) => createQuestion(values))}>
+          <form onSubmit={form.onSubmit((values) => createQuestion({ user: user, question: values, images: images }).then((res) => {
+            if (res === 200) {
+              router.push("/")
+              router.refresh()
+            }
+          }))}>
             <TextInput
               label="Title"
               placeholder="this or that?"

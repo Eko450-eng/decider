@@ -13,6 +13,24 @@
       "version": "5",
       "when": 1681467247806,
       "tag": "0001_handy_fenris"
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1681591584271,
+      "tag": "0002_tricky_steve_rogers"
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1681599157779,
+      "tag": "0003_needy_catseye"
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1681675853031,
+      "tag": "0004_square_gabe_jones"
     }
   ]
 }
