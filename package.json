@@ -38,7 +38,8 @@
     "bcryptjs-react": "^2.4.6",
     "browser-image-compression": "^2.0.2",
     "cypress": "^12.9.0",
-    "drizzle-orm": "^0.23.5",
+    "drizzle-kit": "^0.17.4",
+    "drizzle-orm": "^0.24.0",
     "eslint": "8.36.0",
     "eslint-config-next": "13.2.4",
     "firebase": "^9.18.0",
@@ -47,6 +48,7 @@
     "gyp": "^0.5.0",
     "next": "13.2.4",
     "pg": "^8.10.0",
+    "pg-listen": "^1.7.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-modal-image": "^2.6.0",
@@ -55,7 +57,6 @@
     "webpack": "^5.77.0"
   },
   "devDependencies": {
-    "drizzle-kit": "^0.17.3",
     "sass": "^1.60.0",
     "typescript": "5.0.2"
   }
