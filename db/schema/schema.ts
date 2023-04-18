@@ -23,7 +23,7 @@ export const Question = pgTable("Question", {
   id: serial("id").primaryKey().notNull(),
   title: varchar("title", { length: 100 }).notNull(),
   desc: varchar("desc", { length: 100 }),
-  createdAt: date("createdAt"),
+  createdAt: date("createdAt").defaultNow(),
 
   image1: text("image1"),
   image2: text("image2"),

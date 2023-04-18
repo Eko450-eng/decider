@@ -1,12 +1,13 @@
 import { Question } from "@/db/schema/schema"
 
 export async function vote(question: Question, userid: string, number: number) {
-  const res = await fetch('/api/questions/vote', {
-    method: "POST",
+  const res = await fetch('/api/questions', {
+    method: "PATCH",
     body: JSON.stringify({
       questionId: question.id,
       userId: userid,
-      vote: number ? number : 0
+      vote: number ? number : 0,
+      type: "vote"
     })
   }).then(async (e: any) => {
     const returnValue = await e.json()
@@ -16,11 +17,12 @@ export async function vote(question: Question, userid: string, number: number) {
 }
 
 export async function like(question: Question, user: string) {
-  const res = await fetch('/api/questions/like', {
-    method: "POST",
+  const res = await fetch('/api/questions', {
+    method: "PATCH",
     body: JSON.stringify({
       questionId: question.id,
       userId: user,
+      type: "like"
     })
   }).then(async (e: any) => {
     const res = await e.json()
@@ -30,15 +32,10 @@ export async function like(question: Question, user: string) {
 }
 
 export async function deleteQuestion(question: Question, userId: string) {
-  const res = await fetch('/api/questions/deleteQuestion', {
-    method: "POST",
-    body: JSON.stringify({
-      questionId: question.id,
-      userId: userId,
+  const res = await fetch(`/api/questions?userid=${userId}&questionid=${question.id}`, { method: "DELETE", })
+    .then(async (e: any) => {
+      const returnValue = await e.json()
+      return (returnValue)
     })
-  }).then(async (e: any) => {
-    const returnValue = await e.json()
-    return (returnValue)
-  })
   return res
 }

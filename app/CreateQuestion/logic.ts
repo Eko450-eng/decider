@@ -49,7 +49,7 @@ export async function createQuestion(props: QuestionProps) {
   console.log(props)
 
   if (!user.isSignedIn) showNotification({ title: "Whoops", message: "Please login to create a question", color: "red" })
-  const res = await fetch('/api/questions/createQuestion', {
+  const res = await fetch('/api/questions', {
     method: "POST",
     body: JSON.stringify({
       ...question,

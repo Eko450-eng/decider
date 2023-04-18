@@ -1,0 +1,1 @@
+ALTER TABLE Question ALTER COLUMN "createdAt" SET DEFAULT now();

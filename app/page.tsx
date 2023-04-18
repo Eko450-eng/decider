@@ -6,8 +6,10 @@ import { desc } from "drizzle-orm/expressions"
 export const dynamic = "force-dynamic"
 export const revalidate = 1
 
-async function getQuestions() {
-  const questions = await db.select().from(Question).orderBy(desc(Question.createdAt))
+const questionsQuery = db.select().from(Question).orderBy(desc(Question.createdAt)).prepare("getQuestions")
+
+async function getQuestions(): Promise<Question[]> {
+  const questions = questionsQuery.execute()
   return questions
 }
 
