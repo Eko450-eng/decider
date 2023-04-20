@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
-import { ENoLogon, ENoOption1, ENoOption2, ENoTitle, SCreateQuestion, SLike, SLiked } from "../messages"
+import { ENoLogon, ENoOption1, ENoOption2, ENoTitle, SCreateQuestion } from "../messages"
 import { Question } from "@/db/schema/schema"
 import db from "@/db/db"
-import { and, placeholder, eq } from "drizzle-orm"
+import { and, placeholder, eq, desc } from "drizzle-orm"
 import { ENoNo, ENoPerm, SDeleteQuestion } from "../messages"
 import { liking, voting } from "./logic"
 
@@ -18,6 +18,7 @@ const prepareCreateQuestion = db.insert(Question).values({
   likes: [],
   posterId: placeholder('posterId')
 }).prepare("createQuestion")
+
 
 export async function POST(request: Request) {
   const body = await request.json()
@@ -38,6 +39,11 @@ export async function POST(request: Request) {
   })
 
   return NextResponse.json(SCreateQuestion)
+}
+
+export async function GET(req: Request) {
+  const questions = await db.select({ id: Question.id }).from(Question).orderBy(desc(Question.createdAt))
+  return NextResponse.json(questions)
 }
 
 export async function DELETE(request: Request) {

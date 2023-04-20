@@ -1,11 +1,17 @@
-.red_icon{
-  color: #E41F24;
-  height: 1.2rem;
-}
-
-.gray_icon{
+.icon{
   color: #CECECE;
   height: 1.2rem;
+  animation: all .4s ease-in;
+  transition: all .4s ease-in;
+}
+
+.red{
+  color: #E41F24;
+}
+
+.animated{
+  animation: color .4s ease-in;
+  transition: color .4s ease-in;
 }
 
 form{
