@@ -46,8 +46,6 @@ interface QuestionProps {
 export async function createQuestion(props: QuestionProps) {
   const { user, question, images } = props
 
-  console.log(props)
-
   if (!user.isSignedIn) showNotification({ title: "Whoops", message: "Please login to create a question", color: "red" })
   const res = await fetch('/api/questions', {
     method: "POST",

@@ -29,9 +29,8 @@ export default function Page() {
       desc: "",
       option1: "",
       option2: "",
-    }
+    },
   })
-
 
   async function saveImage(option: 1 | 2, image: File | null) {
     if (!image) return
@@ -62,17 +61,33 @@ export default function Page() {
             <TextInput
               label="Title"
               placeholder="this or that?"
+              sx={{
+                input: {
+                  color: `${form.getInputProps("title").value.length > 100 ? "red" : "white"}`
+                }
+              }}
+              error={`${form.getInputProps("title").value.length > 100 ? "red" : "white"}`}
               {...form.getInputProps("title")}
             />
             <TextInput
               label="Description"
               placeholder="Should I do this or that?"
+              sx={{
+                input: {
+                  color: `${form.getInputProps("desc").value.length > 100 ? "red" : "white"}`
+                }
+              }}
               {...form.getInputProps("desc")}
             />
 
             <TextInput
               label="Option One"
               placeholder="this?"
+              sx={{
+                input: {
+                  color: `${form.getInputProps("option1").value.length > 30 ? "red" : "white"}`
+                }
+              }}
               {...form.getInputProps("option1")}
             />
             <FileInput
@@ -85,6 +100,11 @@ export default function Page() {
             <TextInput
               label="Option Two"
               placeholder="that?"
+              sx={{
+                input: {
+                  color: `${form.getInputProps("option2").value.length > 30 ? "red" : "white"}`
+                }
+              }}
               {...form.getInputProps("option2")}
             />
 

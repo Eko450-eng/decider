@@ -11,7 +11,7 @@ const prepareCreateQuestion = db.insert(Question).values({
   desc: placeholder('desc'),
   option1: placeholder('option1'),
   option2: placeholder('option2'),
-  image1: placeholder('option2'),
+  image1: placeholder('image1'),
   image2: placeholder('image2'),
   votes1: [],
   votes2: [],
@@ -19,9 +19,6 @@ const prepareCreateQuestion = db.insert(Question).values({
   posterId: placeholder('posterId')
 }).prepare("createQuestion")
 
-const deleted = db.delete(Question).where(and(eq(Question.posterId, placeholder("userId")), eq(Question.id, Number(placeholder("questionId"))))).prepare("deleteQuestion")
-
-// Create a question
 export async function POST(request: Request) {
   const body = await request.json()
 
@@ -43,7 +40,6 @@ export async function POST(request: Request) {
   return NextResponse.json(SCreateQuestion)
 }
 
-// Delete a question
 export async function DELETE(request: Request) {
   const { searchParams } = new URL(request.url)
   const userId = searchParams.get("userid")
@@ -51,10 +47,8 @@ export async function DELETE(request: Request) {
 
   if (!userId || !questionId) return NextResponse.json(ENoNo)
 
-  await deleted.execute({
-    questionId: questionId,
-    userId: userId
-  })
+  const deleted = await db.delete(Question)
+    .where(and(eq(Question.posterId, userId), eq(Question.id, Number(questionId))))
 
   if (!deleted) return NextResponse.json(ENoPerm)
 

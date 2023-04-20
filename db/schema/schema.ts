@@ -1,5 +1,5 @@
 import { InferModel } from 'drizzle-orm'
-import { integer, pgTable, date, serial, varchar, text } from 'drizzle-orm/pg-core'
+import { integer, pgTable, date, serial, varchar, text, timestamp } from 'drizzle-orm/pg-core'
 
 export const Profile = pgTable("Profile", {
   id: serial("id").primaryKey().notNull(),
@@ -23,7 +23,7 @@ export const Question = pgTable("Question", {
   id: serial("id").primaryKey().notNull(),
   title: varchar("title", { length: 100 }).notNull(),
   desc: varchar("desc", { length: 100 }),
-  createdAt: date("createdAt").defaultNow(),
+  createdAt: timestamp("createdAt").defaultNow(),
 
   image1: text("image1"),
   image2: text("image2"),

@@ -1,7 +1,7 @@
 'use client'
 
 import { useAuth } from '@clerk/nextjs'
-import { Button, Card, Group, Text, Stack, ActionIcon, Modal } from "@mantine/core";
+import { Button, Card, Group, Text, Stack, ActionIcon, Modal, Center } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { IconHeartFilled } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
@@ -10,13 +10,12 @@ import { like, vote, deleteQuestion } from "./logic";
 import { Trash, X } from "tabler-icons-react";
 import { ENoLogon } from '@/app/api/messages';
 import { Question } from "@/db/schema/schema"
-// @ts-expect-error
-import ModalImage from 'react-modal-image'
 
 export default function Questioncard({ question }: { question: Question }) {
   const router = useRouter()
   const [modal, setModal] = useState(false)
 
+  const [imageModal, setImageModal] = useState("")
   const [voteStatus, setVoteStatus] = useState(0)
   const [likeStatus, setLikeStatus] = useState(false)
   const [imageByte1, setImage1] = useState<string>("")
@@ -90,6 +89,24 @@ export default function Questioncard({ question }: { question: Question }) {
         </Group>
       </Modal>
 
+      <Modal
+        onClose={() => setImageModal("")}
+        opened={imageModal !== ""}
+        fullScreen
+      >
+        <img src={`${imageModal}`} style={{
+          maxWidth: "100%",
+          maxHeight: "100%",
+          zIndex: 2,
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)"
+        }}
+          onClick={() => setImageModal("")}
+        />
+      </Modal>
+
       <Stack>
         <Group position="apart">
           <Text fw="bold" fz="lg">{question.title}</Text>
@@ -101,24 +118,24 @@ export default function Questioncard({ question }: { question: Question }) {
           }
         </Group>
         <Text>{question.desc}</Text>
-        <Group spacing="sm">
+        <Stack spacing="sm">
           <Stack >
             {imageByte1 !== "" &&
-              <div style={{ width: "5rem" }}>
-                <ModalImage small={imageByte1} large={imageByte1} />
-              </div>
+              <Center>
+                <img onClick={() => setImageModal(imageByte1)} src={`${imageByte1}`} style={{ maxWidth: "5rem", maxHeight: "5rem" }} />
+              </Center>
             }
             <Button id="vote1" className={`${voteStatus == 1 ? "border" : "noBorder"}`} onClick={() => handleVote(1)}>{question.option1}: {question.votes1.length}</Button>
           </Stack>
           <Stack>
             {imageByte2 !== "" &&
-              <div style={{ width: "5rem" }}>
-                <ModalImage small={imageByte2} large={imageByte2} />
-              </div>
+              <Center>
+                <img onClick={() => setImageModal(imageByte2)} src={`${imageByte2}`} style={{ maxWidth: "5rem", maxHeight: "5rem" }} />
+              </Center>
             }
             <Button id="vote2" className={`${voteStatus == 2 ? "border" : "noBorder"}`} onClick={() => handleVote(2)}>{question.option2}: {question.votes2.length}</Button>
           </Stack>
-        </Group>
+        </Stack>
         <Group position="right" spacing="xxs">
           <ActionIcon onClick={handleLike}>
             <IconHeartFilled className={`${likeStatus ? "red_icon" : "gray_icon"}`} />

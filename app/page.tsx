@@ -20,8 +20,9 @@ export default async function Home() {
     <main className="main">
       <div className="cards">
         {data && data.map((v: any, k: number) => {
+          let { createdAt, ...question } = v
           return (
-            <Questioncard key={`renderQuestion${k}`} question={v} data-superjson />
+            <Questioncard key={`renderQuestion${k}`} question={question} data-superjson />
           )
         })}
       </div>
