@@ -4,7 +4,7 @@ import { Suspense } from "react"
 import { Question } from "@/db/schema/schema"
 import { desc } from "drizzle-orm"
 
-const questionsQuery = db.select({ id: Question.id })
+const questionsQuery = db.select()
   .from(Question)
   .orderBy(desc(Question.createdAt))
   .prepare("questions")
@@ -21,9 +21,10 @@ export default async function Home() {
     <main className="main">
       <div className="cards">
         {data && data.map((v: any, k: number) => {
+          const { createdAt, ...question } = v
           return (
-            <Suspense key={`renderQuestionSuspens${k}`} fallback={<p>Loading.....</p>}>
-              <Questioncard key={`renderQuestion${k}`} questionId={v.id} data-superjson />
+            <Suspense key={`renderQuestionSuspense${k}`} fallback={<p>Loading.....</p>}>
+              <Questioncard key={`renderQuestion${k}`} question={question} data-superjson />
             </Suspense>
           )
         })}

@@ -59,7 +59,6 @@ specifiers:
   pg: ^8.10.0
   react: ^18.2.0
   react-dom: ^18.2.0
-  react-modal-image: ^2.6.0
   react-scripts: ^5.0.1
   sass: ^1.60.0
   superjson: ^1.12.2
@@ -127,7 +126,6 @@ dependencies:
   pg: 8.10.0
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
-  react-modal-image: 2.6.0
   react-scripts: 5.0.1_owpi4nyymfpa72txgmgq33a3lu
   superjson: 1.12.2
   svix: 0.83.1
@@ -12876,10 +12874,6 @@ packages:
 
   /react-is/18.2.0:
     resolution: {integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==}
-    dev: false
-
-  /react-modal-image/2.6.0:
-    resolution: {integrity: sha512-NNc1xPKzFAn0VsNMdJ8NXt6c54aL/z0fcoYmw9qn4SBUONdGl+8LOQ0sTfo0wtdzcjLiby/ncloHcAL+UI+wIA==}
     dev: false
 
   /react-property/2.0.0:

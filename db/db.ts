@@ -1,5 +1,5 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
-import { Pool } from 'pg';
+import { Client, Pool } from 'pg';
 
 const pool = new Pool({
   host: `${process.env.HOST}`,
@@ -11,5 +11,6 @@ const pool = new Pool({
 
 const db = drizzle(pool);
 
+export { pool }
 export default db
 

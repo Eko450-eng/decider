@@ -1,10 +1,11 @@
 import { Question } from "@/db/schema/schema"
+import { showNotification } from "@mantine/notifications"
 
-export async function vote(question: Question, userid: string, number: number) {
+export async function vote(questionid: number, userid: string, number: number) {
   const res = await fetch('/api/questions', {
     method: "PATCH",
     body: JSON.stringify({
-      questionId: question.id,
+      questionId: questionid,
       userId: userid,
       vote: number ? number : 0,
       type: "vote"
@@ -16,11 +17,11 @@ export async function vote(question: Question, userid: string, number: number) {
   return res
 }
 
-export async function like(question: Question, user: string) {
+export async function like(questionid: number, user: string) {
   const res = await fetch('/api/questions', {
     method: "PATCH",
     body: JSON.stringify({
-      questionId: question.id,
+      questionId: questionid,
       userId: user,
       type: "like"
     })
@@ -39,3 +40,4 @@ export async function deleteQuestion(question: Question, userId: string) {
     })
   return res
 }
+

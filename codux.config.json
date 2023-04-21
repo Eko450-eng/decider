@@ -20,7 +20,7 @@
     "install": {
       "title": "Install",
       "description": "Run install",
-      "command": "npm i",
+      "command": "pnpm i",
       "trigger": [
         "checkout",
         "pull",

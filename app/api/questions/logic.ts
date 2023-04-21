@@ -1,14 +1,17 @@
 import db from "@/db/db"
 import { Pushdevices, Question } from "@/db/schema/schema"
-import { eq } from "drizzle-orm"
+import { eq, placeholder } from "drizzle-orm"
 import { ENoNo, ENoPerm, SDeleteQuestion, SLike, SLiked } from "../messages"
 import { NextResponse } from "next/server"
 import { sendPush } from "@/app/PushNotification/messaging"
 
+const initialRawQuery = db.select().from(Question).where(eq(Question.id, placeholder("questionId"))).prepare("liking")
+const pushQuery = db.select().from(Pushdevices).where(eq(Pushdevices.profileId, placeholder("posterId"))).prepare("pushQuery")
+
 export async function liking(userId: string, questionId: number) {
-  const initialRaw = await db.select().from(Question).where(eq(Question.id, questionId))
+  const initialRaw = await initialRawQuery.execute({ questionId: questionId })
   const initial = initialRaw[0]
-  const posterPushdevices = await db.select().from(Pushdevices).where(eq(Pushdevices.profileId, initial.posterId))
+  const posterPushdevices = await pushQuery.execute({ posterId: initial.posterId })
 
   // Remove like
   if (initial.likes.includes(userId)) {
@@ -25,9 +28,15 @@ export async function liking(userId: string, questionId: number) {
 
   // Append like
   if (!initial.likes.includes(userId)) {
-    await db.update(Question)
+    const updateQuery = db.update(Question)
       .set({ likes: [...initial.likes, `${userId}`] })
-      .where(eq(Question.id, questionId))
+      .where(eq(Question.id, placeholder("questionId")))
+      .prepare("updateQuery")
+
+    await updateQuery.execute({
+      questionId: questionId,
+
+    })
 
     posterPushdevices.forEach((device) => {
       if (!device || !device.device) return

@@ -42,7 +42,7 @@ export async function POST(request: Request) {
 }
 
 export async function GET(req: Request) {
-  const questions = await db.select({ id: Question.id }).from(Question).orderBy(desc(Question.createdAt))
+  const questions = await db.select().from(Question).orderBy(desc(Question.createdAt))
   return NextResponse.json(questions)
 }
 
