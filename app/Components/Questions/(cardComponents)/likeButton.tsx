@@ -34,9 +34,10 @@ export default function LikeButton({ ButtonProps }: { ButtonProps: IButtonProps 
   }
 
   async function getQuestion() {
-    await fetch(`/api/question?id=${questionid}`, { method: "GET", cache: "no-store" })
+    await fetch(`/api/likes?id=${questionid}`, { method: "GET", cache: "no-store" })
       .then(async (res: any) => {
-        setQuestion(await res.json() ? await res.json() : [])
+        const data = await res.json()
+        setQuestion(data ? data.likes : [])
       })
   }
 

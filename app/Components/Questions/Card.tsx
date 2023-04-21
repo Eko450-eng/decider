@@ -74,7 +74,7 @@ export default function Questioncard({ question }: { question: Question }) {
             </Group>
             <Text>{question.desc}</Text>
             <VoteButton ButtonProps={{ imageByte1: imageByte1, imageByte2: imageByte2, questionid: question.id }} />
-            <LikeButton ButtonProps={{ questionid: question.id }} />
+            {/* <LikeButton ButtonProps={{ questionid: question.id }} /> */}
           </Stack>
         </Card>
       }

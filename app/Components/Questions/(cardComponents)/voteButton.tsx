@@ -23,7 +23,7 @@ export default function VoteButton({ ButtonProps }: { ButtonProps: IButtonProps 
 
 
   async function getQuestion() {
-    await fetch(`/api/vote?id=${questionid}`, { method: "GET", cache: "no-store" })
+    await fetch(`/api/votes?id=${questionid}`, { method: "GET", cache: "no-store" })
       .then(async (res: any) => {
         setQuestion(await res.json())
       })
