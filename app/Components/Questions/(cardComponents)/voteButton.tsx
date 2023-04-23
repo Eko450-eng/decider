@@ -6,6 +6,8 @@ import { Button, Center, Modal, Stack } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { useEffect, useState } from "react";
 import { vote } from "../logic";
+import { SERVER } from "@/app/vars";
+import { useRouter } from "next/navigation";
 
 interface IButtonProps {
   imageByte1: string
@@ -21,11 +23,14 @@ export default function VoteButton({ ButtonProps }: { ButtonProps: IButtonProps 
   const [imageModal, setImageModal] = useState("")
   const [voteStatus, setVoteStatus] = useState(0)
 
+  const router = useRouter()
+
 
   async function getQuestion() {
-    await fetch(`/api/votes?id=${questionid}`, { method: "GET", cache: "no-store" })
+    await fetch(`${SERVER}/votes?id=${questionid}`, { method: "GET", cache: "no-store" })
       .then(async (res: any) => {
-        setQuestion(await res.json())
+        const q = await res.json()
+        setQuestion(q[0])
       })
   }
 

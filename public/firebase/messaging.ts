@@ -2,6 +2,7 @@
 import { showNotification } from '@mantine/notifications'
 import { deleteToken, getToken, onMessage } from 'firebase/messaging'
 import { messaging } from './config'
+import { SERVER } from '@/app/vars'
 
 const VAPID_KEY = process.env.NEXT_PUBLIC_VAPIDKEY
 
@@ -18,8 +19,9 @@ export async function saveMessagingDeviceToken(userId: string) {
   const token = await getToken(msg, { vapidKey: VAPID_KEY })
 
   if (token) {
-    await fetch("/api/users/pushDevices", {
+    await fetch(`${SERVER}/users/pushDevices`, {
       method: "POST",
+      headers: { 'Content-Type': 'application/json', },
       body: JSON.stringify({
         "device": token,
         "userId": userId,

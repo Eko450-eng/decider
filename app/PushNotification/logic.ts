@@ -1,7 +1,8 @@
+import { SERVER } from "../vars"
 import { sendPush } from "./messaging"
 
 export async function sendMsgToAll({ title, msg }: { title: string, msg: string }) {
-  await fetch(`/api/users/pushAllDevices`, {
+  await fetch(`${SERVER}/users/pushAllDevices`, {
     method: "GET"
   })
     .then(async (e: any) => {
@@ -13,7 +14,7 @@ export async function sendMsgToAll({ title, msg }: { title: string, msg: string 
 }
 
 export async function sendMsg({ title, msg, user }: { title: string, msg: string, user: any }) {
-  await fetch(`/api/users/pushDevices?username=${user.username}`, {
+  await fetch(`${SERVER}/users/pushDevices?username=${user.username}`, {
     method: "GET"
   })
     .then(async (e: any) => {
@@ -25,8 +26,9 @@ export async function sendMsg({ title, msg, user }: { title: string, msg: string
 }
 
 export async function subscribeToTopic(user: any, topic: string, subscribed: boolean) {
-  await fetch(`/api/users/topics`, {
+  await fetch(`${SERVER}/users/topics`, {
     method: "POST",
+    headers: { 'Content-Type': 'application/json', },
     body: JSON.stringify({
       user: user,
       topic: topic,

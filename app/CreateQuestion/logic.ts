@@ -2,6 +2,7 @@ import { UserResource } from '@clerk/types';
 import { showNotification } from '@mantine/notifications';
 import imageCompression from 'browser-image-compression'
 import { ImageState } from './page';
+import { SERVER } from '../vars';
 
 export async function compressImage(file: File | null): Promise<ArrayBuffer | null> {
   if (!file) return null
@@ -47,8 +48,9 @@ export async function createQuestion(props: QuestionProps) {
   const { user, question, images } = props
 
   if (!user.isSignedIn) showNotification({ title: "Whoops", message: "Please login to create a question", color: "red" })
-  const res = await fetch('/api/questions', {
+  const res = await fetch(`${SERVER}/questions`, {
     method: "POST",
+    headers: { 'Content-Type': 'application/json', },
     body: JSON.stringify({
       ...question,
       image1: images.image1,

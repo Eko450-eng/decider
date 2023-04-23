@@ -10,6 +10,7 @@ import { ENoLogon } from '@/app/api/messages';
 import { Question } from "@/db/schema/schema"
 import VoteButton from './(cardComponents)/voteButton';
 import LikeButton from './(cardComponents)/likeButton';
+import { useRouter } from 'next/navigation';
 
 export default function Questioncard({ question }: { question: Question }) {
   const [modal, setModal] = useState(false)
@@ -17,22 +18,18 @@ export default function Questioncard({ question }: { question: Question }) {
   const [imageByte2, setImage2] = useState<string>("")
   const { isSignedIn, user } = useUser()
   const role = user ? user.publicMetadata.role as number : 0
+  const router = useRouter()
 
-  function displayMessage(res: any) { if (res.notification) showNotification(res.notification) }
+  function displayMessage(res: any) {
+    if (res.notification) {
+      showNotification(res.notification)
+      router.refresh()
+    }
+  }
 
   async function handleDelete() {
     if (!isSignedIn || !question) return showNotification(ENoLogon.notification)
-    if (role > 8) {
-      await fetch("/api/questions/force", {
-        method: "PATCH",
-        body: JSON.stringify({
-          questionid: question.id,
-          role: role
-        })
-      })
-    } else {
-      deleteQuestion(question, user.id).then((res: any) => displayMessage(res))
-    }
+    deleteQuestion(question, user.id).then((res: any) => displayMessage(res))
   }
 
   async function getImages() {
@@ -74,7 +71,7 @@ export default function Questioncard({ question }: { question: Question }) {
             </Group>
             <Text>{question.desc}</Text>
             <VoteButton ButtonProps={{ imageByte1: imageByte1, imageByte2: imageByte2, questionid: question.id }} />
-            {/* <LikeButton ButtonProps={{ questionid: question.id }} /> */}
+            <LikeButton ButtonProps={{ questionid: question.id }} />
           </Stack>
         </Card>
       }
