@@ -6,7 +6,6 @@ import { Button, Center, Modal, Stack } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { useEffect, useState } from "react";
 import { vote } from "../logic";
-import { SERVER } from "@/app/vars";
 import { useRouter } from "next/navigation";
 
 interface IButtonProps {
@@ -27,7 +26,7 @@ export default function VoteButton({ ButtonProps }: { ButtonProps: IButtonProps 
 
 
   async function getQuestion() {
-    await fetch(`${SERVER}/votes?id=${questionid}`, { method: "GET", cache: "no-store" })
+    await fetch(`${process.env.NEXT_PUBLIC_HOSTING_SERVER}/votes?id=${questionid}`, { method: "GET", cache: "no-store" })
       .then(async (res: any) => {
         const q = await res.json()
         setQuestion(q[0])

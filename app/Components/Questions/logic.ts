@@ -1,9 +1,8 @@
-import { SERVER } from "@/app/vars"
 import { Question } from "@/db/schema/schema"
 import { showNotification } from "@mantine/notifications"
 
 export async function vote(questionid: number, userid: string, number: number) {
-  const res = await fetch(`${SERVER}/questions`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_HOSTING_SERVER}/questions`, {
     method: "PATCH",
     headers: { 'Content-Type': 'application/json', },
     body: JSON.stringify({
@@ -21,7 +20,7 @@ export async function vote(questionid: number, userid: string, number: number) {
 }
 
 export async function like(questionid: number, user: string) {
-  const res = await fetch(`${SERVER}/questions`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_HOSTING_SERVER}/questions`, {
     method: "PATCH",
     headers: { 'Content-Type': 'application/json', },
     body: JSON.stringify({
@@ -38,7 +37,7 @@ export async function like(questionid: number, user: string) {
 
 export async function deleteQuestion(question: Question, userId: string) {
   console.log(userId, question)
-  const res = await fetch(`${SERVER}/questions?userid=${userId}&questionid=${question.id}`, { method: "DELETE", })
+  const res = await fetch(`${process.env.NEXT_PUBLIC_HOSTING_SERVER}/questions?userid=${userId}&questionid=${question.id}`, { method: "DELETE", })
     .then(async (e: any) => {
       const returnValue = await e.json()
       return (returnValue)

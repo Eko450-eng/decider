@@ -6,7 +6,6 @@ import { IconHeartFilled } from "@tabler/icons-react";
 import { like } from "../logic";
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
-import { SERVER } from "@/app/vars";
 
 interface IButtonProps {
   questionid: number
@@ -35,7 +34,7 @@ export default function LikeButton({ ButtonProps }: { ButtonProps: IButtonProps 
   }
 
   async function getQuestion() {
-    await fetch(`${SERVER}/likes?id=${questionid}`, { method: "GET", cache: "no-store" })
+    await fetch(`${process.env.NEXT_PUBLIC_HOSTING_SERVER}/likes?id=${questionid}`, { method: "GET", cache: "no-store" })
       .then(async (res: any) => {
         const data = await res.json()
         setQuestion(data)
