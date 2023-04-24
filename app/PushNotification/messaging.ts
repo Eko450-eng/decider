@@ -1,44 +1,42 @@
-
 export async function sendPush(title: string, message: string, key: string) {
   const headers = {
     "Content-Type": "application/json",
-    "Authorization": `${process.env.NEXT_PUBLIC_AUTHORIZATIONKEY}`
-  }
+    "Authorization": `${process.env.NEXT_PUBLIC_AUTHORIZATIONKEY}`,
+  };
 
   const body = {
     "to": key,
     "notification": {
       "title": title,
-      "body": message
-    }
-  }
+      "body": message,
+    },
+  };
 
-  await fetch('https://fcm.googleapis.com/fcm/send', {
+  await fetch("https://fcm.googleapis.com/fcm/send", {
     method: "POST",
     headers: headers,
     body: JSON.stringify(body),
-  })
+  });
 }
 
 export async function sendNewVote(vote: string, message: string, key: string) {
   const headers = {
     "Content-Type": "application/json",
     "Authorization": `${process.env.NEXT_PUBLIC_AUTHORIZATIONKEY}`,
-    "Access-Control-Allow-Origin": "no-cors"
-  }
+    "Access-Control-Allow-Origin": "no-cors",
+  };
 
   const body = {
     "to": key,
     "notification": {
       "title": `There has been a new vote on ${vote}`,
-      "body": message
-    }
-  }
+      "body": message,
+    },
+  };
 
-  await fetch('https://fcm.googleapis.com/fcm/send', {
+  await fetch("https://fcm.googleapis.com/fcm/send", {
     method: "POST",
     headers: headers,
     body: JSON.stringify(body),
-  })
-
+  });
 }

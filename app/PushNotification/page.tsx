@@ -1,36 +1,42 @@
-'use client'
-import { Button, Center, Stack, Switch, Text } from "@mantine/core";
-import { Input } from '@mantine/core'
-import { useState } from "react";
+"use client";
+import { Button, Center } from "@mantine/core";
 import { saveMessagingDeviceToken } from "@/public/firebase/messaging";
 import { useRouter } from "next/navigation";
-import { subscribeToTopic, sendMsg, sendMsgToAll } from "./logic";
 import { useUser } from "@clerk/nextjs";
 
 export default function Push() {
-  const router = useRouter()
-  const topicOverview = ["Likes", "Comments", "Votes", "New Questions", "New Features", "System Notifications"]
-  const user = useUser()
+  const router = useRouter();
+  // const topicOverview = [
+  //   "Likes",
+  //   "Comments",
+  //   "Votes",
+  //   "New Questions",
+  //   "New Features",
+  //   "System Notifications",
+  // ];
+  const user = useUser();
 
-  const [message, setMessage] = useState({
-    title: "",
-    msg: ""
-  })
+  // const [message, setMessage] = useState({
+  //   title: "",
+  //   msg: "",
+  // });
 
   async function handleSubscription() {
-    if (!user.user) return
-    saveMessagingDeviceToken(user.user.id).then(() => router.refresh())
+    if (!user.user) return;
+    saveMessagingDeviceToken(user.user.id).then(() => router.refresh());
   }
 
-  async function handleTopic(topic: string, subscribed: boolean) {
-    // dispatch(changeSubscritpion({ topic: topic, subscribed: subscribed }))
-    // subscribeToTopic(user, topic, subscribed)
-  }
+  // async function handleTopic(topic: string, subscribed: boolean) {
+  // dispatch(changeSubscritpion({ topic: topic, subscribed: subscribed }))
+  // subscribeToTopic(user, topic, subscribed)
+  // }
 
   return (
     <div className="flex-center">
       <Center>
-        <Button sx={{ margin: "1rem" }} onClick={() => handleSubscription()}>Allow notifications</Button>
+        <Button sx={{ margin: "1rem" }} onClick={() => handleSubscription()}>
+          Allow notifications
+        </Button>
       </Center>
 
       {/* <Text>Get notifications for:</Text> */}
@@ -75,5 +81,5 @@ export default function Push() {
       {/* </> */}
       {/* } */}
     </div>
-  )
+  );
 }
