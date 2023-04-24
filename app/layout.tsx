@@ -32,8 +32,8 @@ export default function RootLayout({ children, }: { children: React.ReactNode })
           }}
         >
           <RootStyleRegistry>
-            <Navigation />
             {children}
+            <Navigation />
           </RootStyleRegistry>
         </ClerkProvider>
       </body>
