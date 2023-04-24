@@ -1,41 +1,47 @@
-import db from "@/db/db";
+"use client";
 import Questioncard from "./Components/Questions/Card";
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Question } from "@/db/schema/schema";
-import { desc } from "drizzle-orm";
+import { motion } from "framer-motion";
+import { boxVariant } from "./framer";
+import Loading from "./loading";
 
-const questionsQuery = db.select()
-  .from(Question)
-  .orderBy(desc(Question.createdAt))
-  .prepare("questions");
+export default function Home() {
+  const [data, setData] = useState<Question[]>();
+  async function getData() {
+    await fetch(
+      `${process.env.NEXT_PUBLIC_HOSTING_SERVER}/questions`,
+      { method: "GET", cache: "no-store" },
+    )
+      .then(async (res) => {
+        setData(await res.json());
+      });
+  }
 
-async function getData() {
-  const questions = await questionsQuery.execute();
-  return questions;
-}
-
-export default async function Home() {
-  const data = await getData();
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <main className="main">
-      <div className="cards">
+      <motion.ul
+        className="cards"
+        variants={boxVariant}
+        animate="visible"
+        initial="hidden"
+      >
         {data && data.map((v: any, k: number) => {
           const { createdAt, ...question } = v;
           return (
-            <Suspense
-              key={`renderQuestionSuspense${k}`}
-              fallback={<p>Loading.....</p>}
-            >
+            <Suspense key={`questionCard-${k}`} fallback={<Loading />}>
               <Questioncard
-                key={`renderQuestion${k}`}
                 question={question}
                 data-superjson
               />
             </Suspense>
           );
         })}
-      </div>
+      </motion.ul>
     </main>
   );
 }

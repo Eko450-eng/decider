@@ -1,6 +1,7 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
+import { motion } from "framer-motion";
 import {
   ActionIcon,
   Button,
@@ -18,20 +19,23 @@ import { ENoLogon } from "@/app/api/messages";
 import { Question } from "@/db/schema/schema";
 import VoteButton from "./(cardComponents)/voteButton";
 import LikeButton from "./(cardComponents)/likeButton";
-import { useRouter } from "next/navigation";
+import { boxVariant } from "@/app/framer";
 
-export default function Questioncard({ question }: { question: Question }) {
+interface IButtonProps {
+  question: Question;
+}
+
+export default function Questioncard(ButtonProps: IButtonProps) {
+  const { question } = ButtonProps;
   const [modal, setModal] = useState(false);
   const [imageByte1, setImage1] = useState<string>("");
   const [imageByte2, setImage2] = useState<string>("");
   const { isSignedIn, user } = useUser();
   const role = user ? user.publicMetadata.role as number : 0;
-  const router = useRouter();
 
   function displayMessage(res: any) {
     if (res.notification) {
       showNotification(res.notification);
-      router.refresh();
     }
   }
 
@@ -52,7 +56,10 @@ export default function Questioncard({ question }: { question: Question }) {
   }, []);
 
   return (
-    <>
+    <motion.li
+      className="motion-list"
+      variants={boxVariant}
+    >
       {question &&
         (
           <Card withBorder padding="lg" radius="md" sx={{ margin: "1rem" }}>
@@ -80,7 +87,8 @@ export default function Questioncard({ question }: { question: Question }) {
             <Stack>
               <Group position="apart">
                 <Text fw="bold" fz="lg">{question.title}</Text>
-                {(isSignedIn && (question.posterId === user.id || role > 8)) &&
+                {(isSignedIn &&
+                  (question.posterId === user.id || role > 8)) &&
                   (
                     <ActionIcon
                       onClick={() => setModal(true)}
@@ -101,6 +109,6 @@ export default function Questioncard({ question }: { question: Question }) {
             </Stack>
           </Card>
         )}
-    </>
+    </motion.li>
   );
 }

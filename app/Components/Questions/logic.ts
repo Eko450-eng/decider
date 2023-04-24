@@ -1,4 +1,7 @@
+import { ENoNo, ENoPerm, SDeleteQuestion } from "@/app/api/messages";
+import db from "@/db/db";
 import { Question } from "@/db/schema/schema";
+import { and, eq } from "drizzle-orm";
 
 export async function vote(questionid: number, userid: string, number: number) {
   const res = await fetch(
@@ -41,7 +44,6 @@ export async function like(questionid: number, user: string) {
 }
 
 export async function deleteQuestion(question: Question, userId: string) {
-  console.log(userId, question);
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_HOSTING_SERVER}/questions?userid=${userId}&questionid=${question.id}`,
     { method: "DELETE" },

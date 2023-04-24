@@ -8,12 +8,15 @@ import { Home, Login, Plus, UserPlus } from "tabler-icons-react";
 import Push from "./PushNotification/page";
 import { useAuth, useUser } from "@clerk/nextjs";
 import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
 
 function LinkButton({ link, icon }: { link: any; icon: any }) {
   return (
-    <Tabs.Tab value={link}>
-      {icon}
-    </Tabs.Tab>
+    <Link href={link}>
+      <Tabs.Tab value={link}>
+        {icon}
+      </Tabs.Tab>
+    </Link>
   );
 }
 
@@ -54,7 +57,7 @@ export default function Navigation() {
           <Tabs
             variant="outline"
             defaultValue={path}
-            onTabChange={(value) => router.push(`${value}`)}
+            // onTabChange={(value) => router.push(`${value}`)}
           >
             <Tabs.List>
               <LinkButton link="/" icon={<Home />} />
