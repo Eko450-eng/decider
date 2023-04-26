@@ -6,6 +6,7 @@ import { Button, Center, Modal, Stack } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { useEffect, useState } from "react";
 import { vote } from "../logic";
+import { motion } from "framer-motion";
 
 interface IButtonProps {
   imageByte1: string;
@@ -13,9 +14,11 @@ interface IButtonProps {
   questionid: number;
 }
 
-export default function VoteButton(
-  { ButtonProps }: { ButtonProps: IButtonProps },
-) {
+export default function VoteButton({
+  ButtonProps,
+}: {
+  ButtonProps: IButtonProps;
+}) {
   const { questionid, imageByte2, imageByte1 } = ButtonProps;
   const { isSignedIn, user } = useUser();
 
@@ -26,12 +29,11 @@ export default function VoteButton(
   async function getQuestion() {
     await fetch(
       `${process.env.NEXT_PUBLIC_HOSTING_SERVER}/votes?id=${questionid}`,
-      { method: "GET", cache: "no-store" },
-    )
-      .then(async (res: any) => {
-        const q = await res.json();
-        setQuestion(q[0]);
-      });
+      { method: "GET", cache: "no-store" }
+    ).then(async (res: any) => {
+      const q = await res.json();
+      setQuestion(q[0]);
+    });
   }
 
   async function getVoteStatus() {
@@ -83,50 +85,50 @@ export default function VoteButton(
         />
       </Modal>
 
-      {question
-        ? (
-          <Stack spacing="sm">
-            <Stack>
-              {imageByte1 !== "data:image/png;base64," &&
-                (
-                  <Center>
-                    <img
-                      onClick={() => setImageModal(imageByte1)}
-                      src={`${imageByte1}`}
-                      style={{ maxWidth: "5rem", maxHeight: "5rem" }}
-                    />
-                  </Center>
-                )}
-              <Button
-                id="vote1"
-                className={`${voteStatus == 1 ? "border" : "noBorder"}`}
-                onClick={() => handleVote(1)}
-              >
-                {question.option1}: {question.votes1.length}
-              </Button>
-            </Stack>
-            <Stack>
-              {imageByte2 !== "data:image/png;base64," &&
-                (
-                  <Center>
-                    <img
-                      onClick={() => setImageModal(imageByte2)}
-                      src={`${imageByte2}`}
-                      style={{ maxWidth: "5rem", maxHeight: "5rem" }}
-                    />
-                  </Center>
-                )}
-              <Button
-                id="vote2"
-                className={`${voteStatus == 2 ? "border" : "noBorder"}`}
-                onClick={() => handleVote(2)}
-              >
-                {question.option2}: {question.votes2.length}
-              </Button>
-            </Stack>
+      {question ? (
+        <Stack spacing="sm">
+          <Stack>
+            {imageByte1 !== "data:image/png;base64," && (
+              <Center>
+                <img
+                  onClick={() => setImageModal(imageByte1)}
+                  src={`${imageByte1}`}
+                  style={{ maxWidth: "5rem", maxHeight: "5rem" }}
+                />
+              </Center>
+            )}
+            <Button
+              id="vote1"
+              className={`${voteStatus == 1 ? "border" : "noBorder"}`}
+              onClick={() => handleVote(1)}
+              sx={(theme)=>({backgroundColor: `${voteStatus === 0 ? "indigo" : voteStatus === 1 ? theme.colors.nord_success[8] : theme.colors.nord_gray[2] }`})}
+            >
+              {question.option1}: {question.votes1.length}
+            </Button>
           </Stack>
-        )
-        : <p>Loading</p>}
+          <Stack>
+            {imageByte2 !== "data:image/png;base64," && (
+              <Center>
+                <img
+                  onClick={() => setImageModal(imageByte2)}
+                  src={`${imageByte2}`}
+                  style={{ maxWidth: "5rem", maxHeight: "5rem" }}
+                />
+              </Center>
+            )}
+            <Button
+              id="vote2"
+              className={`${voteStatus == 2 ? "border" : "noBorder"}`}
+              onClick={() => handleVote(2)}
+              sx={(theme)=>({backgroundColor: `${voteStatus === 0 ? "indigo" : voteStatus === 2 ? theme.colors.nord_success[8] : theme.colors.nord_gray[2] }`})}
+            >
+              {question.option2}: {question.votes2.length}
+            </Button>
+          </Stack>
+        </Stack>
+      ) : (
+        <p>Loading</p>
+      )}
     </>
   );
 }

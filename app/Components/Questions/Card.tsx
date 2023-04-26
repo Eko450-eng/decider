@@ -1,7 +1,7 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   ActionIcon,
   Button,
@@ -20,22 +20,27 @@ import { Question } from "@/db/schema/schema";
 import VoteButton from "./(cardComponents)/voteButton";
 import LikeButton from "./(cardComponents)/likeButton";
 import { boxVariant } from "@/app/framer";
+import { useRouter } from "next/navigation";
 
 interface IButtonProps {
   question: Question;
+  unmount: () => void;
+  index: number;
 }
 
 export default function Questioncard(ButtonProps: IButtonProps) {
-  const { question } = ButtonProps;
+  const { question, unmount } = ButtonProps;
   const [modal, setModal] = useState(false);
   const [imageByte1, setImage1] = useState<string>("");
   const [imageByte2, setImage2] = useState<string>("");
   const { isSignedIn, user } = useUser();
-  const role = user ? user.publicMetadata.role as number : 0;
+  const router = useRouter();
 
   function displayMessage(res: any) {
     if (res.notification) {
       showNotification(res.notification);
+      unmount();
+      router.refresh();
     }
   }
 
@@ -56,59 +61,63 @@ export default function Questioncard(ButtonProps: IButtonProps) {
   }, []);
 
   return (
-    <motion.li
-      className="motion-list"
-      variants={boxVariant}
-    >
-      {question &&
-        (
-          <Card withBorder padding="lg" radius="md" sx={{ margin: "1rem" }}>
-            <Modal
-              opened={modal}
-              onClose={() => setModal(false)}
-              title="Are you sure?"
-            >
-              <Group spacing="xl">
-                <Button color="red" onClick={() => setModal(false)}>
-                  <X />No
-                </Button>
-                <Button
-                  color="nord_success"
-                  onClick={() => {
-                    handleDelete();
-                    setModal(false);
-                  }}
-                >
-                  <Trash />Yes
-                </Button>
-              </Group>
-            </Modal>
+    <AnimatePresence>
+      <motion.div
+        exit={{ opacity: 0 }}
+        key={ButtonProps.index}
+        variants={boxVariant}
+        transition={{ duration: .1, delay: ButtonProps.index * .2 }}
+      >
+        {question &&
+          (
+            <Card withBorder padding="lg" radius="md" sx={{ margin: "1rem" }}>
+              <Modal
+                opened={modal}
+                onClose={() => setModal(false)}
+                title="Are you sure?"
+              >
+                <Group spacing="xl">
+                  <Button color="red" onClick={() => setModal(false)}>
+                    <X />No
+                  </Button>
+                  <Button
+                    color="nord_success"
+                    onClick={() => {
+                      handleDelete();
+                      setModal(false);
+                    }}
+                  >
+                    <Trash />Yes
+                  </Button>
+                </Group>
+              </Modal>
 
-            <Stack>
-              <Group position="apart">
-                <Text fw="bold" fz="lg">{question.title}</Text>
-                {(isSignedIn &&
-                  (question.posterId === user.id || role > 8)) &&
-                  (
-                    <ActionIcon
-                      onClick={() => setModal(true)}
-                    >
-                      <Trash className="icon red" />
-                    </ActionIcon>
-                  )}
-              </Group>
-              <Text>{question.desc}</Text>
-              <VoteButton
-                ButtonProps={{
-                  imageByte1: imageByte1,
-                  imageByte2: imageByte2,
-                  questionid: question.id,
-                }}
-              />
-              <LikeButton ButtonProps={{ questionid: question.id }} />
-            </Stack>
-          </Card>
-        )}
-    </motion.li>
+              <Stack>
+                <Group position="apart">
+                  <Text fw="bold" fz="lg">{question.title}</Text>
+                  {(isSignedIn &&
+                    (question.posterId === user.id)) &&
+                    (
+                      <ActionIcon
+                        onClick={() => setModal(true)}
+                      >
+                        <Trash className="icon red" />
+                      </ActionIcon>
+                    )}
+                </Group>
+                <Text>{question.desc}</Text>
+                <VoteButton
+                  ButtonProps={{
+                    imageByte1: imageByte1,
+                    imageByte2: imageByte2,
+                    questionid: question.id,
+                  }}
+                />
+                <LikeButton ButtonProps={{ questionid: question.id }} />
+              </Stack>
+            </Card>
+          )}
+      </motion.div>
+    </AnimatePresence>
   );
 }

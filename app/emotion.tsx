@@ -5,9 +5,11 @@ import { MantineProvider, useEmotionCache } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { useServerInsertedHTML } from "next/navigation";
 
-export default function RootStyleRegistry(
-  { children }: { children: React.ReactNode },
-) {
+export default function RootStyleRegistry({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const cache = useEmotionCache();
   cache.compat = true;
 
@@ -36,7 +38,7 @@ export default function RootStyleRegistry(
           },
           colorScheme: "dark",
           colors: {
-            "nord_pink": [
+            nord_pink: [
               "#CDB2B5",
               "#C4989D",
               "#BF7E84",
@@ -48,7 +50,7 @@ export default function RootStyleRegistry(
               "#61494B",
               "#554446",
             ],
-            "nord_orange": [
+            nord_orange: [
               "#D5B7AE",
               "#D09F90",
               "#D08770",
@@ -59,7 +61,7 @@ export default function RootStyleRegistry(
               "#6E564F",
               "#604F4A",
             ],
-            "nord_yellow": [
+            nord_yellow: [
               "#FBFAF7",
               "#EFE7D5",
               "#EAD7B2",
@@ -71,7 +73,7 @@ export default function RootStyleRegistry(
               "#887755",
               "#766A51",
             ],
-            "nord_green": [
+            nord_green: [
               "#DBE1D7",
               "#C7D1BE",
               "#B4C6A5",
@@ -83,7 +85,7 @@ export default function RootStyleRegistry(
               "#616A59",
               "#575E51",
             ],
-            "nord_purple": [
+            nord_purple: [
               "#DBD2D9",
               "#CBBBC8",
               "#BEA5B9",
@@ -95,7 +97,7 @@ export default function RootStyleRegistry(
               "#655963",
               "#5A5158",
             ],
-            "nord_gray": [
+            nord_gray: [
               "#43474F",
               "#3C404A",
               "#353A44",
@@ -107,7 +109,7 @@ export default function RootStyleRegistry(
               "#1F2022",
               "#1C1D1E",
             ],
-            "nord_success": [
+            nord_success: [
               "#548F54",
               "#458945",
               "#378437",

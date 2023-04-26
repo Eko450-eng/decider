@@ -1,42 +1,46 @@
-.icon{
-  color: #CECECE;
+body {
+  overflow-x: hidden;
+}
+
+.icon {
+  color: #cecece;
   height: 1.2rem;
 }
 
-.red{
-  color: #E41F24;
+.red {
+  color: #e41f24;
 }
 
-.animated{
-  animation: color .4s ease-in;
-  transition: color .4s ease-in;
+.animated {
+  animation: color 0.4s ease-in;
+  transition: color 0.4s ease-in;
 }
 
-form{
+form {
   margin: 0 auto;
   width: 50%;
 }
 
-.cards{
+.cards {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
 }
 
-.cl-rootBox{
+.cl-rootBox {
   margin: 1rem auto;
 }
 
-.border{
+.border {
   border: 2px solid white;
 }
 
-.noBorder{
+.noBorder {
   border: 0px solid white;
 }
 
-.avatar{
+.avatar {
   border-radius: 25px;
 }
 
@@ -44,10 +48,38 @@ form{
   margin-bottom: 4rem;
 }
 
-.motion-list{
-    list-style: none;
+.motion-list {
+  list-style: none;
 }
 
-ul{
-    padding: 0;
+ul {
+  padding: 0;
+}
+
+.background {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 2rem;
+  height: 2rem;
+  background: blue;
+}
+
+.btn-icon {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: green;
+  border-radius: 5px;
+  color: white;
+  padding: 0.25rem 0;
+  font-weight: bold;
 }

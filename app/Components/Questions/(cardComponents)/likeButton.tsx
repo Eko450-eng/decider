@@ -1,11 +1,12 @@
 "use client";
 import { ENoLogon } from "@/app/api/messages";
-import { ActionIcon, Group, Text } from "@mantine/core";
+import { Group, Text } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { IconHeartFilled } from "@tabler/icons-react";
 import { like } from "../logic";
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
+import { motion } from "framer-motion";
 
 interface IButtonProps {
   questionid: number;
@@ -58,9 +59,24 @@ export default function LikeButton(
 
   return (
     <Group position="right" spacing="xxs">
-      <ActionIcon onClick={handleLike}>
+      <motion.div
+        onClick={handleLike}
+        className="btn-icon"
+        whileHover={{
+          rotate: [0, 15, 0, -15, 0],
+          scale: [1, .9, 1, .9, 1],
+          transition: { repeat: Infinity, duration: 1, ease: "easeInOut" },
+        }}
+        whileTap={{
+          rotate: [360, 0, 360, 0],
+          scale: [1, .9, 1, .9, 1],
+          transition: {
+            duration: 2,
+          },
+        }}
+      >
         <IconHeartFilled className={`${likeStatus ? "icon red" : "icon"}`} />
-      </ActionIcon>
+      </motion.div>
       <Text>
         {question.length}
       </Text>
