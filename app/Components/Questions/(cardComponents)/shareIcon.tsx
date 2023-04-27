@@ -1,3 +1,4 @@
+"use client"
 import { showNotification } from "@mantine/notifications";
 import { Share } from "tabler-icons-react";
 interface IButtonProps {
