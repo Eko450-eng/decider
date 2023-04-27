@@ -2,19 +2,20 @@
 
 import { useUser } from "@clerk/nextjs";
 import { AnimatePresence, motion, useCycle } from "framer-motion";
-import { Button, Card, Group, Stack, Text, TextInput } from "@mantine/core";
+import { Card, Group, Stack } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import React, { useEffect, useState } from "react";
 import { deleteQuestion, editQuestion } from "./logic";
-import { Trash } from "tabler-icons-react";
 import { ENoLogon } from "@/app/api/messages";
 import { Question } from "@/db/schema/schema";
 import VoteButton from "./(cardComponents)/voteButton";
 import LikeButton from "./(cardComponents)/likeButton";
 import { boxVariant } from "@/app/framer";
 import { useRouter } from "next/navigation";
-import EditButton from "./(cardComponents)/editButton";
 import { useForm } from "@mantine/form";
+import DeleteButton from "./(cardComponents)/buttonComponents/deleteButton";
+import { EditableTextField } from "./(cardComponents)/buttonComponents/editableTextField";
+import EditButton from "./(cardComponents)/buttonComponents/editButton";
 
 interface IButtonProps {
   question: Question;
@@ -53,8 +54,8 @@ export default function Questioncard(ButtonProps: IButtonProps) {
     option2: string;
   }) {
     if (!isSignedIn) return;
-    const d = {...values, id: question.id, userid: user.id}
-    editQuestion(d).then((res: any)=>displayMessage(res))
+    const d = { ...values, id: question.id, userid: user.id };
+    editQuestion(d).then((res: any) => displayMessage(res));
   }
 
   async function getImages() {
@@ -98,29 +99,26 @@ export default function Questioncard(ButtonProps: IButtonProps) {
             >
               <Stack>
                 <Group position="apart">
-                  {isOpen ? (
-                    <TextInput
-                      placeholder={question.title}
-                      {...form.getInputProps("title")}
-                    />
-                  ) : (
-                    <Text fw="bold" fz="lg">
-                      {question.title}
-                    </Text>
-                  )}
+                  <EditableTextField
+                    title={question.title}
+                    form={form}
+                    isOpen={isOpen}
+                    weight="bold"
+                    fz="lg"
+                  />
+
                   {isSignedIn && question.posterId === user.id && (
                     <EditButton toggleOpen={toggleOpen} isOpen={isOpen} />
                   )}
+
                 </Group>
 
-                {isOpen ? (
-                  <TextInput
-                    placeholder={question.desc ?? ""}
-                    {...form.getInputProps("desc")}
-                  />
-                ) : (
-                  <Text>{question.desc}</Text>
-                )}
+                <EditableTextField
+                  title={question.desc ?? ""}
+                  form={form}
+                  isOpen={isOpen}
+                />
+
                 <VoteButton
                   ButtonProps={{
                     form: form,
@@ -130,23 +128,13 @@ export default function Questioncard(ButtonProps: IButtonProps) {
                     questionid: question.id,
                   }}
                 />
-                {isOpen && (
-                  <Group position="center">
-                    <Button color="nord_success" type="submit">
-                      Change
-                    </Button>
-                    <Button
-                      color="nord_success"
-                      onClick={() => {
-                        handleDelete();
-                        toggleOpen();
-                      }}
-                    >
-                      <Trash />
-                      Yes
-                    </Button>
-                  </Group>
-                )}
+
+                <DeleteButton
+                  isOpen={isOpen}
+                  handleDelete={handleDelete}
+                  toggleOpen={toggleOpen}
+                />
+
                 <LikeButton ButtonProps={{ questionid: question.id }} />
               </Stack>
             </form>

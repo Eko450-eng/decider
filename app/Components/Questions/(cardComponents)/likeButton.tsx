@@ -2,7 +2,6 @@
 import { ENoLogon } from "@/app/api/messages";
 import { Group, Text } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
-import { IconFlame, IconHeartFilled } from "@tabler/icons-react";
 import { like } from "../logic";
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";

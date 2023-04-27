@@ -1,11 +1,9 @@
 "use client";
-import { ENoLogon } from "@/app/api/messages";
 import { Question } from "@/db/schema/schema";
 import { useUser } from "@clerk/nextjs";
-import { Button, Center, Modal, Stack } from "@mantine/core";
-import { showNotification } from "@mantine/notifications";
+import { Center, Modal, Stack } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { EditableVoteButton } from "./editableButton";
+import { EditableVoteButton } from "./buttonComponents/editableButton";
 
 interface IButtonProps {
   form:any

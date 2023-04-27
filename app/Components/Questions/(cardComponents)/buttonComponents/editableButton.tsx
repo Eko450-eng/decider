@@ -3,16 +3,12 @@ import { useUser } from "@clerk/nextjs";
 import {
   ActionIcon,
   Button,
-  Group,
-  Stack,
-  Text,
   TextInput,
 } from "@mantine/core";
-import { vote } from "../logic";
+import { vote } from "../../logic";
 import { useRouter } from "next/navigation";
 import { showNotification } from "@mantine/notifications";
 import { ENoLogon } from "@/app/api/messages";
-import { Check } from "tabler-icons-react";
 
 interface IButtonProps {
   voteStatus: number;
@@ -50,11 +46,6 @@ export function EditableVoteButton(ButtonProps: IButtonProps) {
         <TextInput
           placeholder={option}
           {...form.getInputProps(`option${index}`)}
-          rightSection={
-            <ActionIcon type="submit">
-              <Check />
-            </ActionIcon>
-          }
         />
       ) : (
         <Button
