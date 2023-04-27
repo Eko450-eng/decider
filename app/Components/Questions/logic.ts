@@ -12,10 +12,40 @@ export async function vote(questionid: number, userid: string, number: number) {
         vote: number ? number : 0,
         type: "vote",
       }),
-    },
+    }
   ).then(async (e: any) => {
     const returnValue = await e.json();
-    return (returnValue);
+    return returnValue;
+  });
+  return res;
+}
+
+export async function editQuestion(values: {
+  userid: string;
+  id: number;
+  title: string;
+  desc: string | null;
+  option1: string;
+  option2: string;
+}) {
+  const {userid, id, title, desc, option1, option2} = values
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_HOSTING_SERVER}/questions/edit`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId: userid,
+        id: id,
+        title: title,
+        desc: desc,
+        option1: option1,
+        option2: option2,
+      }),
+    }
+  ).then(async (e: any) => {
+    const returnValue = await e.json();
+    return returnValue;
   });
   return res;
 }
@@ -31,7 +61,7 @@ export async function like(questionid: number, user: string) {
         userId: user,
         type: "like",
       }),
-    },
+    }
   ).then(async (e: any) => {
     const res = await e.json();
     return res;
@@ -42,11 +72,10 @@ export async function like(questionid: number, user: string) {
 export async function deleteQuestion(question: Question, userId: string) {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_HOSTING_SERVER}/questions?userid=${userId}&questionid=${question.id}`,
-    { method: "DELETE" },
-  )
-    .then(async (e: any) => {
-      const returnValue = await e.json();
-      return (returnValue);
-    });
+    { method: "DELETE" }
+  ).then(async (e: any) => {
+    const returnValue = await e.json();
+    return returnValue;
+  });
   return res;
 }

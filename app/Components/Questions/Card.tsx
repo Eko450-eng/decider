@@ -5,7 +5,7 @@ import { AnimatePresence, motion, useCycle } from "framer-motion";
 import { Button, Card, Group, Stack, Text, TextInput } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import React, { useEffect, useState } from "react";
-import { deleteQuestion } from "./logic";
+import { deleteQuestion, editQuestion } from "./logic";
 import { Trash } from "tabler-icons-react";
 import { ENoLogon } from "@/app/api/messages";
 import { Question } from "@/db/schema/schema";
@@ -46,36 +46,24 @@ export default function Questioncard(ButtonProps: IButtonProps) {
     deleteQuestion(question, user.id).then((res: any) => displayMessage(res));
   }
 
+  async function changeQuestion(values: {
+    title: string;
+    desc: string | null;
+    option1: string;
+    option2: string;
+  }) {
+    if (!isSignedIn) return;
+    const d = {...values, id: question.id, userid: user.id}
+    editQuestion(d).then((res: any)=>displayMessage(res))
+  }
+
   async function getImages() {
     setImage1(`data:image/png;base64,${question.image1?.toString()}` ?? "");
     setImage2(`data:image/png;base64,${question.image2?.toString()}` ?? "");
   }
 
-  async function changeQuestion(values: Question) {
-    const { title, desc, option1, option2 } = values;
-    if (!isSignedIn) return;
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_HOSTING_SERVER}/questions/edit`,
-      {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userId: user.id,
-          id: question.id,
-          title: title,
-          desc: desc,
-          option1: option1,
-          option2: option2,
-        }),
-      }
-    ).then(async (e: any) => {
-      const returnValue = await e.json();
-      return returnValue;
-    });
-    return displayMessage(res);
-  }
-
   useEffect(() => {
+    console.log();
     getImages();
   }, []);
 
