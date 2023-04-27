@@ -7,17 +7,3 @@ so that you can blame other for the consequences of your own choises.
 ... you want to "help" someone else decide between 2 possibly live changing decisions and redirect the course of some random humans entire life I dont know, I dont judge (Possibly harmfull, unlawfull or otherwise "bad" questions can and will be removed by the admin) 
 
 # Try it for yourself [here](https://wipdesign.eu)
-
-Features to be added:
-- [ ] Location based search
-- [ ] Tag based search
-- [ ] Comments
-- [ ] Friends
-- [ ] Chats
-- [ ] Group Chats
-- [ ] Spam filter 
-- [ ] Blacklisting words 
-- [ ] Search by words 
-- [ ] Sort by trending 
-- [ ] Hide answer count
-- [ ] Dynamically add options
