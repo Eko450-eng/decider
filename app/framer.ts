@@ -54,3 +54,12 @@ export const sidebar = {
     },
   },
 };
+
+export const dots = {
+  top: {
+    y: 9
+  },
+  bottom: {
+    y: -9
+  }
+}

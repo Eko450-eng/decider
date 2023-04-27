@@ -64,7 +64,7 @@ export default function Navigation() {
               {!user.isSignedIn
                 ? (
                   <>
-                    <LinkButton link="/Signup" icon={<UserPlus />} />
+                    <LinkButton link="/CreateQuestion" icon={<Plus />} />
                     <LinkButton link="/Signin" icon={<Login />} />
                   </>
                 )
@@ -78,8 +78,8 @@ export default function Navigation() {
                           className="avatar"
                           src={image}
                           alt="No image"
-                          width="30"
-                          height="30"
+                          width="20"
+                          height="20"
                         />
                       )}
                     />

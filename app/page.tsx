@@ -23,7 +23,7 @@ export default function Home() {
     <main className="main">
       <AnimatePresence>
         <motion.ul
-          className="cards"
+          className="cards-wrapper"
           variants={boxVariant}
           animate="visible"
           initial="hidden"

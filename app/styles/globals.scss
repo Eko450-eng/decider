@@ -5,6 +5,14 @@ body {
 .icon {
   color: #cecece;
   height: 1.2rem;
+  cursor: pointer;
+  &-edit{
+    @extend .icon;
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    margin: 1rem
+  }
 }
 
 .red {
@@ -23,9 +31,21 @@ form {
 
 .cards {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
   justify-content: center;
+  width: 100%;
+  @media (min-width: 980px) and (max-width: 1200px){
+    width: 50%;
+  }
+  @media (min-width: 1200px){
+    width: 25%;
+  }
+  &-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }
 
 .cl-rootBox {
@@ -41,6 +61,8 @@ form {
 }
 
 .avatar {
+  padding: 0;
+  margin: 0;
   border-radius: 25px;
 }
 
@@ -83,3 +105,18 @@ ul {
   padding: 0.25rem 0;
   font-weight: bold;
 }
+
+.dot {
+  background: gray;
+  border-radius: 100%;
+  width: 5px;
+  height: 5px;
+  margin: .25rem;
+}
+
+.unstyled-form{
+  margin: 0;
+  padding: 0;
+  display: unset;
+}
+

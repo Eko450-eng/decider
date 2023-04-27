@@ -5,10 +5,11 @@ import { useUser } from "@clerk/nextjs";
 import { Button, Center, Modal, Stack } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { useEffect, useState } from "react";
-import { vote } from "../logic";
-import { motion } from "framer-motion";
+import { EditableVoteButton } from "./editableButton";
 
 interface IButtonProps {
+  form:any
+  isOpen: boolean
   imageByte1: string;
   imageByte2: string;
   questionid: number;
@@ -19,12 +20,13 @@ export default function VoteButton({
 }: {
   ButtonProps: IButtonProps;
 }) {
-  const { questionid, imageByte2, imageByte1 } = ButtonProps;
+  const { questionid, imageByte2, imageByte1, isOpen, form } = ButtonProps;
   const { isSignedIn, user } = useUser();
 
   const [question, setQuestion] = useState<Question>();
   const [imageModal, setImageModal] = useState("");
   const [voteStatus, setVoteStatus] = useState(0);
+
 
   async function getQuestion() {
     await fetch(
@@ -41,18 +43,6 @@ export default function VoteButton({
     if (question.votes1.includes(user.id)) setVoteStatus(1);
     else if (question.votes2.includes(user.id)) setVoteStatus(2);
     else setVoteStatus(0);
-  }
-
-  function displayMessage(res: any) {
-    if (res.notification) showNotification(res.notification);
-    getQuestion();
-  }
-
-  function handleVote(number: number) {
-    if (!isSignedIn || !question) {
-      return showNotification(ENoLogon.notification);
-    }
-    vote(questionid, user.id, number).then((res: any) => displayMessage(res));
   }
 
   useEffect(() => {
@@ -97,14 +87,7 @@ export default function VoteButton({
                 />
               </Center>
             )}
-            <Button
-              id="vote1"
-              className={`${voteStatus == 1 ? "border" : "noBorder"}`}
-              onClick={() => handleVote(1)}
-              sx={(theme)=>({backgroundColor: `${voteStatus === 0 ? "indigo" : voteStatus === 1 ? theme.colors.nord_success[8] : theme.colors.nord_gray[2] }`})}
-            >
-              {question.option1}: {question.votes1.length}
-            </Button>
+            <EditableVoteButton form={form} isOpen={isOpen} voteStatus={voteStatus} votes={question.votes1} questionid={questionid} getQuestion={()=>getQuestion()} option={question.option1} index={1} />
           </Stack>
           <Stack>
             {imageByte2 !== "data:image/png;base64," && (
@@ -116,14 +99,7 @@ export default function VoteButton({
                 />
               </Center>
             )}
-            <Button
-              id="vote2"
-              className={`${voteStatus == 2 ? "border" : "noBorder"}`}
-              onClick={() => handleVote(2)}
-              sx={(theme)=>({backgroundColor: `${voteStatus === 0 ? "indigo" : voteStatus === 2 ? theme.colors.nord_success[8] : theme.colors.nord_gray[2] }`})}
-            >
-              {question.option2}: {question.votes2.length}
-            </Button>
+            <EditableVoteButton form={form} isOpen={isOpen} voteStatus={voteStatus} votes={question.votes2} questionid={questionid} getQuestion={()=>getQuestion()} option={question.option2} index={2} />
           </Stack>
         </Stack>
       ) : (

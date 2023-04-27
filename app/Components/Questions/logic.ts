@@ -1,7 +1,4 @@
-import { ENoNo, ENoPerm, SDeleteQuestion } from "@/app/api/messages";
-import db from "@/db/db";
 import { Question } from "@/db/schema/schema";
-import { and, eq } from "drizzle-orm";
 
 export async function vote(questionid: number, userid: string, number: number) {
   const res = await fetch(
@@ -18,7 +15,6 @@ export async function vote(questionid: number, userid: string, number: number) {
     },
   ).then(async (e: any) => {
     const returnValue = await e.json();
-    console.log(returnValue);
     return (returnValue);
   });
   return res;

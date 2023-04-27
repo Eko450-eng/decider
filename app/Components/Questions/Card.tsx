@@ -1,26 +1,20 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
-import { AnimatePresence, motion } from "framer-motion";
-import {
-  ActionIcon,
-  Button,
-  Card,
-  Group,
-  Modal,
-  Stack,
-  Text,
-} from "@mantine/core";
+import { AnimatePresence, motion, useCycle } from "framer-motion";
+import { Button, Card, Group, Stack, Text, TextInput } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import React, { useEffect, useState } from "react";
 import { deleteQuestion } from "./logic";
-import { Trash, X } from "tabler-icons-react";
+import { Trash } from "tabler-icons-react";
 import { ENoLogon } from "@/app/api/messages";
 import { Question } from "@/db/schema/schema";
 import VoteButton from "./(cardComponents)/voteButton";
 import LikeButton from "./(cardComponents)/likeButton";
 import { boxVariant } from "@/app/framer";
 import { useRouter } from "next/navigation";
+import EditButton from "./(cardComponents)/editButton";
+import { useForm } from "@mantine/form";
 
 interface IButtonProps {
   question: Question;
@@ -30,7 +24,7 @@ interface IButtonProps {
 
 export default function Questioncard(ButtonProps: IButtonProps) {
   const { question, unmount } = ButtonProps;
-  const [modal, setModal] = useState(false);
+  const [isOpen, toggleOpen] = useCycle(false, true);
   const [imageByte1, setImage1] = useState<string>("");
   const [imageByte2, setImage2] = useState<string>("");
   const { isSignedIn, user } = useUser();
@@ -40,6 +34,7 @@ export default function Questioncard(ButtonProps: IButtonProps) {
     if (res.notification) {
       showNotification(res.notification);
       unmount();
+      if (isOpen) toggleOpen();
       router.refresh();
     }
   }
@@ -56,67 +51,119 @@ export default function Questioncard(ButtonProps: IButtonProps) {
     setImage2(`data:image/png;base64,${question.image2?.toString()}` ?? "");
   }
 
+  async function changeQuestion(values: Question) {
+    const { title, desc, option1, option2 } = values;
+    if (!isSignedIn) return;
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_HOSTING_SERVER}/questions/edit`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: user.id,
+          id: question.id,
+          title: title,
+          desc: desc,
+          option1: option1,
+          option2: option2,
+        }),
+      }
+    ).then(async (e: any) => {
+      const returnValue = await e.json();
+      return returnValue;
+    });
+    return displayMessage(res);
+  }
+
   useEffect(() => {
     getImages();
   }, []);
 
+  const form = useForm({
+    initialValues: {
+      title: question.title,
+      desc: question.desc,
+      option1: question.option1,
+      option2: question.option2,
+    },
+  });
+
   return (
     <AnimatePresence>
       <motion.div
+        className="cards"
         exit={{ opacity: 0 }}
         key={ButtonProps.index}
         variants={boxVariant}
-        transition={{ duration: .1, delay: ButtonProps.index * .2 }}
+        transition={{ duration: 0.1, delay: ButtonProps.index * 0.2 }}
       >
-        {question &&
-          (
-            <Card withBorder padding="lg" radius="md" sx={{ margin: "1rem" }}>
-              <Modal
-                opened={modal}
-                onClose={() => setModal(false)}
-                title="Are you sure?"
-              >
-                <Group spacing="xl">
-                  <Button color="red" onClick={() => setModal(false)}>
-                    <X />No
-                  </Button>
-                  <Button
-                    color="nord_success"
-                    onClick={() => {
-                      handleDelete();
-                      setModal(false);
-                    }}
-                  >
-                    <Trash />Yes
-                  </Button>
-                </Group>
-              </Modal>
-
+        {question && (
+          <Card
+            withBorder
+            padding="lg"
+            radius="md"
+            sx={{ width: "100%", margin: "1rem" }}
+          >
+            <form
+              className="unstyled-form"
+              onSubmit={form.onSubmit((values) => changeQuestion(values))}
+            >
               <Stack>
                 <Group position="apart">
-                  <Text fw="bold" fz="lg">{question.title}</Text>
-                  {(isSignedIn &&
-                    (question.posterId === user.id)) &&
-                    (
-                      <ActionIcon
-                        onClick={() => setModal(true)}
-                      >
-                        <Trash className="icon red" />
-                      </ActionIcon>
-                    )}
+                  {isOpen ? (
+                    <TextInput
+                      placeholder={question.title}
+                      {...form.getInputProps("title")}
+                    />
+                  ) : (
+                    <Text fw="bold" fz="lg">
+                      {question.title}
+                    </Text>
+                  )}
+                  {isSignedIn && question.posterId === user.id && (
+                    <EditButton toggleOpen={toggleOpen} isOpen={isOpen} />
+                  )}
                 </Group>
-                <Text>{question.desc}</Text>
+
+                {isOpen ? (
+                  <TextInput
+                    placeholder={question.desc ?? ""}
+                    {...form.getInputProps("desc")}
+                  />
+                ) : (
+                  <Text>{question.desc}</Text>
+                )}
                 <VoteButton
                   ButtonProps={{
+                    form: form,
+                    isOpen: isOpen,
                     imageByte1: imageByte1,
                     imageByte2: imageByte2,
                     questionid: question.id,
                   }}
                 />
+                {isOpen && (
+                  <Group position="center">
+                    <Button color="nord_success" type="submit">
+                      Change
+                    </Button>
+                    <Button
+                      color="nord_success"
+                      onClick={() => {
+                        handleDelete();
+                        toggleOpen();
+                      }}
+                    >
+                      <Trash />
+                      Yes
+                    </Button>
+                  </Group>
+                )}
                 <LikeButton ButtonProps={{ questionid: question.id }} />
               </Stack>
-            </Card>
-          )}
+            </form>
+          </Card>
+        )}
       </motion.div>
     </AnimatePresence>
   );
