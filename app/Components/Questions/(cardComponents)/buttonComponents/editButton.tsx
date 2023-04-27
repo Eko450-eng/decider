@@ -1,6 +1,8 @@
 "use client";
 import { dots } from "@/app/framer";
 import { motion } from "framer-motion";
+import ShareIcon from "../shareIcon";
+import { Group } from "@mantine/core";
 
 interface IButtonProps {
   toggleOpen: () => void;

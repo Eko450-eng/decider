@@ -61,7 +61,7 @@ export default function LikeButton({
   }, [question]);
 
   return (
-    <Group position="right" spacing="xxs">
+    <Group  spacing="xxs">
       <motion.div
         onClick={handleLike}
         className="btn-icon"

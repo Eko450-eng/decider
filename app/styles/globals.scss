@@ -6,14 +6,18 @@ body {
   color: #cecece;
   height: 1.2rem;
   cursor: pointer;
-  &-edit{
+  &-floating {
+    display: inline;
+    font-size: .5rem;
+  }
+  &-edit {
     border-radius: 25px;
     border: 1px solid gray;
     @extend .icon;
     position: fixed;
     top: 1rem;
     right: 1rem;
-    margin: .5rem;
+    margin: 0.5rem;
     height: max-content;
   }
 }
@@ -36,10 +40,10 @@ form {
   display: flex;
   justify-content: center;
   width: 100%;
-  @media (min-width: 980px) and (max-width: 1200px){
+  @media (min-width: 980px) and (max-width: 1200px) {
     width: 50%;
   }
-  @media (min-width: 1200px){
+  @media (min-width: 1200px) {
     width: 25%;
   }
   &-wrapper {
@@ -114,12 +118,15 @@ ul {
   border-radius: 100%;
   width: 5px;
   height: 5px;
-  margin: .25rem;
+  margin: 0.25rem;
 }
 
-.unstyled-form{
+.unstyled-form {
   margin: 0;
   padding: 0;
   display: unset;
 }
 
+.title-wrapper {
+  position: relative;
+}

@@ -16,6 +16,7 @@ import { useForm } from "@mantine/form";
 import DeleteButton from "./(cardComponents)/buttonComponents/deleteButton";
 import { EditableTextField } from "./(cardComponents)/buttonComponents/editableTextField";
 import EditButton from "./(cardComponents)/buttonComponents/editButton";
+import ShareIcon from "./(cardComponents)/shareIcon";
 
 interface IButtonProps {
   question: Question;
@@ -98,7 +99,7 @@ export default function Questioncard(ButtonProps: IButtonProps) {
               onSubmit={form.onSubmit((values) => changeQuestion(values))}
             >
               <Stack>
-                <Group position="apart">
+                <Group className="title-wrapper" position="apart">
                   <EditableTextField
                     title={question.title}
                     form={form}
@@ -108,9 +109,11 @@ export default function Questioncard(ButtonProps: IButtonProps) {
                   />
 
                   {isSignedIn && question.posterId === user.id && (
-                    <EditButton toggleOpen={toggleOpen} isOpen={isOpen} />
+                      <EditButton
+                        toggleOpen={toggleOpen}
+                        isOpen={isOpen}
+                      />
                   )}
-
                 </Group>
 
                 <EditableTextField
@@ -135,7 +138,10 @@ export default function Questioncard(ButtonProps: IButtonProps) {
                   toggleOpen={toggleOpen}
                 />
 
+                <Group position="apart">
+                <ShareIcon link={`https://wipdesign.eu/question/${question.id}`} />
                 <LikeButton ButtonProps={{ questionid: question.id }} />
+                </Group>
               </Stack>
             </form>
           </Card>
