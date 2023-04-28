@@ -7,8 +7,9 @@ body {
   height: 1.2rem;
   cursor: pointer;
   &-floating {
+    cursor: pointer;
     display: inline;
-    font-size: .5rem;
+    font-size: 0.5rem;
   }
   &-edit {
     border-radius: 25px;

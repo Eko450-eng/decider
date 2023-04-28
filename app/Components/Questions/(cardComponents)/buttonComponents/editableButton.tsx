@@ -1,10 +1,6 @@
 "use client";
 import { useUser } from "@clerk/nextjs";
-import {
-  ActionIcon,
-  Button,
-  TextInput,
-} from "@mantine/core";
+import { ActionIcon, Button, TextInput, Text } from "@mantine/core";
 import { vote } from "../../logic";
 import { useRouter } from "next/navigation";
 import { showNotification } from "@mantine/notifications";
@@ -18,14 +14,22 @@ interface IButtonProps {
   option: string;
   index: number;
   isOpen: boolean;
-  form: any
+  form: any;
 }
 
 export function EditableVoteButton(ButtonProps: IButtonProps) {
   const router = useRouter();
   const { isSignedIn, user } = useUser();
-  const { voteStatus, getQuestion, questionid, option, form, index, isOpen } =
-    ButtonProps;
+  const {
+    voteStatus,
+    getQuestion,
+    questionid,
+    option,
+    form,
+    index,
+    isOpen,
+    votes,
+  } = ButtonProps;
 
   function displayMessage(res: any) {
     if (res.notification) showNotification(res.notification);
@@ -63,6 +67,17 @@ export function EditableVoteButton(ButtonProps: IButtonProps) {
           })}
         >
           {option}
+          {voteStatus !== 0 && (
+            <Text
+              sx={{
+                position: "absolute",
+                bottom: "0",
+                right: ".5rem",
+              }}
+            >
+              {votes.length}
+            </Text>
+          )}
         </Button>
       )}
     </>
