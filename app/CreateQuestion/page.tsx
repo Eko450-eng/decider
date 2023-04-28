@@ -8,6 +8,7 @@ import { PleaseLogin } from "../(PleaseLogin)";
 import { useUser } from "@clerk/nextjs";
 import { useState } from "react";
 import { convertToBase64, createQuestion } from "./logic";
+import { Check } from "tabler-icons-react";
 
 export interface ImageState {
   image1: string | undefined | null;
@@ -57,6 +58,7 @@ export default function Page() {
       {user.isSignedIn
         ? (
           <form
+            className="creation-form"
             onSubmit={form.onSubmit((values) =>
               createQuestion({ user: user, question: values, images: images })
                 .then((res) => {
@@ -142,7 +144,9 @@ export default function Page() {
               onChange={(v) => saveImage(2, v)}
             />
 
-            <Button type="submit">Create</Button>
+            <Button type="submit"
+              rightIcon={<Check />}
+            >Create</Button>
           </form>
         )
         : <PleaseLogin />}

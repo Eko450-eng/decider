@@ -1,3 +1,14 @@
+$prussian-blue: #003049;
+$fire-engine-red: #d62828;
+$orange-wheel: #f77f00;
+$xanthous: #fcbf49;
+$vanilla: #eae2b7;
+$card-bg: #344e41;
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   overflow-x: hidden;
 }
@@ -11,10 +22,14 @@ body {
     display: inline;
     font-size: 0.5rem;
   }
-  &-edit {
-    border-radius: 25px;
-    border: 1px solid gray;
+  &-hot {
     @extend .icon;
+    height: 1rem;
+    padding-right: 0.2rem;
+  }
+  &-edit {
+    @extend .icon;
+    display: flex;
     position: fixed;
     top: 1rem;
     right: 1rem;
@@ -35,6 +50,7 @@ body {
 form {
   margin: 0 auto;
   width: 50%;
+  height: 100%;
 }
 
 .cards {
@@ -130,4 +146,49 @@ ul {
 
 .title-wrapper {
   position: relative;
+}
+
+.creation-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .mantine-InputWrapper-root {
+    width: 80%;
+  }
+
+  .mantine-UnstyledButton-root {
+    margin-top: 1rem;
+  }
+}
+
+.mantine-Button-root {
+  color: white;
+}
+
+.mantine-Input-input {
+  background: $prussian-blue;
+}
+
+.mantine-Input-input::placeholder,
+.mantine-FileInput-placeholder {
+  color: white;
+}
+
+.mantine-Card-root {
+  color: white;
+}
+
+.card-closed {
+  width: 100%;
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: space-between;
+}
+
+.card-open {
+  top: 1rem;
+  z-index: 100;
 }

@@ -92,56 +92,79 @@ export default function Questioncard(ButtonProps: IButtonProps) {
             withBorder
             padding="lg"
             radius="md"
-            sx={{ width: "100%", margin: "1rem" }}
+            className={isOpen ? "card-closed" : "card-closed"}
           >
             <form
               className="unstyled-form"
               onSubmit={form.onSubmit((values) => changeQuestion(values))}
+              style={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+              }}
             >
-              <Stack>
-                <Group className="title-wrapper" position="apart">
+              <Stack
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  alignItems: "space-between",
+                  height: "100%",
+                }}
+              >
+                <Stack>
+                  <Group
+                    sx={{
+                      width: "100%",
+                      overflowWrap: "break-word",
+                    }}
+                    position="apart"
+                  >
+                    <EditableTextField
+                      title={question.title}
+                      setValue={(value)=>{form.setValues((prev)=>({...prev, title: value}))}}
+                      isOpen={isOpen}
+                      weight="bold"
+                    />
+
+                    {isSignedIn && question.posterId === user.id && (
+                      <EditButton toggleOpen={toggleOpen} isOpen={isOpen} />
+                    )}
+                  </Group>
+
                   <EditableTextField
-                    title={question.title}
-                    form={form}
+                    title={question.desc ?? ""}
+                      setValue={(value)=>{form.setValues((prev)=>({...prev, desc: value}))}}
                     isOpen={isOpen}
-                    weight="bold"
-                    fz="lg"
                   />
-
-                  {isSignedIn && question.posterId === user.id && (
-                      <EditButton
-                        toggleOpen={toggleOpen}
-                        isOpen={isOpen}
+                </Stack>
+                <Stack>
+                  <VoteButton
+                    ButtonProps={{
+                      /* setOption1={form.setValues((prev)=>({...prev, option1: value}))} */
+                      setOption1:(value)=>{form.setValues((prev)=>({...prev, option1: value}))},
+                      setOption2:(value)=>{form.setValues((prev)=>({...prev, option2: value}))},
+                      isOpen: isOpen,
+                      imageByte1: imageByte1,
+                      imageByte2: imageByte2,
+                      questionid: question.id,
+                    }}
+                  />
+                  {isOpen ? (
+                    <DeleteButton
+                      isOpen={isOpen}
+                      handleDelete={handleDelete}
+                      toggleOpen={toggleOpen}
+                    />
+                  ) : (
+                    <Group position="apart">
+                      <ShareIcon
+                        link={`https://wipdesign.eu/question/${question.id}`}
                       />
+                      <LikeButton ButtonProps={{ questionid: question.id }} />
+                    </Group>
                   )}
-                </Group>
-
-                <EditableTextField
-                  title={question.desc ?? ""}
-                  form={form}
-                  isOpen={isOpen}
-                />
-
-                <VoteButton
-                  ButtonProps={{
-                    form: form,
-                    isOpen: isOpen,
-                    imageByte1: imageByte1,
-                    imageByte2: imageByte2,
-                    questionid: question.id,
-                  }}
-                />
-
-                <DeleteButton
-                  isOpen={isOpen}
-                  handleDelete={handleDelete}
-                  toggleOpen={toggleOpen}
-                />
-
-                <Group position="apart">
-                <ShareIcon link={`https://wipdesign.eu/question/${question.id}`} />
-                <LikeButton ButtonProps={{ questionid: question.id }} />
-                </Group>
+                </Stack>
               </Stack>
             </form>
           </Card>

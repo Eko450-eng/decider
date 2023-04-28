@@ -8,6 +8,11 @@ import { useUser } from "@clerk/nextjs";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 
+const iconColors = {
+  unLiked: "#003049",
+  liked: "#e41f24"
+}
+
 interface IButtonProps {
   questionid: number;
 }
@@ -21,7 +26,7 @@ export default function LikeButton({
   const [likeStatus, setLikeStatus] = useState(false);
   const [question, setQuestion] = useState<string[]>([""]);
   const { user, isSignedIn, isLoaded } = useUser();
-  const router = useRouter()
+  const router = useRouter();
 
   async function getLikeStatus() {
     if (!isSignedIn || !question) return;
@@ -36,7 +41,7 @@ export default function LikeButton({
 
   function handleLike() {
     if (!isSignedIn || !question || !user) {
-      router.push("/Signin")
+      router.push("/Signin");
       return showNotification(ENoLogon.notification);
     }
     like(questionid, user.id).then((res: any) => displayMessage(res));
@@ -61,47 +66,46 @@ export default function LikeButton({
   }, [question]);
 
   return (
-    <Group  spacing="xxs">
+    <Group spacing="xxs">
       <motion.div
         onClick={handleLike}
         className="btn-icon"
         whileTap={{
-          rotate: [360, 0, 360, 0],
-          scale: [1, 0.9, 1, 0.9, 1],
+          rotate: [360, 0],
+          scale: [1, 0.9],
           transition: {
             duration: 2,
+            repeat: 1
           },
         }}
       >
         <motion.svg
-        whileHover={{
-          skewX: [0, 10, 0, -10, 0],
-          skewY: [0, 10, 0, -10, 0],
-          transformOrigin: "bottom",
-          transition: {
-            duration: .7,
-            ease: "linear",
-            repeat: Infinity,
-          },
-        }}
-          className={`${likeStatus ? "icon red" : "icon"}`}
+          whileHover={{
+            skewX: [0, 10, 0, -10, 0],
+            skewY: [0, 10, 0, -10, 0],
+            transformOrigin: "bottom",
+            transition: {
+              duration: 0.4,
+              ease: "linear",
+              repeat: 1,
+            },
+          }}
+          className={`${likeStatus ? "icon-hot red" : "icon-hot"}`}
+          viewBox="0 0 220 312"
+          fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 300 300"
-          shapeRendering="geometricPrecision"
-          textRendering="geometricPrecision"
         >
           <motion.path
-            d="M87.343142,160.394794c15.784075-38.0009,39.10146-54.526807,43.406209-100.085388C142.40289,84.704605,150.141736,129.275174,139.358846,150c.000001,0,11.379414,13.019483,23.299382,10.394794c13.459958-6.352669,26.547418-30.960967,29.07505-47.352227c9.583981,7.572023,17.242849,36.124713,20.850081,47.352227l-49.925132,26.686367q-76.391271-26.686366-75.315085-26.686367Z"
-            transform="translate(.000001 0)"
-            fill={likeStatus ? "#e41f24" : "gray"}
-            stroke={likeStatus ? "#e41f24" : "gray"}
-            strokeWidth="0.6"
-          />
-          <motion.path
-            d="M87.343143,160.394794c-20.09329,42.41902.758726,97.897315,62.656857,103.10111c47.398303-1.846542,87.392448-45.815339,62.58336-103.10111-30.164897,8.586323-82.298115,18.085484-125.240217,0Z"
-            fill={likeStatus ? "#e41f24" : "gray"}
-            stroke={likeStatus ? "#e41f24" : "gray"}
-            strokeWidth="0.6"
+            d="M109.171 146.264C108.883 146.69 108.966 147.266 109.362 147.594C120.518 156.831 131.068 161.73 143.071 156.928C149.002 154.556 155.189 149.847 161.923 142.329C168.467 135.023 175.567 125.019 183.485 111.813C191.773 121.502 200.497 136.789 207.232 153.133C214.213 170.074 219 188.012 219 201.882C219 230.822 207.516 258.577 187.074 279.041C166.633 299.504 138.908 311 110 311C81.0918 311 53.3673 299.504 32.9257 279.041C12.4842 258.577 1 230.822 1 201.882C1 169.831 15.0959 133.745 37.3832 110.815C38.1805 109.996 38.9909 109.167 39.8123 108.326C61.7987 85.8161 91.7254 55.1773 92.645 2.49664C101.6 12.5221 114.06 34.339 120.488 60.1639C127.325 87.6316 127.287 119.424 109.171 146.264Z"
+            fill={likeStatus ? iconColors.liked : "#ffffff"}
+            stroke={likeStatus ? iconColors.liked : "#ffffff"}
+            strokeWidth="20"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            whileHover={{
+              fill: "#e41f24",
+              stroke: "#e41f24"
+            }}
           />
         </motion.svg>
       </motion.div>

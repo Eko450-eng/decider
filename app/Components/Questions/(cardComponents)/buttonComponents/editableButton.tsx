@@ -1,6 +1,6 @@
 "use client";
 import { useUser } from "@clerk/nextjs";
-import { ActionIcon, Button, TextInput, Text } from "@mantine/core";
+import { Button, Text } from "@mantine/core";
 import { vote } from "../../logic";
 import { useRouter } from "next/navigation";
 import { showNotification } from "@mantine/notifications";
@@ -14,7 +14,7 @@ interface IButtonProps {
   option: string;
   index: number;
   isOpen: boolean;
-  form: any;
+  setValue: (v: string) => void;
 }
 
 export function EditableVoteButton(ButtonProps: IButtonProps) {
@@ -22,10 +22,10 @@ export function EditableVoteButton(ButtonProps: IButtonProps) {
   const { isSignedIn, user } = useUser();
   const {
     voteStatus,
+    setValue,
     getQuestion,
     questionid,
     option,
-    form,
     index,
     isOpen,
     votes,
@@ -46,39 +46,40 @@ export function EditableVoteButton(ButtonProps: IButtonProps) {
 
   return (
     <>
-      {isOpen ? (
-        <TextInput
-          placeholder={option}
-          {...form.getInputProps(`option${index}`)}
-        />
-      ) : (
-        <Button
-          id="vote1"
-          className={`${voteStatus == index ? "border" : "noBorder"}`}
-          onClick={() => handleVote(index)}
-          sx={(theme) => ({
-            backgroundColor: `${
-              voteStatus === 0
-                ? "indigo"
-                : voteStatus === index
-                ? theme.colors.nord_success[8]
-                : theme.colors.nord_gray[2]
-            }`,
-          })}
+      <Button
+        className={`${voteStatus == index ? "border" : "noBorder"}`}
+        suppressContentEditableWarning={true}
+        contentEditable={isOpen}
+        onInput={(value) => {
+          if (!isOpen) return;
+          setValue(value.currentTarget.children[0].children[0].innerHTML);
+        }}
+        onClick={() => {
+          if (isOpen) return;
+          handleVote(index);
+        }}
+        sx={(theme) => ({
+          backgroundColor: `${
+            voteStatus === 0
+              ? "indigo"
+              : voteStatus === index
+              ? theme.colors.nord_success[8]
+              : theme.colors.nord_gray[2]
+          }`,
+        })}
+      >
+        {option}
+      </Button>
+      {voteStatus !== 0 && (
+        <Text
+          sx={{
+            position: "absolute",
+            bottom: "0",
+            right: ".5rem",
+          }}
         >
-          {option}
-          {voteStatus !== 0 && (
-            <Text
-              sx={{
-                position: "absolute",
-                bottom: "0",
-                right: ".5rem",
-              }}
-            >
-              {votes.length}
-            </Text>
-          )}
-        </Button>
+          {votes.length}
+        </Text>
       )}
     </>
   );

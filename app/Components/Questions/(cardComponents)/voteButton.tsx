@@ -6,8 +6,9 @@ import { useEffect, useState } from "react";
 import { EditableVoteButton } from "./buttonComponents/editableButton";
 
 interface IButtonProps {
-  form:any
-  isOpen: boolean
+  setOption1: (values: string) => void;
+  setOption2: (values: string) => void;
+  isOpen: boolean;
   imageByte1: string;
   imageByte2: string;
   questionid: number;
@@ -18,13 +19,12 @@ export default function VoteButton({
 }: {
   ButtonProps: IButtonProps;
 }) {
-  const { questionid, imageByte2, imageByte1, isOpen, form } = ButtonProps;
+  const { questionid, imageByte2, imageByte1, isOpen, setOption1, setOption2 } = ButtonProps;
   const { isSignedIn, user } = useUser();
 
   const [question, setQuestion] = useState<Question>();
   const [imageModal, setImageModal] = useState("");
   const [voteStatus, setVoteStatus] = useState(0);
-
 
   async function getQuestion() {
     await fetch(
@@ -76,7 +76,7 @@ export default function VoteButton({
       {question ? (
         <Stack spacing="sm">
           <Stack>
-            {imageByte1 !== "data:image/png;base64," && (
+            {!isOpen && imageByte1 !== "data:image/png;base64," && (
               <Center>
                 <img
                   onClick={() => setImageModal(imageByte1)}
@@ -85,10 +85,19 @@ export default function VoteButton({
                 />
               </Center>
             )}
-            <EditableVoteButton form={form} isOpen={isOpen} voteStatus={voteStatus} votes={question.votes1} questionid={questionid} getQuestion={()=>getQuestion()} option={question.option1} index={1} />
+            <EditableVoteButton
+              setValue={setOption1}
+              isOpen={isOpen}
+              voteStatus={voteStatus}
+              votes={question.votes1}
+              questionid={questionid}
+              getQuestion={() => getQuestion()}
+              option={question.option1}
+              index={1}
+            />
           </Stack>
           <Stack>
-            {imageByte2 !== "data:image/png;base64," && (
+            {!isOpen && imageByte2 !== "data:image/png;base64," && (
               <Center>
                 <img
                   onClick={() => setImageModal(imageByte2)}
@@ -97,7 +106,16 @@ export default function VoteButton({
                 />
               </Center>
             )}
-            <EditableVoteButton form={form} isOpen={isOpen} voteStatus={voteStatus} votes={question.votes2} questionid={questionid} getQuestion={()=>getQuestion()} option={question.option2} index={2} />
+            <EditableVoteButton
+              setValue={setOption2}
+              isOpen={isOpen}
+              voteStatus={voteStatus}
+              votes={question.votes2}
+              questionid={questionid}
+              getQuestion={() => getQuestion()}
+              option={question.option2}
+              index={2}
+            />
           </Stack>
         </Stack>
       ) : (

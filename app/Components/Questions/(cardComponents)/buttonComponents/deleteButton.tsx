@@ -1,4 +1,4 @@
-import { Button, Group } from "@mantine/core";
+import { ActionIcon, Button, Group } from "@mantine/core";
 import { Check, Trash } from "tabler-icons-react";
 
 interface IButtonProps {
@@ -12,20 +12,22 @@ export default function DeleteButton(ButtonProps: IButtonProps) {
   return (
     <>
       {isOpen && (
-        <Group position="center">
-          <Button
+        <Group position="apart">
+          <ActionIcon
             color="red"
             onClick={() => {
               handleDelete();
               toggleOpen();
             }}
-            leftIcon={<Trash />}
           >
-            Delete
-          </Button>
-          <Button color="nord_success" type="submit" rightIcon={<Check />}>
-            Change
-          </Button>
+            <Trash />
+          </ActionIcon>
+          <ActionIcon
+            color="nord_success"
+            type="submit"
+          >
+            <Check />
+          </ActionIcon>
         </Group>
       )}
     </>
