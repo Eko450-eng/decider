@@ -1,3 +1,14 @@
+$prussian-blue: #003049;
+$fire-engine-red: #d62828;
+$orange-wheel: #f77f00;
+$xanthous: #fcbf49;
+$vanilla: #eae2b7;
+$card-bg: #344e41;
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   overflow-x: hidden;
 }
@@ -7,16 +18,21 @@ body {
   height: 1.2rem;
   cursor: pointer;
   &-floating {
+    cursor: pointer;
     display: inline;
-    font-size: .5rem;
+    font-size: 0.5rem;
+  }
+  &-hot {
+    @extend .icon;
+    height: 1rem;
+    padding-right: 0.2rem;
   }
   &-edit {
-    border-radius: 25px;
-    border: 1px solid gray;
     @extend .icon;
-    position: fixed;
-    top: 1rem;
-    right: 1rem;
+    display: flex;
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
     margin: 0.5rem;
     height: max-content;
   }
@@ -34,6 +50,7 @@ body {
 form {
   margin: 0 auto;
   width: 50%;
+  height: 100%;
 }
 
 .cards {
@@ -57,14 +74,6 @@ form {
 
 .cl-rootBox {
   margin: 1rem auto;
-}
-
-.border {
-  border: 2px solid white;
-}
-
-.noBorder {
-  border: 0px solid white;
 }
 
 .avatar {
@@ -124,9 +133,68 @@ ul {
 .unstyled-form {
   margin: 0;
   padding: 0;
-  display: unset;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .title-wrapper {
   position: relative;
+}
+
+.creation-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .mantine-InputWrapper-root {
+    width: 80%;
+  }
+
+  .mantine-UnstyledButton-root {
+    margin-top: 1rem;
+  }
+}
+
+.mantine-Button-root {
+  color: white;
+}
+
+.mantine-Input-input {
+  background: $prussian-blue;
+}
+
+.mantine-Input-input::placeholder,
+.mantine-FileInput-placeholder {
+  color: gray;
+}
+
+.mantine-Card-root {
+  color: white;
+}
+
+.card-closed {
+  box-shadow: 0px 5px 10px rgba($color: #ffffff, $alpha: 0.1);
+  width: 100%;
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  justify-content: space-between;
+  align-items: space-between;
+}
+
+.card-open {
+  top: 1rem;
+  z-index: 100;
+}
+
+.fullscreen-image {
+  max-width: 100%;
+  max-height: 100%;
+  z-index: 2;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

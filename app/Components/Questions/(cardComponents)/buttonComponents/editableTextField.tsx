@@ -1,26 +1,30 @@
 "use client";
-import { Text, TextInput } from "@mantine/core";
+import { Text } from "@mantine/core";
 
 interface IButtonProps {
   title: string;
   isOpen: boolean;
-  form: any;
+  setValue: (v: string)=>void;
   weight?: "normal" | "bold" | "bolder" | "light" | "lighter";
-  fz?: "sm" | "xs" | "md" | "lg" | "xl";
 }
 
 export function EditableTextField(ButtonProps: IButtonProps) {
-  const { title, isOpen, form, weight, fz } = ButtonProps;
+  const { title, isOpen, setValue, weight } = ButtonProps;
 
   return (
-    <>
-      {isOpen ? (
-        <TextInput placeholder={title} {...form.getInputProps(title)} />
-      ) : (
-          <Text fw={weight ?? "normal"} fz={fz ?? "md"} >
-            {title}
-          </Text>
-      )}
-    </>
+    <Text
+      suppressContentEditableWarning={true}
+      contentEditable={isOpen}
+      onInput={(value)=> setValue(value.currentTarget.innerHTML)}
+      fw={weight ?? "normal"}
+      sx={{
+        textAlign: "center",
+        width: "100%",
+        marginTop: ".5rem",
+        overflowWrap: "break-word",
+      }}
+    >
+    {title}
+    </Text>
   );
 }

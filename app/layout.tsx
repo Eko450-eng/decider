@@ -1,8 +1,10 @@
 import "./styles/globals.scss";
 import { ClerkProvider } from "@clerk/nextjs/app-beta";
 import { dark } from "@clerk/themes";
-import Navigation from "./(navigation)";
-import RootStyleRegistry from "./emotion";
+import { lazy } from "react";
+
+const Navigation = lazy(()=>import("./(navigation)")) ;
+const RootStyleRegistry = lazy(()=>import("./emotion")) ;
 
 export const metadata = {
   title: "Decider",

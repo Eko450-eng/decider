@@ -57,9 +57,9 @@ export const sidebar = {
 
 export const dots = {
   top: {
-    y: 9
+    x: 13
   },
   bottom: {
-    y: -9
+    x: -13
   }
 }
