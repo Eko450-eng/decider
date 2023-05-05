@@ -69,18 +69,18 @@ export function EditableVoteButton(ButtonProps: IButtonProps) {
         })}
       >
         {option}
+        {voteStatus !== 0 && (
+          <Text
+            sx={{
+              position: "absolute",
+              bottom: "0",
+              right: ".5rem",
+            }}
+          >
+            {votes.length}
+          </Text>
+        )}
       </Button>
-      {voteStatus !== 0 && (
-        <Text
-          sx={{
-            position: "absolute",
-            bottom: "0",
-            right: ".5rem",
-          }}
-        >
-          {votes.length}
-        </Text>
-      )}
     </>
   );
 }
