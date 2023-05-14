@@ -15,8 +15,7 @@ function LinkButton({ link, icon }: { link: any; icon: any }) {
     <Link href={link}>
       <Tabs.Tab value={link}>
         {icon}
-      </Tabs.Tab>
-    </Link>
+      </Tabs.Tab> </Link>
   );
 }
 
@@ -63,10 +62,7 @@ export default function Navigation() {
               <LinkButton link="/" icon={<Home />} />
               {!user.isSignedIn
                 ? (
-                  <>
-                    <LinkButton link="/CreateQuestion" icon={<Plus />} />
-                    <LinkButton link="/Signin" icon={<Login />} />
-                  </>
+                  <LinkButton link="/Signin" icon={<Login />} />
                 )
                 : (
                   <>

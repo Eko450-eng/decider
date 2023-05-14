@@ -47,7 +47,7 @@ export default function Page() {
     } catch (e: any) {
       showNotification({
         title: "Well uhhh",
-        message: "Seems like that image is tooo big",
+        message: "Seems like that image is too big",
         color: "red",
       });
     }
