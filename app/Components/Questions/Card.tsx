@@ -20,12 +20,12 @@ import ShareIcon from "./(cardComponents)/shareIcon";
 
 interface IButtonProps {
   question: Question;
-  unmount: () => void;
+  unmount?: () => void;
   index: number;
 }
 
 export default function Questioncard(ButtonProps: IButtonProps) {
-  const { question, unmount } = ButtonProps;
+  const { question } = ButtonProps;
   const [isOpen, toggleOpen] = useCycle(false, true);
   const [imageByte1, setImage1] = useState<string>("");
   const [imageByte2, setImage2] = useState<string>("");
@@ -35,7 +35,6 @@ export default function Questioncard(ButtonProps: IButtonProps) {
   function displayMessage(res: any) {
     if (res.notification) {
       showNotification(res.notification);
-      unmount();
       if (isOpen) toggleOpen();
       router.refresh();
     }
@@ -122,7 +121,9 @@ export default function Questioncard(ButtonProps: IButtonProps) {
                   >
                     <EditableTextField
                       title={question.title}
-                      setValue={(value)=>{form.setValues((prev)=>({...prev, title: value}))}}
+                      setValue={(value) => {
+                        form.setValues((prev) => ({ ...prev, title: value }));
+                      }}
                       isOpen={isOpen}
                       weight="bold"
                     />
@@ -134,16 +135,21 @@ export default function Questioncard(ButtonProps: IButtonProps) {
 
                   <EditableTextField
                     title={question.desc ?? ""}
-                      setValue={(value)=>{form.setValues((prev)=>({...prev, desc: value}))}}
+                    setValue={(value) => {
+                      form.setValues((prev) => ({ ...prev, desc: value }));
+                    }}
                     isOpen={isOpen}
                   />
                 </Stack>
                 <Stack>
                   <VoteButton
                     ButtonProps={{
-                      /* setOption1={form.setValues((prev)=>({...prev, option1: value}))} */
-                      setOption1:(value)=>{form.setValues((prev)=>({...prev, option1: value}))},
-                      setOption2:(value)=>{form.setValues((prev)=>({...prev, option2: value}))},
+                      setOption1: (value) => {
+                        form.setValues((prev) => ({ ...prev, option1: value }));
+                      },
+                      setOption2: (value) => {
+                        form.setValues((prev) => ({ ...prev, option2: value }));
+                      },
                       isOpen: isOpen,
                       imageByte1: imageByte1,
                       imageByte2: imageByte2,

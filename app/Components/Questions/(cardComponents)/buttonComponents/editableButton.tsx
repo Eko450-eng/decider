@@ -60,9 +60,7 @@ export function EditableVoteButton(ButtonProps: IButtonProps) {
         }}
         sx={(theme) => ({
           backgroundColor: `${
-            voteStatus === 0
-              ? "indigo"
-              : voteStatus === index
+            voteStatus === index
               ? theme.colors.nord_success[8]
               : theme.colors.nord_gray[2]
           }`,

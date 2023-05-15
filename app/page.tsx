@@ -1,49 +1,40 @@
-"use client";
-
 import Questioncard from "./Components/Questions/Card";
-import { Suspense, useEffect, useState } from "react";
-import { Question } from "@/db/schema/schema";
-import { AnimatePresence, motion } from "framer-motion";
-import { boxVariant } from "./framer";
-import Loading from "./loading";
 
-export default function Home() {
-  const [data, setData] = useState<Question[]>();
-  async function getData() {
-    await fetch(`${process.env.NEXT_PUBLIC_HOSTING_SERVER}/questions`, { method: "GET", cache: "no-store", }).then(async (res) => {
-      setData(await res.json());
-    });
-  }
+async function getData() {
+  "use server";
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_HOSTING_SERVER}/questions`,
+    {
+      method: "GET",
+      next: {
+        revalidate: 1,
+      },
+    }
+  ).then(async (res) => {
+    return await res.json();
+  });
+  return res;
+}
 
-  useEffect(() => {
-    getData();
-  }, []);
+export default async function Home() {
+  const data = await getData();
 
   return (
     <main className="main">
-      <AnimatePresence>
-        <motion.ul
-          className="cards-wrapper"
-          variants={boxVariant}
-          animate="visible"
-          initial="hidden"
-        >
-          {data &&
-            data.map((v: any, k: number) => {
-              const { createdAt, ...question } = v;
-              return (
-                <Suspense key={`questionCard-${k}`} fallback={<Loading />}>
-                  <Questioncard
-                    index={k}
-                    unmount={() => getData()}
-                    question={question}
-                    data-superjson
-                  />
-                </Suspense>
-              );
-            })}
-        </motion.ul>
-      </AnimatePresence>
+      <div className="cards-wrapper">
+        {data &&
+          data.map((v: any, k: number) => {
+            const { createdAt, ...question } = v;
+            return (
+              <Questioncard
+                key={`questionCard-${k}`}
+                index={k}
+                question={question}
+                data-superjson
+              />
+            );
+          })}
+      </div>
     </main>
   );
 }

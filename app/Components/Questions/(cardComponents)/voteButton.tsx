@@ -4,6 +4,7 @@ import { useUser } from "@clerk/nextjs";
 import { Center, Modal, Stack } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { EditableVoteButton } from "./buttonComponents/editableButton";
+import Image from "next/image";
 
 interface IButtonProps {
   setOption1: (values: string) => void;
@@ -19,7 +20,8 @@ export default function VoteButton({
 }: {
   ButtonProps: IButtonProps;
 }) {
-  const { questionid, imageByte2, imageByte1, isOpen, setOption1, setOption2 } = ButtonProps;
+  const { questionid, imageByte2, imageByte1, isOpen, setOption1, setOption2 } =
+    ButtonProps;
   const { isSignedIn, user } = useUser();
 
   const [question, setQuestion] = useState<Question>();
@@ -59,6 +61,9 @@ export default function VoteButton({
         fullScreen
       >
         <img
+          alt="Fullscreen option Image"
+          width={500}
+          height={500}
           src={`${imageModal}`}
           style={{
             maxWidth: "100%",
@@ -79,9 +84,12 @@ export default function VoteButton({
             {!isOpen && imageByte1 !== "data:image/png;base64," && (
               <Center>
                 <img
+                  alt="First Option Image"
                   onClick={() => setImageModal(imageByte1)}
                   src={`${imageByte1}`}
                   style={{ maxWidth: "5rem", maxHeight: "5rem" }}
+                  width={500}
+                  height={500}
                 />
               </Center>
             )}
@@ -100,9 +108,12 @@ export default function VoteButton({
             {!isOpen && imageByte2 !== "data:image/png;base64," && (
               <Center>
                 <img
+                  alt="Second Option Image"
                   onClick={() => setImageModal(imageByte2)}
                   src={`${imageByte2}`}
                   style={{ maxWidth: "5rem", maxHeight: "5rem" }}
+                  width={500}
+                  height={500}
                 />
               </Center>
             )}
