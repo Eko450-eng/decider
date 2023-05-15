@@ -1,4 +1,5 @@
 import { Question } from "@/db/schema/schema";
+import { revalidateTag } from "next/cache";
 
 export async function vote(questionid: number, userid: string, number: number) {
   const res = await fetch(
@@ -17,6 +18,7 @@ export async function vote(questionid: number, userid: string, number: number) {
     const returnValue = await e.json();
     return returnValue;
   });
+  await fetch("/api/revalidate?main=main");
   return res;
 }
 
@@ -28,7 +30,7 @@ export async function editQuestion(values: {
   option1: string;
   option2: string;
 }) {
-  const {userid, id, title, desc, option1, option2} = values
+  const { userid, id, title, desc, option1, option2 } = values;
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_HOSTING_SERVER}/questions/edit`,
     {
@@ -47,6 +49,7 @@ export async function editQuestion(values: {
     const returnValue = await e.json();
     return returnValue;
   });
+  await fetch("/api/revalidate?main=main");
   return res;
 }
 
@@ -66,6 +69,7 @@ export async function like(questionid: number, user: string) {
     const res = await e.json();
     return res;
   });
+  await fetch("/api/revalidate?main=main");
   return res;
 }
 
@@ -75,6 +79,7 @@ export async function deleteQuestion(question: Question, userId: string) {
     { method: "DELETE" }
   ).then(async (e: any) => {
     const returnValue = await e.json();
+    await fetch("/api/revalidate?main=main");
     return returnValue;
   });
   return res;

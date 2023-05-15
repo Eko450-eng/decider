@@ -3,19 +3,23 @@
 import Image from "next/image";
 import { Affix, Center, Modal, Tabs } from "@mantine/core";
 import { IconUser } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
-import { Home, Login, Plus, UserPlus } from "tabler-icons-react";
+import { startTransition, useEffect, useState } from "react";
+import { Home, Login, Plus, Reload } from "tabler-icons-react";
 import Push from "./PushNotification/page";
 import { useAuth, useUser } from "@clerk/nextjs";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 
-function LinkButton({ link, icon }: { link: any; icon: any }) {
+interface LinkButtonProps {
+  link?: any;
+  icon: any;
+}
+
+function LinkButton({ link, icon }: LinkButtonProps) {
   return (
     <Link href={link}>
-      <Tabs.Tab value={link}>
-        {icon}
-      </Tabs.Tab> </Link>
+      <Tabs.Tab value={link}>{icon}</Tabs.Tab>{" "}
+    </Link>
   );
 }
 
@@ -53,23 +57,20 @@ export default function Navigation() {
         })}
       >
         <Center>
-          <Tabs
-            variant="outline"
-            defaultValue={path}
-            // onTabChange={(value) => router.push(`${value}`)}
-          >
+          <Tabs variant="outline" defaultValue={path}>
             <Tabs.List>
               <LinkButton link="/" icon={<Home />} />
-              {!user.isSignedIn
-                ? (
-                  <LinkButton link="/Signin" icon={<Login />} />
-                )
-                : (
-                  <>
-                    <LinkButton link="/CreateQuestion" icon={<Plus />} />
-                    <LinkButton
-                      link="/user-profile"
-                      icon={image == "" ? <IconUser /> : (
+              {!user.isSignedIn ? (
+                <LinkButton link="/Signin" icon={<Login />} />
+              ) : (
+                <>
+                  <LinkButton link="/CreateQuestion" icon={<Plus />} />
+                  <LinkButton
+                    link="/user-profile"
+                    icon={
+                      image == "" ? (
+                        <IconUser />
+                      ) : (
                         <Image
                           className="avatar"
                           src={image}
@@ -77,10 +78,22 @@ export default function Navigation() {
                           width="20"
                           height="20"
                         />
-                      )}
-                    />
-                  </>
-                )}
+                      )
+                    }
+                  />
+                </>
+              )}
+
+              <Tabs.Tab
+                onClick={() => {
+                  startTransition(() => {
+                    router.refresh();
+                  });
+                }}
+                value={"/reload"}
+              >
+                {<Reload />}
+              </Tabs.Tab>
             </Tabs.List>
           </Tabs>
         </Center>

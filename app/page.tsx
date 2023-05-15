@@ -9,11 +9,13 @@ async function getData() {
       method: "GET",
       next: {
         revalidate: 1,
+        tags: ["main"]
       },
     }
   ).then(async (res) => {
     return await res.json();
   });
+  if(!res) return null
   return res;
 }
 
@@ -35,7 +37,8 @@ export default async function Home() {
                 />
               );
             })
-          : [...Array(10).keys()].map((i: number) => {
+          :
+          [...Array(20).keys()].map((i: number) => {
               return <Loading key={`placeholder-${i}`}/>;
             })}
       </div>
