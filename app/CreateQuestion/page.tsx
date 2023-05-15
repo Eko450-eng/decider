@@ -55,101 +55,106 @@ export default function Page() {
 
   return (
     <>
-      {user.isSignedIn
-        ? (
-          <form
-            className="creation-form"
-            onSubmit={form.onSubmit((values) =>
-              createQuestion({ user: user, question: values, images: images })
-                .then((res) => {
-                  if (res === 200) {
-                    router.push("/");
-                    router.refresh();
-                  }
-                })
-            )}
-          >
-            <TextInput
-              label="Title"
-              placeholder="this or that?"
-              sx={{
-                input: {
-                  color: `${
-                    form.getInputProps("title").value.length > 100
-                      ? "red"
-                      : "white"
-                  }`,
-                },
-              }}
-              error={`${
-                form.getInputProps("title").value.length > 100 ? "red" : "white"
-              }`}
-              {...form.getInputProps("title")}
-            />
-            <TextInput
-              label="Description"
-              placeholder="Should I do this or that?"
-              sx={{
-                input: {
-                  color: `${
-                    form.getInputProps("desc").value.length > 100
-                      ? "red"
-                      : "white"
-                  }`,
-                },
-              }}
-              {...form.getInputProps("desc")}
-            />
+      {user.isSignedIn ? (
+        <form
+          className="creation-form"
+          onSubmit={form.onSubmit((values) =>
+            createQuestion({
+              user: user,
+              question: values,
+              images: images,
+            }).then((res) => {
+              if (res === 200) {
+                setTimeout(() => {
+                  router.push("/");
+                  router.refresh();
+                }, 250);
+              }
+            })
+          )}
+        >
+          <TextInput
+            label="Title"
+            placeholder="this or that?"
+            sx={{
+              input: {
+                color: `${
+                  form.getInputProps("title").value.length > 100
+                    ? "red"
+                    : "white"
+                }`,
+              },
+            }}
+            error={`${
+              form.getInputProps("title").value.length > 100 ? "red" : "white"
+            }`}
+            {...form.getInputProps("title")}
+          />
+          <TextInput
+            label="Description"
+            placeholder="Should I do this or that?"
+            sx={{
+              input: {
+                color: `${
+                  form.getInputProps("desc").value.length > 100
+                    ? "red"
+                    : "white"
+                }`,
+              },
+            }}
+            {...form.getInputProps("desc")}
+          />
 
-            <TextInput
-              label="Option One"
-              placeholder="this?"
-              sx={{
-                input: {
-                  color: `${
-                    form.getInputProps("option1").value.length > 30
-                      ? "red"
-                      : "white"
-                  }`,
-                },
-              }}
-              {...form.getInputProps("option1")}
-            />
-            <FileInput
-              placeholder="Image 1"
-              label="Image for first option"
-              accept="image/png,image/jpeg"
-              onChange={(v) => saveImage(1, v)}
-            />
+          <TextInput
+            label="Option One"
+            placeholder="this?"
+            sx={{
+              input: {
+                color: `${
+                  form.getInputProps("option1").value.length > 30
+                    ? "red"
+                    : "white"
+                }`,
+              },
+            }}
+            {...form.getInputProps("option1")}
+          />
+          <FileInput
+            placeholder="Image 1"
+            label="Image for first option"
+            accept="image/png,image/jpeg"
+            onChange={(v) => saveImage(1, v)}
+          />
 
-            <TextInput
-              label="Option Two"
-              placeholder="that?"
-              sx={{
-                input: {
-                  color: `${
-                    form.getInputProps("option2").value.length > 30
-                      ? "red"
-                      : "white"
-                  }`,
-                },
-              }}
-              {...form.getInputProps("option2")}
-            />
+          <TextInput
+            label="Option Two"
+            placeholder="that?"
+            sx={{
+              input: {
+                color: `${
+                  form.getInputProps("option2").value.length > 30
+                    ? "red"
+                    : "white"
+                }`,
+              },
+            }}
+            {...form.getInputProps("option2")}
+          />
 
-            <FileInput
-              placeholder="Image 1"
-              label="Image for first option"
-              accept="image/png,image/jpeg"
-              onChange={(v) => saveImage(2, v)}
-            />
+          <FileInput
+            placeholder="Image 1"
+            label="Image for first option"
+            accept="image/png,image/jpeg"
+            onChange={(v) => saveImage(2, v)}
+          />
 
-            <Button type="submit"
-              rightIcon={<Check />}
-            >Create</Button>
-          </form>
-        )
-        : <PleaseLogin />}
+          <Button type="submit" rightIcon={<Check />}>
+            Create
+          </Button>
+        </form>
+      ) : (
+        <PleaseLogin />
+      )}
     </>
   );
 }
