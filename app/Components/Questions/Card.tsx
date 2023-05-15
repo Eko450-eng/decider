@@ -91,7 +91,7 @@ export default function Questioncard(ButtonProps: IButtonProps) {
             withBorder
             padding="lg"
             radius="md"
-            className={isOpen ? "card-closed" : "card-closed"}
+            className="card-closed"
           >
             <form
               className="unstyled-form"

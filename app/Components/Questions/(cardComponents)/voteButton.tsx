@@ -60,22 +60,24 @@ export default function VoteButton({
         opened={imageModal !== ""}
         fullScreen
       >
-        <img
-          alt="Fullscreen option Image"
-          width={500}
-          height={500}
-          src={`${imageModal}`}
-          style={{
-            maxWidth: "100%",
-            maxHeight: "100%",
-            zIndex: 2,
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-          onClick={() => setImageModal("")}
-        />
+        {imageModal !== "" && (
+          <img
+            alt="Fullscreen option Image"
+            width={500}
+            height={500}
+            src={`${imageModal}`}
+            style={{
+              maxWidth: "100%",
+              maxHeight: "100%",
+              zIndex: 2,
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+            onClick={() => setImageModal("")}
+          />
+        )}
       </Modal>
 
       {question ? (
