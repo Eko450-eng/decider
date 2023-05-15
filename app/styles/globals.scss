@@ -30,9 +30,9 @@ body {
   &-edit {
     @extend .icon;
     display: flex;
-    position: fixed;
-    top: 1rem;
-    right: 1rem;
+    position: absolute;
+    top: .25rem;
+    right: .25rem;
     margin: 0.5rem;
     height: max-content;
   }
@@ -172,7 +172,7 @@ ul {
 
 .mantine-Input-input::placeholder,
 .mantine-FileInput-placeholder {
-  color: white;
+  color: gray;
 }
 
 .mantine-Card-root {
@@ -184,6 +184,7 @@ ul {
   margin: 1rem;
   display: flex;
   flex-direction: column;
+  position: relative;
   justify-content: space-between;
   align-items: space-between;
 }
