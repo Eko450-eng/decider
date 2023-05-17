@@ -103,12 +103,9 @@ export function EditableVoteButton(ButtonProps: IButtonProps) {
         }}
       >
         {option}
-        {
-        voteStatus !== 0 && 
-          <Text className={classes.voteText}>
-            {index === 1 ? optimisticVotes.votes1 : optimisticVotes.votes2}
-          </Text>
-        }
+        <Text className={classes.voteText}>
+          {index === 1 ? optimisticVotes.votes1 : optimisticVotes.votes2}
+        </Text>
       </Button>
     </>
   );

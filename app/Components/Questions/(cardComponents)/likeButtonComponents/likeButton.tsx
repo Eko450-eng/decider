@@ -99,7 +99,7 @@ export default function LikeButton({
         <LikeSvg likeStatus={likeStatus ? true : false} />
       </motion.div>
       <Text>{likeStatus}</Text>
-      <Text>{optimisticLikes.likeCount}</Text>
+      <Text>{optimisticLikes.likeCount}   </Text>
     </Group>
   );
 }
