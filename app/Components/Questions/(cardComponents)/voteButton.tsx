@@ -98,11 +98,8 @@ export default function VoteButton({
             <EditableVoteButton
               setValue={setOption1}
               isOpen={isOpen}
-              voteStatus={voteStatus}
-              votes={question.votes1}
-              questionid={questionid}
-              getQuestion={() => getQuestion()}
               option={question.option1}
+              question={question}
               index={1}
             />
           </Stack>
@@ -122,10 +119,7 @@ export default function VoteButton({
             <EditableVoteButton
               setValue={setOption2}
               isOpen={isOpen}
-              voteStatus={voteStatus}
-              votes={question.votes2}
-              questionid={questionid}
-              getQuestion={() => getQuestion()}
+              question={question}
               option={question.option2}
               index={2}
             />
