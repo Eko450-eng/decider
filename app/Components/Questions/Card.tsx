@@ -3,13 +3,8 @@
 import { useUser } from "@clerk/nextjs";
 import { AnimatePresence, motion, useCycle } from "framer-motion";
 import { Card, Group, Stack } from "@mantine/core";
-import { showNotification } from "@mantine/notifications";
 import React, { useEffect, useState } from "react";
-import { deleteQuestion, editQuestion } from "./logic";
-import { ENoLogon } from "@/app/api/messages";
 import { Question } from "@/db/schema/schema";
-import VoteButton from "./(cardComponents)/voteButton";
-import LikeButton from "./(cardComponents)/likeButton";
 import { boxVariant } from "@/app/framer";
 import { useRouter } from "next/navigation";
 import { useForm } from "@mantine/form";
@@ -17,6 +12,10 @@ import DeleteButton from "./(cardComponents)/buttonComponents/deleteButton";
 import { EditableTextField } from "./(cardComponents)/buttonComponents/editableTextField";
 import EditButton from "./(cardComponents)/buttonComponents/editButton";
 import ShareIcon from "./(cardComponents)/shareIcon";
+import { changeQuestion, handleDelete } from "./handlers";
+import VoteButton from "./(cardComponents)/voteButton/voteButton";
+import LikeButton from "./(cardComponents)/likeButtonComponents/likeButton";
+import { useStyles } from "@/app/styles/styles";
 
 interface IButtonProps {
   question: Question;
@@ -31,6 +30,9 @@ export default function Questioncard(ButtonProps: IButtonProps) {
   const [imageByte2, setImage2] = useState<string>("");
   const { isSignedIn, user } = useUser();
   const router = useRouter();
+<<<<<<< HEAD
+  const props = { router: router, user: user, isSignedIn: isSignedIn };
+=======
 
   function displayMessage(res: any) {
     if (res.notification) {
@@ -57,14 +59,27 @@ export default function Questioncard(ButtonProps: IButtonProps) {
     const d = { ...values, id: question.id, userid: user.id };
     editQuestion(d).then((res: any) => displayMessage(res));
   }
+>>>>>>> main
 
   async function getImages() {
-    setImage1(`data:image/png;base64,${question.image1?.toString()}` ?? "");
-    setImage2(`data:image/png;base64,${question.image2?.toString()}` ?? "");
+    setImage1(
+      `${
+        question.image1
+          ? `data:image/png;base64,${question.image1.toString()}`
+          : ""
+      }`
+    );
+    setImage2(
+      `${
+        question.image2
+          ? `data:image/png;base64,${question.image2.toString()}`
+          : ""
+      }`
+    );
+    // setImage2(`data:image/png;base64,${question.image2?.toString()}` ?? "");
   }
 
   useEffect(() => {
-    console.log();
     getImages();
   }, []);
 
@@ -77,6 +92,8 @@ export default function Questioncard(ButtonProps: IButtonProps) {
     },
   });
 
+  const { classes } = useStyles();
+
   return (
     <AnimatePresence>
       <motion.div
@@ -87,6 +104,18 @@ export default function Questioncard(ButtonProps: IButtonProps) {
         transition={{ duration: 0.1, delay: ButtonProps.index * 0.2 }}
       >
         {question && (
+<<<<<<< HEAD
+          <Card withBorder padding="lg" radius="md" className="card-closed">
+            <form
+              className="unstyled-form"
+              onSubmit={form.onSubmit((values) =>
+                changeQuestion(question, values, props)
+              )}
+            >
+              <Stack className={classes.innerCardWrapper}>
+                <Stack>
+                  <Group className={classes.title} position="apart">
+=======
           <Card
             withBorder
             padding="lg"
@@ -119,6 +148,7 @@ export default function Questioncard(ButtonProps: IButtonProps) {
                     }}
                     position="apart"
                   >
+>>>>>>> main
                     <EditableTextField
                       title={question.title}
                       setValue={(value) => {
@@ -143,6 +173,32 @@ export default function Questioncard(ButtonProps: IButtonProps) {
                 </Stack>
                 <Stack>
                   <VoteButton
+<<<<<<< HEAD
+                    setOption1={(value) => {
+                      form.setValues((prev) => ({ ...prev, option1: value }));
+                    }}
+                    setOption2={(value) => {
+                      form.setValues((prev) => ({ ...prev, option2: value }));
+                    }}
+                    isOpen={isOpen}
+                    imageByte1={imageByte1}
+                    imageByte2={imageByte2}
+                    question={question}
+                  />
+                  {isOpen ? (
+                    <Group>
+                      <DeleteButton
+                        isOpen={isOpen}
+                        handleDelete={() => handleDelete(props, question)}
+                        toggleOpen={toggleOpen}
+                      />
+                    </Group>
+                  ) : (
+                    <Group position="apart">
+                      <ShareIcon
+                        link={`https://wipdesign.eu/question/${question.id}`}
+                      />
+=======
                     ButtonProps={{
                       setOption1: (value) => {
                         form.setValues((prev) => ({ ...prev, option1: value }));
@@ -167,6 +223,7 @@ export default function Questioncard(ButtonProps: IButtonProps) {
                       <ShareIcon
                         link={`https://wipdesign.eu/question/${question.id}`}
                       />
+>>>>>>> main
                       <LikeButton ButtonProps={{ questionid: question.id }} />
                     </Group>
                   )}

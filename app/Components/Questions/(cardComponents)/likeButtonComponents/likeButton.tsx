@@ -2,12 +2,16 @@
 import { ENoLogon } from "@/app/api/messages";
 import { Group, Text } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
-import { like } from "../logic";
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import LikeSvg from "./LikeSvg";
+<<<<<<< HEAD:app/Components/Questions/(cardComponents)/likeButtonComponents/likeButton.tsx
+import { experimental_useOptimistic as useOptimistic } from "react";
+import { like } from "../../logic";
+=======
+>>>>>>> main:app/Components/Questions/(cardComponents)/likeButton.tsx
 
 interface IButtonProps {
   questionid: number;
@@ -41,6 +45,13 @@ export default function LikeButton({
       router.push("/Signin");
       return showNotification(ENoLogon.notification);
     }
+    if (user && question.includes(user.id)) {
+      changeOptimisticLikes(optimisticLikes.likeCount - 1);
+      setLikeStatus(false);
+    } else if (user && !question.includes(user.id)) {
+      changeOptimisticLikes(optimisticLikes.likeCount + 1);
+      setLikeStatus(true);
+    }
     like(questionid, user.id).then((res: any) => displayMessage(res));
   }
 
@@ -62,10 +73,22 @@ export default function LikeButton({
     getLikeStatus();
   }, [question]);
 
+  const likeCount = question.length;
+
+  const [optimisticLikes, changeOptimisticLikes] = useOptimistic(
+    { likeCount, likeStatus },
+    (state, newLikeCount: number) => ({
+      ...state,
+      likeCount: newLikeCount,
+    })
+  );
+
   return (
     <Group spacing="xxs">
       <motion.div
-        onClick={handleLike}
+        onClick={async () => {
+          handleLike();
+        }}
         className="btn-icon"
         whileTap={{
           rotate: [360, 0],
@@ -76,9 +99,14 @@ export default function LikeButton({
           },
         }}
       >
+<<<<<<< HEAD:app/Components/Questions/(cardComponents)/likeButtonComponents/likeButton.tsx
+        <LikeSvg likeStatus={likeStatus ? true : false} />
+=======
         <LikeSvg likeStatus={likeStatus ? true : false} /> 
+>>>>>>> main:app/Components/Questions/(cardComponents)/likeButton.tsx
       </motion.div>
-      <Text>{question.length}</Text>
+      <Text>{likeStatus}</Text>
+      <Text>{optimisticLikes.likeCount}</Text>
     </Group>
   );
 }
