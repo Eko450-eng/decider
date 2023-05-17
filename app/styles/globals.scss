@@ -31,13 +31,8 @@ body {
     @extend .icon;
     display: flex;
     position: absolute;
-<<<<<<< HEAD
     top: 0.25rem;
     right: 0.25rem;
-=======
-    top: .25rem;
-    right: .25rem;
->>>>>>> main
     margin: 0.5rem;
     height: max-content;
   }
@@ -179,10 +174,7 @@ ul {
 }
 
 .card-closed {
-<<<<<<< HEAD
   box-shadow: 0px 5px 10px rgba($color: #ffffff, $alpha: 0.1);
-=======
->>>>>>> main
   width: 100%;
   margin: 1rem;
   display: flex;
@@ -196,7 +188,6 @@ ul {
   top: 1rem;
   z-index: 100;
 }
-<<<<<<< HEAD
 
 .fullscreen-image {
   max-width: 100%;
@@ -207,5 +198,3 @@ ul {
   left: 50%;
   transform: translate(-50%, -50%);
 }
-=======
->>>>>>> main

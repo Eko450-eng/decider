@@ -24,24 +24,10 @@ interface IButtonProps {
 
 export function EditableVoteButton(ButtonProps: IButtonProps) {
   const router = useRouter();
-<<<<<<< HEAD
   const { classes } = useStyles();
   const { setValue, question, option, index, isOpen } = ButtonProps;
   const [voteStatus, setVoteStatus] = useState(0);
   const { user, isSignedIn } = useUser();
-=======
-  const { isSignedIn, user } = useUser();
-  const {
-    voteStatus,
-    setValue,
-    getQuestion,
-    questionid,
-    option,
-    index,
-    isOpen,
-    votes,
-  } = ButtonProps;
->>>>>>> main
 
   function validateVotes() {
     if (!isSignedIn || !question) return;
@@ -100,15 +86,11 @@ export function EditableVoteButton(ButtonProps: IButtonProps) {
   return (
     <>
       <Button
-<<<<<<< HEAD
         className={
           voteStatus == index
             ? classes.buttonSelected
             : classes.buttonUnselected
         }
-=======
-        className={`${voteStatus == index ? "border" : "noBorder"}`}
->>>>>>> main
         suppressContentEditableWarning={true}
         contentEditable={isOpen}
         onInput={(value) => {
@@ -119,34 +101,11 @@ export function EditableVoteButton(ButtonProps: IButtonProps) {
           if (isOpen) return;
           handleVote(index);
         }}
-<<<<<<< HEAD
       >
         {option}
-        {voteStatus !== 0 && (
-          <Text className={classes.voteText}>
-            {index === 1 ? optimisticVotes.votes1 : optimisticVotes.votes2}
-=======
-        sx={(theme) => ({
-          backgroundColor: `${
-            voteStatus === index
-              ? theme.colors.nord_success[8]
-              : theme.colors.nord_gray[2]
-          }`,
-        })}
-      >
-        {option}
-        {voteStatus !== 0 && (
-          <Text
-            sx={{
-              position: "absolute",
-              bottom: "0",
-              right: ".5rem",
-            }}
-          >
-            {votes.length}
->>>>>>> main
-          </Text>
-        )}
+        <Text className={classes.voteText}>
+          {index === 1 ? optimisticVotes.votes1 : optimisticVotes.votes2}
+        </Text>
       </Button>
     </>
   );
