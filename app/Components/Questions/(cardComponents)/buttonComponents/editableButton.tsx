@@ -28,6 +28,7 @@ export function EditableVoteButton(ButtonProps: IButtonProps) {
   const { setValue, question, option, index, isOpen } = ButtonProps;
   const [voteStatus, setVoteStatus] = useState(0);
   const { user, isSignedIn } = useUser();
+  const [blocked, blockRequest] = useState(false);
 
   function validateVotes() {
     if (!isSignedIn || !question) return;
@@ -48,38 +49,52 @@ export function EditableVoteButton(ButtonProps: IButtonProps) {
   const votes2 = question.votes2.length;
 
   function handleVote(number: number) {
+    blockRequest(true);
     if (!isSignedIn) {
       router.push("/Signin");
       return showNotification(ENoLogon.notification);
     } else if (index === 1) {
       if (question.votes2.includes(user.id)) return;
       else if (user && question.votes1.includes(user.id)) {
-        changeOptimisticVote(optimisticVotes.votes1 - 1);
+        console.log("1");
+        changeOptimisticVote1(optimisticVotes1.votes1 - 1);
         setVoteStatus(0);
       } else if (user && !question.votes1.includes(user.id)) {
+        console.log("2");
         setVoteStatus(1);
-        changeOptimisticVote(optimisticVotes.votes1 + 1);
+        changeOptimisticVote1(optimisticVotes1.votes1 + 1);
       }
     } else if (index === 2) {
-      if (question.votes1.includes(user.id)) return;
+      if (question.votes1.includes(user.id) || optimisticVotes1.sending) return;
       else if (user && question.votes2.includes(user.id)) {
         setVoteStatus(0);
-        changeOptimisticVote(optimisticVotes.votes2 - 1);
+        changeOptimisticVote2(optimisticVotes2.votes2 - 1);
       } else if (user && !question.votes2.includes(user.id)) {
         setVoteStatus(2);
-        changeOptimisticVote(optimisticVotes.votes2 + 1);
+        changeOptimisticVote2(optimisticVotes2.votes2 + 1);
       }
     }
     vote(question.id, user.id, number).then((res: any) => {
       displayMessage(res, router);
+      blockRequest(false);
     });
   }
 
-  const [optimisticVotes, changeOptimisticVote] = useOptimistic(
-    { votes1, votes2 },
+  const [optimisticVotes1, changeOptimisticVote1] = useOptimistic(
+    { votes1, sending: false },
     (state, newVoteCount1: number) => ({
       ...state,
       votes1: newVoteCount1,
+      sending: true,
+    })
+  );
+
+  const [optimisticVotes2, changeOptimisticVote2] = useOptimistic(
+    { votes2, sending: false },
+    (state, newVoteCount2: number) => ({
+      ...state,
+      votes2: newVoteCount2,
+      sending: true,
     })
   );
 
@@ -98,13 +113,19 @@ export function EditableVoteButton(ButtonProps: IButtonProps) {
           setValue(value.currentTarget.children[0].children[0].innerHTML);
         }}
         onClick={() => {
-          if (isOpen) return;
+          if (
+            isOpen ||
+            optimisticVotes1.sending ||
+            optimisticVotes2.sending ||
+            blocked
+          )
+            return;
           handleVote(index);
         }}
       >
         {option}
         <Text className={classes.voteText}>
-          {index === 1 ? optimisticVotes.votes1 : optimisticVotes.votes2}
+          {index === 1 ? optimisticVotes1.votes1 : optimisticVotes2.votes2}
         </Text>
       </Button>
     </>
