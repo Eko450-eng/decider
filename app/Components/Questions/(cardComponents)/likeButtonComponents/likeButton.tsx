@@ -7,11 +7,8 @@ import { useUser } from "@clerk/nextjs";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import LikeSvg from "./LikeSvg";
-<<<<<<< HEAD:app/Components/Questions/(cardComponents)/likeButtonComponents/likeButton.tsx
 import { experimental_useOptimistic as useOptimistic } from "react";
 import { like } from "../../logic";
-=======
->>>>>>> main:app/Components/Questions/(cardComponents)/likeButton.tsx
 
 interface IButtonProps {
   questionid: number;
@@ -99,11 +96,7 @@ export default function LikeButton({
           },
         }}
       >
-<<<<<<< HEAD:app/Components/Questions/(cardComponents)/likeButtonComponents/likeButton.tsx
         <LikeSvg likeStatus={likeStatus ? true : false} />
-=======
-        <LikeSvg likeStatus={likeStatus ? true : false} /> 
->>>>>>> main:app/Components/Questions/(cardComponents)/likeButton.tsx
       </motion.div>
       <Text>{likeStatus}</Text>
       <Text>{optimisticLikes.likeCount}</Text>
