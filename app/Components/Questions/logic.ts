@@ -1,4 +1,5 @@
 import { Question } from "@/db/schema/schema";
+import { revalidateTag } from "next/cache";
 
 export async function vote(questionid: number, userid: string, number: number) {
   const res = await fetch(

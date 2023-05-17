@@ -45,7 +45,11 @@
     "@types/parse-json": "^4.0.0",
     "@types/pg": "^8.6.6",
     "@types/prop-types": "^15.7.5",
+<<<<<<< HEAD
     "@types/react": "18.2.6",
+=======
+    "@types/react": "18.0.29",
+>>>>>>> main
     "@types/react-dom": "^18.2.4",
     "@types/react-is": "^17.0.4",
     "@types/resolve": "^1.20.2",
@@ -55,7 +59,10 @@
     "dayjs": "^1.11.7",
     "drizzle-kit": "^0.17.6",
     "drizzle-orm": "^0.24.5",
+<<<<<<< HEAD
     "embla-carousel-react": "8.0.0-rc03",
+=======
+>>>>>>> main
     "eslint": "8.40.0",
     "eslint-config-next": "13.4.2",
     "firebase": "^9.21.0",
@@ -63,7 +70,10 @@
     "framer-motion": "^10.12.10",
     "fs": "0.0.1-security",
     "gyp": "^0.5.0",
+<<<<<<< HEAD
     "navigation": "link:@types/next/navigation",
+=======
+>>>>>>> main
     "next": "13.4.2",
     "pg": "^8.10.0",
     "react": "^18.2.0",
