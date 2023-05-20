@@ -1,26 +1,25 @@
+import { Prisma, PrismaClient, question } from "@prisma/client";
 import Questioncard from "./Components/Questions/Card";
 import Loading from "./loading";
 
-async function getData() {
-  "use server";
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_HOSTING_SERVER}/questions`,
-    {
-      method: "GET",
-      next: {
-        revalidate: 1,
-        tags: ["main"]
-      },
+const prisma = new PrismaClient()
+
+async function getPrisma() {
+  const questions = await prisma.question.findMany({
+    include:{
+      votes: true,
+      likes: true,
+    },
+    where: {
+      isDeleted: false
     }
-  ).then(async (res) => {
-    return await res.json();
-  });
-  if(!res) return null
-  return res;
+  })
+
+  return questions
 }
 
 export default async function Home() {
-  const data = await getData();
+  const data = await getPrisma();
 
   return (
     <main className="main">

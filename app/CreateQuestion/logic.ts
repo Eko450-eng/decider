@@ -2,9 +2,10 @@ import { UserResource } from "@clerk/types";
 import { showNotification } from "@mantine/notifications";
 import imageCompression from "browser-image-compression";
 import { ImageState } from "./page";
+import { createQuestionApi } from "./apis";
 
 export async function compressImage(
-  file: File | null,
+  file: File | null
 ): Promise<ArrayBuffer | null> {
   if (!file) return null;
 
@@ -22,9 +23,11 @@ export async function convertToBase64(file: File) {
   const image = await compressImage(file);
 
   if (!image) return;
-  const res = btoa(new Uint8Array(image).reduce(function (data, byte) {
-    return data + String.fromCharCode(byte);
-  }, ""));
+  const res = btoa(
+    new Uint8Array(image).reduce(function (data, byte) {
+      return data + String.fromCharCode(byte);
+    }, "")
+  );
 
   return res;
 }
@@ -45,7 +48,7 @@ interface QuestionProps {
 }
 
 export async function createQuestion(props: QuestionProps) {
-  const { user, question, images } = props;
+  const { user } = props;
 
   if (!user.isSignedIn) {
     showNotification({
@@ -54,23 +57,11 @@ export async function createQuestion(props: QuestionProps) {
       color: "red",
     });
   }
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_HOSTING_SERVER}/questions`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...question,
-        image1: images.image1,
-        image2: images.image2,
-        userId: user.user.id,
-      }),
-    },
-  ).then(async (e: any) => {
-    const returnValue = await e.json();
 
-    showNotification(returnValue.notification);
-    return returnValue.status;
+  const res = createQuestionApi({
+    question: props.question,
+    userid: user.user.id,
+    images: props.images,
   });
   return res;
 }

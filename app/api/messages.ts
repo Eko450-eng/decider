@@ -139,3 +139,8 @@ export const SSettingsUpdated = {
   status: 200,
   notification: { title: "Ok", message: `Settings updated`, color: "green" },
 };
+
+export const SChangedQuestion = {
+  status: 200,
+  notification: { title: "On it!", message: `We are changing your question`, color: "green" },
+};

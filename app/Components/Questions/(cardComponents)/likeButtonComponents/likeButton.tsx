@@ -9,9 +9,11 @@ import { useRouter } from "next/navigation";
 import LikeSvg from "./LikeSvg";
 import { experimental_useOptimistic as useOptimistic } from "react";
 import { like } from "../../logic";
+import { displayMessage } from "../../helpers";
+import { Question } from "@/db/schema/schema";
 
 interface IButtonProps {
-  questionid: number;
+  question: Question;
 }
 
 export default function LikeButton({
@@ -20,57 +22,42 @@ export default function LikeButton({
   ButtonProps: IButtonProps;
 }) {
 
-  const { questionid } = ButtonProps;
+  const { question } = ButtonProps;
   const [likeStatus, setLikeStatus] = useState(false);
-  const [question, setQuestion] = useState<string[]>([""]);
+  // const [question, setQuestion] = useState<string[]>([""]);
   const { user, isSignedIn, isLoaded } = useUser();
   const router = useRouter();
 
   async function getLikeStatus() {
     if (!isSignedIn || !question) return;
-    if (question.includes(user.id)) setLikeStatus(true);
-    else if (!question.includes(user.id)) setLikeStatus(false);
-  }
-
-  function displayMessage(res: any) {
-    if (res.notification) showNotification(res.notification);
-    getQuestion();
+    if (question.likes.includes(user.id)) setLikeStatus(true);
+    else if (!question.likes.includes(user.id)) setLikeStatus(false);
   }
 
   function handleLike() {
-    if (!isSignedIn || !question || !user) {
+    if (!isSignedIn || !question) {
       router.push("/Signin");
       return showNotification(ENoLogon.notification);
     }
-    if (user && question.includes(user.id)) {
+    // Mutate Optimistic
+    if (question.likes.includes(user.id)) {
       changeOptimisticLikes(optimisticLikes.likeCount - 1);
       setLikeStatus(false);
-    } else if (user && !question.includes(user.id)) {
+    } else if (!question.likes.includes(user.id)) {
       changeOptimisticLikes(optimisticLikes.likeCount + 1);
       setLikeStatus(true);
     }
-    like(questionid, user.id).then((res: any) => displayMessage(res));
+    // Run requestes
+    like(question.id, user.id)
+      // Update with actual value
+      .then((res: any) => displayMessage(res, router));
   }
-
-  async function getQuestion() {
-    await fetch(
-      `${process.env.NEXT_PUBLIC_HOSTING_SERVER}/likes?id=${questionid}`,
-      { method: "GET", cache: "no-store" }
-    ).then(async (res: any) => {
-      const data = await res.json();
-      setQuestion(data);
-    });
-  }
-
-  useEffect(() => {
-    getQuestion();
-  }, [isLoaded]);
 
   useEffect(() => {
     getLikeStatus();
-  }, [question]);
+  }, [isLoaded]);
 
-  const likeCount = question.length;
+  const likeCount = question.likes.length;
 
   const [optimisticLikes, changeOptimisticLikes] = useOptimistic(
     { likeCount, likeStatus },

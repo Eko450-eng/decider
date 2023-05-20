@@ -7,8 +7,10 @@ import { useRouter } from "next/navigation";
 import { PleaseLogin } from "../(PleaseLogin)";
 import { useUser } from "@clerk/nextjs";
 import { useState } from "react";
-import { convertToBase64, createQuestion } from "./logic";
+import { convertToBase64 } from "./logic";
 import { Check } from "tabler-icons-react";
+import { displayMessage } from "../Components/Questions/helpers";
+import { createQuestionApi } from "./apis";
 
 export interface ImageState {
   image1: string | undefined | null;
@@ -59,16 +61,13 @@ export default function Page() {
         <form
           className="creation-form"
           onSubmit={form.onSubmit((values) =>
-            createQuestion({
-              user: user,
+            createQuestionApi({
+              userid: user.user.id,
               question: values,
               images: images,
             }).then((res) => {
-              if (res === 200) {
-                setTimeout(() => {
-                  router.push("/");
-                  router.refresh();
-                }, 250);
+              if (res.status === 200) {
+                displayMessage(res, router, true)
               }
             })
           )}

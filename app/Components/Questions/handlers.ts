@@ -28,12 +28,3 @@ export async function handleDelete(props: HandlerProps, question: Question) {
     displayMessage(res, router)
   );
 }
-
-  export async function changeQuestion(question: Question, values: QuestionProps, props: HandlerProps) {
-    const {isSignedIn, router, user} = props
-
-    if (!isSignedIn || !user) return;
-    const d = { ...values, id: question.id, userid: user.id };
-    editQuestion(d).then((res: any) => displayMessage(res, router));
-  }
-

@@ -4,7 +4,6 @@ import { useUser } from "@clerk/nextjs";
 import { AnimatePresence, motion, useCycle } from "framer-motion";
 import { Card, Group, Stack } from "@mantine/core";
 import React, { useEffect, useState } from "react";
-import { Question } from "@/db/schema/schema";
 import { boxVariant } from "@/app/framer";
 import { useRouter } from "next/navigation";
 import { useForm } from "@mantine/form";
@@ -12,13 +11,15 @@ import DeleteButton from "./(cardComponents)/buttonComponents/deleteButton";
 import { EditableTextField } from "./(cardComponents)/buttonComponents/editableTextField";
 import EditButton from "./(cardComponents)/buttonComponents/editButton";
 import ShareIcon from "./(cardComponents)/shareIcon";
-import { changeQuestion, handleDelete } from "./handlers";
-import VoteButton from "./(cardComponents)/voteButton/voteButton";
+import VoteButton, { IQuestionWithVotes } from "./(cardComponents)/voteButton/voteButton";
 import LikeButton from "./(cardComponents)/likeButtonComponents/likeButton";
 import { useStyles } from "@/app/styles/styles";
+import { editQuestionApi } from "@/app/CreateQuestion/apis";
+import { showNotification } from "@mantine/notifications";
+import { ENoLogon } from "@/app/api/messages";
 
 interface IButtonProps {
-  question: Question;
+  question: IQuestionWithVotes;
   unmount?: () => void;
   index: number;
 }
@@ -47,7 +48,6 @@ export default function Questioncard(ButtonProps: IButtonProps) {
           : ""
       }`
     );
-    // setImage2(`data:image/png;base64,${question.image2?.toString()}` ?? "");
   }
 
   useEffect(() => {
@@ -60,6 +60,7 @@ export default function Questioncard(ButtonProps: IButtonProps) {
       desc: question.desc,
       option1: question.option1,
       option2: question.option2,
+      deleted: question.isDeleted
     },
   });
 
@@ -78,9 +79,18 @@ export default function Questioncard(ButtonProps: IButtonProps) {
           <Card withBorder padding="lg" radius="md" className="card-closed">
             <form
               className="unstyled-form"
-              onSubmit={form.onSubmit((values) =>
-                changeQuestion(question, values, props)
-              )}
+              onSubmit={form.onSubmit((values) => {
+                if (!isSignedIn) return;
+                editQuestionApi({
+                  id: question.id,
+                  userid: user.id,
+                  title: values.title,
+                  desc: values.desc,
+                  option1: values.option1,
+                  option2: values.option2,
+                  isDeleted: values.deleted
+                });
+              })}
             >
               <Stack className={classes.innerCardWrapper}>
                 <Stack>
@@ -94,7 +104,7 @@ export default function Questioncard(ButtonProps: IButtonProps) {
                       weight="bold"
                     />
 
-                    {isSignedIn && question.posterId === user.id && (
+                    {isSignedIn && question.ownerId === user.id && (
                       <EditButton toggleOpen={toggleOpen} isOpen={isOpen} />
                     )}
                   </Group>
@@ -124,7 +134,17 @@ export default function Questioncard(ButtonProps: IButtonProps) {
                     <Group>
                       <DeleteButton
                         isOpen={isOpen}
-                        handleDelete={() => handleDelete(props, question)}
+                        handleDelete={() => {
+                          const { isSignedIn, user } = props;
+                          if (!isSignedIn || !question || !user) {
+                            return showNotification(ENoLogon.notification);
+                          }
+                          editQuestionApi({
+                            ...question,
+                            isDeleted: true,
+                            userid: user.id,
+                          });
+                        }}
                         toggleOpen={toggleOpen}
                       />
                     </Group>
@@ -133,7 +153,7 @@ export default function Questioncard(ButtonProps: IButtonProps) {
                       <ShareIcon
                         link={`https://wipdesign.eu/question/${question.id}`}
                       />
-                      <LikeButton ButtonProps={{ questionid: question.id }} />
+                      <LikeButton ButtonProps={{ question: question }} />
                     </Group>
                   )}
                 </Stack>

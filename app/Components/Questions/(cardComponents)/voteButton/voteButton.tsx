@@ -1,9 +1,20 @@
 "use client";
-import { Question } from "@/db/schema/schema";
 import { Stack } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EditableVoteButton } from "../buttonComponents/editableButton";
 import { FullscreenImageModal, VoteImage } from "./voteButtonComponents";
+import { Prisma, question } from "@prisma/client";
+import { useUser } from "@clerk/nextjs";
+
+const questionWithVotes = Prisma.validator<Prisma.questionArgs>()({
+  include: {
+    votes: true,
+  },
+});
+
+export type IQuestionWithVotes = Prisma.questionGetPayload<
+  typeof questionWithVotes
+>;
 
 interface IButtonProps {
   setOption1: (values: string) => void;
@@ -11,13 +22,29 @@ interface IButtonProps {
   isOpen: boolean;
   imageByte1: string;
   imageByte2: string;
-  question: Question;
+  question: IQuestionWithVotes;
 }
 
 export default function VoteButton(ButtonProps: IButtonProps) {
   const [imageModal, setImageModal] = useState<string | null>(null);
+  const [voteStatus, setVoteStatus] = useState(0);
+  const { isSignedIn, user } = useUser();
   const { question, imageByte2, imageByte1, isOpen, setOption1, setOption2 } =
     ButtonProps;
+
+  function validateVotes() {
+    if (!isSignedIn || !question) return;
+    question.votes.map((vote) => {
+      if (vote.ownerId === user.id) {
+        setVoteStatus(vote.option);
+      }
+    });
+    if(question.votes.length <= 0) setVoteStatus(0)
+  }
+
+  useEffect(() => {
+    validateVotes();
+  }, [isSignedIn, user]);
 
   return (
     <>
@@ -37,11 +64,14 @@ export default function VoteButton(ButtonProps: IButtonProps) {
               />
             )}
             <EditableVoteButton
+              setVoteStatus={(index) => setVoteStatus(index)}
               setValue={setOption1}
               isOpen={isOpen}
               question={question}
               option={question.option1}
               index={1}
+              voteStatus={voteStatus}
+              revalidate={() => validateVotes()}
             />
           </Stack>
           <Stack>
@@ -53,11 +83,14 @@ export default function VoteButton(ButtonProps: IButtonProps) {
               />
             )}
             <EditableVoteButton
+              setVoteStatus={(index) => console.log(index)}
               setValue={setOption2}
               isOpen={isOpen}
               question={question}
               option={question.option2}
               index={2}
+              voteStatus={voteStatus}
+              revalidate={() => validateVotes()}
             />
           </Stack>
         </Stack>

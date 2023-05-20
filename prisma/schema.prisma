@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  relationMode = "foreignKeys"
+}
+
+model Comment {
+  id Int @id @default(autoincrement())
+}
+
+model Profile {
+  id        Int       @id @default(autoincrement())
+  username  String    @db.VarChar(20)
+  email     String    @db.VarChar(255)
+  role      Int?
+  password  String
+  createdAt DateTime? @db.Date
+  topics    String[]
+}
+
+model Pushdevices {
+  id        Int       @id @default(autoincrement())
+  device    String?   @db.VarChar
+  createdAt DateTime? @db.Date
+  profileId String?
+}
+
+model file {
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(200)
+  location  String?   @default("Home") @db.VarChar(200)
+  date      DateTime? @default(now()) @db.Timestamp(6)
+  comment   String?
+  archived  Boolean?  @default(false)
+  image     String?
+  owner     Int?
+  folder_id Int?
+  folder    folder?   @relation(fields: [folder_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "file_folder_id_folder_id_fk")
+  person    person?   @relation(fields: [owner], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "file_owner_person_id_fk")
+}
+
+model folder {
+  id           Int        @id @default(autoincrement())
+  name         String     @db.VarChar(200)
+  location     String?    @default("Home") @db.VarChar(200)
+  comment      String?
+  archived     Boolean?   @default(false)
+  owner        Int?
+  household_id Int?
+  file         file[]
+  household    household? @relation(fields: [household_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "folder_household_id_household_id_fk")
+  person       person?    @relation(fields: [owner], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "folder_owner_person_id_fk")
+}
+
+model household {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(200)
+  location    String?  @default("Home") @db.VarChar(200)
+  owner       Int?
+  profile_ids Int[]
+  folder      folder[]
+  person      person?  @relation(fields: [owner], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "household_owner_person_id_fk")
+}
+
+model person {
+  id         Int         @id @default(autoincrement())
+  profile_id String
+  file       file[]
+  folder     folder[]
+  household  household[]
+}
+
+model account {
+  id       Int                 @id(map: "Account_pkey") @default(autoincrement())
+  userid   String              @unique
+  // comments question_comments[]
+  // likes    question_likes[]
+  // votes    question_votes[]
+}
+
+model question {
+  id        Int                 @id(map: "Question_pkey") @default(autoincrement())
+  title     String              @db.VarChar(100)
+  desc      String?             @db.VarChar(100)
+  createdAt DateTime?           @default(now()) @db.Timestamp(6)
+  option1   String              @db.VarChar(30)
+  option2   String              @db.VarChar(30)
+  ownerId   String
+  image1    String?
+  image2    String?
+  isDeleted Boolean             @default(false)
+  comments  question_comments[]
+  likes     question_likes[]
+  votes     question_votes[]
+}
+
+model question_comments {
+  id         Int      @id(map: "Question_comment_pkey") @default(autoincrement())
+  comment    String   @db.VarChar(256)
+  questionId Int
+  isDeleted  Boolean  @default(false)
+  ownerId    String
+  // owner      account  @relation(fields: [ownerId], references: [id])
+  question   question @relation(fields: [questionId], references: [id])
+}
+
+model question_votes {
+  id         Int      @id(map: "Question_vote_pkey") @default(autoincrement())
+  questionId Int
+  ownerId    String
+  option     Int
+  // owner      account  @relation(fields: [ownerId], references: [id])
+  question   question @relation(fields: [questionId], references: [id])
+}
+
+model question_likes {
+  id         Int      @id(map: "Question_like_pkey") @default(autoincrement())
+  questionId Int
+  ownerId    String
+  // owner      account  @relation(fields: [ownerId], references: [id])
+  question   question @relation(fields: [questionId], references: [id])
+}

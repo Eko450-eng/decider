@@ -26,10 +26,6 @@ export default function QuestionPage({ params }: any) {
     getData();
   }, []);
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   return (
     <AnimatePresence>
       <motion.ul
