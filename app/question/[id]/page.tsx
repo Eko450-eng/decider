@@ -2,13 +2,13 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Question } from "@/db/schema/schema";
 import { boxVariant } from "@/app/framer";
 import Loading from "@/app/loading";
 import Questioncard from "@/app/Components/Questions/Card";
+import { IQuestionWithVotesAndLikes } from "@/prisma/types";
 
 export default function QuestionPage({ params }: any) {
-  const [data, setData] = useState<Question[]>();
+  const [data, setData] = useState<IQuestionWithVotesAndLikes[]>();
 
   async function getData() {
     await fetch(
