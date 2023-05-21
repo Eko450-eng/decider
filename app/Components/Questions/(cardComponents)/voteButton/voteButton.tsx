@@ -3,18 +3,8 @@ import { Stack } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { EditableVoteButton } from "../buttonComponents/editableButton";
 import { FullscreenImageModal, VoteImage } from "./voteButtonComponents";
-import { Prisma, question } from "@prisma/client";
 import { useUser } from "@clerk/nextjs";
-
-const questionWithVotes = Prisma.validator<Prisma.questionArgs>()({
-  include: {
-    votes: true,
-  },
-});
-
-export type IQuestionWithVotes = Prisma.questionGetPayload<
-  typeof questionWithVotes
->;
+import { IQuestionWithVotes } from "@/prisma/types";
 
 interface IButtonProps {
   setOption1: (values: string) => void;

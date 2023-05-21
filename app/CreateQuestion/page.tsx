@@ -62,12 +62,14 @@ export default function Page() {
           className="creation-form"
           onSubmit={form.onSubmit((values) =>
             createQuestionApi({
-              userid: user.user.id,
-              question: values,
-              images: images,
+              ...values,
+              image1: images.image1 ?? null,
+              image2: images.image2 ?? null,
+              isDeleted: false,
+              ownerId: user.user.id,
             }).then((res) => {
               if (res.status === 200) {
-                displayMessage(res, router, true)
+                displayMessage(res, router, true);
               }
             })
           )}

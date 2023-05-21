@@ -3,6 +3,7 @@ import { showNotification } from "@mantine/notifications";
 import imageCompression from "browser-image-compression";
 import { ImageState } from "./page";
 import { createQuestionApi } from "./apis";
+import { question } from "@prisma/client";
 
 export async function compressImage(
   file: File | null
@@ -33,12 +34,7 @@ export async function convertToBase64(file: File) {
 }
 
 interface QuestionProps {
-  question: {
-    title: string;
-    desc: string;
-    option1: string;
-    option2: string;
-  };
+  question: question;
   user: {
     isSignedIn: boolean;
     isLoaded: boolean;

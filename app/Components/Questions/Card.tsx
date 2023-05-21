@@ -11,15 +11,16 @@ import DeleteButton from "./(cardComponents)/buttonComponents/deleteButton";
 import { EditableTextField } from "./(cardComponents)/buttonComponents/editableTextField";
 import EditButton from "./(cardComponents)/buttonComponents/editButton";
 import ShareIcon from "./(cardComponents)/shareIcon";
-import VoteButton, { IQuestionWithVotes } from "./(cardComponents)/voteButton/voteButton";
 import LikeButton from "./(cardComponents)/likeButtonComponents/likeButton";
 import { useStyles } from "@/app/styles/styles";
 import { editQuestionApi } from "@/app/CreateQuestion/apis";
 import { showNotification } from "@mantine/notifications";
 import { ENoLogon } from "@/app/api/messages";
+import { IQuestionWithVotesAndLikes } from "@/prisma/types";
+import VoteButton from "./(cardComponents)/voteButton/voteButton";
 
 interface IButtonProps {
-  question: IQuestionWithVotes;
+  question: IQuestionWithVotesAndLikes;
   unmount?: () => void;
   index: number;
 }
@@ -60,7 +61,7 @@ export default function Questioncard(ButtonProps: IButtonProps) {
       desc: question.desc,
       option1: question.option1,
       option2: question.option2,
-      deleted: question.isDeleted
+      deleted: question.isDeleted,
     },
   });
 
@@ -82,13 +83,15 @@ export default function Questioncard(ButtonProps: IButtonProps) {
               onSubmit={form.onSubmit((values) => {
                 if (!isSignedIn) return;
                 editQuestionApi({
-                  id: question.id,
                   userid: user.id,
-                  title: values.title,
-                  desc: values.desc,
-                  option1: values.option1,
-                  option2: values.option2,
-                  isDeleted: values.deleted
+                  question: {
+                    ...question,
+                    title: values.title,
+                    desc: values.desc,
+                    option1: values.option1,
+                    option2: values.option2,
+                    isDeleted: values.deleted,
+                  },
                 });
               })}
             >
@@ -140,8 +143,10 @@ export default function Questioncard(ButtonProps: IButtonProps) {
                             return showNotification(ENoLogon.notification);
                           }
                           editQuestionApi({
-                            ...question,
-                            isDeleted: true,
+                            question: {
+                              ...question,
+                              isDeleted: true,
+                            },
                             userid: user.id,
                           });
                         }}

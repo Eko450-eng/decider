@@ -1,51 +1,35 @@
 "use server";
 
 import { PrismaClient, question } from "@prisma/client";
-import { ImageState } from "./page";
-import { SChangedQuestion, SCreateQuestion } from "../api/messages";
+import { SChangedQuestion, SCreateQuestion, SLike, SLiked } from "../api/messages";
 
-interface VoteProps {
+interface LikeProps {
   userid: string;
   question: number;
+}
+
+interface VoteProps extends LikeProps {
   option: number;
 }
 
-interface QuestionProps {
-  question: {
-    title: string;
-    desc: string;
-    option1: string;
-    option2: string;
-  };
-  userid: string;
-  images?: ImageState;
-}
-
 interface EditProps {
+  question: question;
   userid: string;
-  id: number;
-  title: string;
-  desc: string | null;
-  option1: string;
-  option2: string;
-  isDeleted: boolean;
 }
 
 const prisma = new PrismaClient();
 
-export async function createQuestionApi(props: QuestionProps) {
-  const { userid, question, images } = props;
-  const { desc, title, option1, option2 } = question;
+export async function createQuestionApi(props: Omit<question, "id" | "createdAt">) {
   const res = prisma.question
     .create({
       data: {
-        title: title,
-        desc: desc,
-        option1: option1,
-        option2: option2,
-        image1: images ? images.image1 : null,
-        image2: images ? images.image2 : null,
-        ownerId: userid,
+        title: props.title,
+        desc: props.desc,
+        option1: props.option1,
+        option2: props.option2,
+        image1: props.image1 ? props.image1 : null,
+        image2: props.image2 ? props.image2 : null,
+        ownerId: props.ownerId,
       },
     })
     .then(() => {
@@ -55,20 +39,19 @@ export async function createQuestionApi(props: QuestionProps) {
 }
 
 export async function editQuestionApi(props: EditProps) {
-  const { id, userid, option2, option1, desc, title, isDeleted } = props;
 
   const res = prisma.question
     .update({
       where: {
-        id: id,
+        id: props.question.id,
       },
       data: {
-        ownerId: userid,
-        title: title,
-        desc: desc,
-        option1: option1,
-        option2: option2,
-        isDeleted: isDeleted,
+        ownerId: props.userid,
+        title: props.question.title,
+        desc: props.question.desc,
+        option1: props.question.option1,
+        option2: props.question.option2,
+        isDeleted: props.question.isDeleted,
       },
     })
     .then(() => {
@@ -114,6 +97,34 @@ export async function removeVote(props: VoteProps) {
           color: "red",
         },
       };
+    });
+  return res;
+}
+
+export async function like(props: LikeProps) {
+  const res = await prisma.question_likes
+    .create({
+      data: {
+        ownerId: props.userid,
+        questionId: props.question,
+      },
+    })
+    .then(() => {
+      return SLike;
+    });
+  return res;
+}
+
+export async function removeLike(props: LikeProps) {
+  const res = await prisma.question_likes
+    .deleteMany({
+      where: {
+        ownerId: props.userid,
+        questionId: props.question,
+      },
+    })
+    .then(() => {
+      return SLiked;
     });
   return res;
 }
