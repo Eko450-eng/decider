@@ -57,7 +57,7 @@ export function Maintenance() {
         <div className={classes.inner}>
           {/* <Illustration className={classes.image} /> */}
           <div className={classes.content}>
-            <Title className={classes.title}>We'll be back</Title>
+            <Title className={classes.title}>We<span>&#39;</span>ll be back</Title>
             <Text size="lg" align="center" className={classes.description}>
               We are currently working on some updates and will be back online as soon as possible!
             </Text>
