@@ -1,21 +1,22 @@
-import { Prisma, PrismaClient, question } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import Questioncard from "./Components/Questions/Card";
 import Loading from "./loading";
+import { Maintenance } from "./maintenance";
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 async function getPrisma() {
   const questions = await prisma.question.findMany({
-    include:{
+    include: {
       votes: true,
       likes: true,
     },
     where: {
-      isDeleted: false
-    }
-  })
+      isDeleted: false,
+    },
+  });
 
-  return questions
+  return questions;
 }
 
 export default async function Home() {
@@ -23,24 +24,27 @@ export default async function Home() {
 
   return (
     <main className="main">
-      <div className="cards-wrapper">
-        {data
-          ? data.map((v: any, k: number) => {
-              const { createdAt, ...question } = v;
-              return (
-                <Questioncard
-                  key={`questionCard-${k}`}
-                  index={k}
-                  question={question}
-                  data-superjson
-                />
-              );
-            })
-          :
-          [...Array(20).keys()].map((i: number) => {
-              return <Loading key={`placeholder-${i}`}/>;
-            })}
-      </div>
+      {process.env.NEXT_PUBLIC_MAINTENANCE ? (
+        <Maintenance />
+      ) : (
+        <div className="cards-wrapper">
+          {data
+            ? data.map((v: any, k: number) => {
+                const { createdAt, ...question } = v;
+                return (
+                  <Questioncard
+                    key={`questionCard-${k}`}
+                    index={k}
+                    question={question}
+                    data-superjson
+                  />
+                );
+              })
+            : [...Array(20).keys()].map((i: number) => {
+                return <Loading key={`placeholder-${i}`} />;
+              })}
+        </div>
+      )}
     </main>
   );
 }
