@@ -1,7 +1,9 @@
 import { SLike, SLiked } from "@/app/api/messages";
-import prisma from "@/app/prisma";
 import { LikeProps } from "@/prisma/types";
+import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+
+const prisma = new PrismaClient()
 
 export async function POST(request: NextRequest) {
   const props: LikeProps = await request.json()
@@ -16,6 +18,7 @@ export async function POST(request: NextRequest) {
     .then(() => {
       return SLike;
     });
+  prisma.$disconnect
   return NextResponse.json(res)
 }
 
@@ -32,5 +35,6 @@ export async function PUT(request: NextRequest) {
     .then(() => {
       return SLiked;
     });
+  prisma.$disconnect
   return NextResponse.json(res)
 }

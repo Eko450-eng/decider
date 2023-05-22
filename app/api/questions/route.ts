@@ -2,7 +2,7 @@ import { PrismaClient, question } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { SCreateQuestion } from "../messages";
 
-const prisma = new PrismaClient
+const prisma = new PrismaClient()
 
 export async function POST(request: NextRequest){
   const props: Omit<question, "id" | "createdAt"> = await request.json()

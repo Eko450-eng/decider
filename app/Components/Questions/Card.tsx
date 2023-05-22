@@ -17,7 +17,6 @@ import { showNotification } from "@mantine/notifications";
 import { ENoLogon } from "@/app/api/messages";
 import { IQuestionWithVotesAndLikes } from "@/prisma/types";
 import VoteButton from "./(cardComponents)/voteButton/voteButton";
-import { editQuestionApi } from "./apis";
 
 interface IButtonProps {
   question: IQuestionWithVotesAndLikes;
@@ -80,20 +79,6 @@ export default function Questioncard(ButtonProps: IButtonProps) {
           <Card withBorder padding="lg" radius="md" className="card-closed">
             <form
               className="unstyled-form"
-              onSubmit={form.onSubmit((values) => {
-                if (!isSignedIn) return;
-                editQuestionApi({
-                  userid: user.id,
-                  question: {
-                    ...question,
-                    title: values.title,
-                    desc: values.desc,
-                    option1: values.option1,
-                    option2: values.option2,
-                    isDeleted: values.deleted,
-                  },
-                });
-              })}
             >
               <Stack className={classes.innerCardWrapper}>
                 <Stack>
@@ -142,14 +127,14 @@ export default function Questioncard(ButtonProps: IButtonProps) {
                           if (!isSignedIn || !question || !user) {
                             return showNotification(ENoLogon.notification);
                           }
-                          editQuestionApi({
+                          {/*editQuestionApi({
                             question: {
                               ...question,
                               isDeleted: true,
                             },
                             userid: user.id,
-                          });
-                        }}
+                          });*/}
+                        }} 
                         toggleOpen={toggleOpen}
                       />
                     </Group>

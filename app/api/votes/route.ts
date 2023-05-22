@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { VoteProps } from "@/prisma/types";
-import { ArrowWaveLeftUp } from "tabler-icons-react";
 
 const prisma = new PrismaClient();
 
-export async function POST(request: NextRequest, response: NextResponse) {
+export async function POST(request: NextRequest) {
   const props: VoteProps = await request.json();
 
   const currentState = await prisma.question_votes.findFirst({
