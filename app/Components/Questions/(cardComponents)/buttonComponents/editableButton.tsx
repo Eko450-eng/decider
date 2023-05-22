@@ -11,9 +11,9 @@ import {
 } from "react";
 import { displayMessage, noLogin } from "../../helpers";
 import { useStyles } from "@/app/styles/styles";
-import { removeVote, voteApi } from "@/app/CreateQuestion/apis";
 import { getVotes } from "./helpers";
 import { IQuestionWithVotes } from "@/prisma/types";
+import { voteApi, removeVote } from "../voteButton/apis";
 
 interface IButtonProps {
   question: IQuestionWithVotes;

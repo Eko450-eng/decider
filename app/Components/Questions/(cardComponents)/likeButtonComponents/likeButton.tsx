@@ -9,8 +9,8 @@ import { useRouter } from "next/navigation";
 import LikeSvg from "./LikeSvg";
 import { experimental_useOptimistic as useOptimistic } from "react";
 import { displayMessage } from "../../helpers";
-import { like, removeLike } from "@/app/CreateQuestion/apis";
 import { IQuestionWithLikes } from "@/prisma/types";
+import { removeLike, like } from "./apis";
 
 interface IButtonProps {
   question: IQuestionWithLikes;

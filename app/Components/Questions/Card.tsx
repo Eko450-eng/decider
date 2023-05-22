@@ -13,11 +13,11 @@ import EditButton from "./(cardComponents)/buttonComponents/editButton";
 import ShareIcon from "./(cardComponents)/shareIcon";
 import LikeButton from "./(cardComponents)/likeButtonComponents/likeButton";
 import { useStyles } from "@/app/styles/styles";
-import { editQuestionApi } from "@/app/CreateQuestion/apis";
 import { showNotification } from "@mantine/notifications";
 import { ENoLogon } from "@/app/api/messages";
 import { IQuestionWithVotesAndLikes } from "@/prisma/types";
 import VoteButton from "./(cardComponents)/voteButton/voteButton";
+import { editQuestionApi } from "./apis";
 
 interface IButtonProps {
   question: IQuestionWithVotesAndLikes;

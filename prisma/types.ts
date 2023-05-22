@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, question } from "@prisma/client";
 
 const questionWithVotes = Prisma.validator<Prisma.questionArgs>()({
   include: {
@@ -30,3 +30,18 @@ export type IQuestionWithLikes = Prisma.questionGetPayload<
 export type IQuestionWithVotesAndLikes = Prisma.questionGetPayload<
   typeof questionWithVotesAndLikes
 >;
+
+export interface LikeProps {
+  userid: string;
+  question: number;
+}
+
+export interface VoteProps extends LikeProps {
+  option: number;
+}
+
+export interface EditProps {
+  question: question;
+  userid: string;
+}
+
