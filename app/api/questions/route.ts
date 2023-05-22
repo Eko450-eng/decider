@@ -4,6 +4,19 @@ import { SCreateQuestion } from "../messages";
 
 const prisma = new PrismaClient()
 
+export async function GET(){
+  const questions = await prisma.question.findMany({
+    include: {
+      votes: true,
+      likes: true,
+    },
+    where: {
+      isDeleted: false,
+    },
+  });
+  return NextResponse.json(questions);
+}
+
 export async function POST(request: NextRequest){
   const props: Omit<question, "id" | "createdAt"> = await request.json()
   const res = prisma.question
