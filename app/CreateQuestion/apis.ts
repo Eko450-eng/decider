@@ -1,9 +1,11 @@
-"use server"
- 
+"use server";
+
 import { question } from "@prisma/client";
+import { SCreateQuestion } from "../api/messages";
 
-
-export async function createQuestionApi(props: Omit<question, "id" | "createdAt">) {
+export async function createQuestionApi(
+  props: Omit<question, "id" | "createdAt">
+) {
   // const res = prisma.question
   //   .create({
   //     data: {
@@ -20,5 +22,5 @@ export async function createQuestionApi(props: Omit<question, "id" | "createdAt"
   //     return SCreateQuestion;
   //   });
   // return res;
-  return {WOOP: "WOOP"}
+  return SCreateQuestion;
 }
