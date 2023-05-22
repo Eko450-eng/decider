@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { PleaseLogin } from "../(PleaseLogin)";
 import { useUser } from "@clerk/nextjs";
 import { useState } from "react";
-import { convertToBase64 } from "./logic";
+import { convertToBase64 } from "./helpers";
 import { Check } from "tabler-icons-react";
 import { displayMessage } from "../Components/Questions/helpers";
 import { createQuestionApi } from "./apis";
