@@ -1,3 +1,4 @@
+"use client"
 import { Center, Modal } from "@mantine/core";
 
 interface ImageProps {

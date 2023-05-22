@@ -1,3 +1,4 @@
+"use client"
 import { ENoLogon } from "@/app/api/messages";
 import { showNotification } from "@mantine/notifications";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";

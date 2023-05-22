@@ -1,3 +1,5 @@
+"use client"
+
 import { IQuestionWithVotes } from "@/prisma/types";
 
   export function getVotes(question: IQuestionWithVotes, voteNumber: number): number {

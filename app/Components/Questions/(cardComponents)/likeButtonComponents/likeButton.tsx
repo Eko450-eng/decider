@@ -36,36 +36,43 @@ export default function LikeButton({
   }
 
   async function dislike() {
+    showNotification({
+      title: "Under construction",
+      message: "Will be available again soon",
+    })
     if (!user) return;
     changeOptimisticLikes(optimisticLikes.likeCount + 1);
-    await fetch("/api/likes", {
-      method: "POST",
-      body: JSON.stringify({
-        question: question.id,
-        userid: user.id,
-      }),
-    }).then((res: any) => {
-    setLikeStatus(true);
-      displayMessage(res, router, false);
-      block(false);
-    });
+    // await fetch("/api/likes", {
+    //   method: "POST",
+    //   body: JSON.stringify({
+    //     question: question.id,
+    //     userid: user.id,
+    //   }),
+    // }).then((res: any) => {
+    // setLikeStatus(true);
+    //   displayMessage(res, router, false);
+    //   block(false);
+    // });
   }
 
   async function like() {
-    console.log("like")
+    showNotification({
+      title: "Under construction",
+      message: "Will be available again soon",
+    })
     if (!user) return;
     changeOptimisticLikes(optimisticLikes.likeCount - 1);
-    await fetch("/api/likes", {
-      method: "PUT",
-      body: JSON.stringify({
-        question: question.id,
-        userid: user.id,
-      }),
-    }).then((res: any) => {
-      displayMessage(res, router, false);
-      setLikeStatus(false);
-      block(false);
-    });
+    // await fetch("/api/likes", {
+    //   method: "PUT",
+    //   body: JSON.stringify({
+    //     question: question.id,
+    //     userid: user.id,
+    //   }),
+    // }).then((res: any) => {
+    //   displayMessage(res, router, false);
+    //   setLikeStatus(false);
+    //   block(false);
+    // });
   }
 
   function handleLike() {
