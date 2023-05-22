@@ -24,9 +24,6 @@ export default async function Home() {
 
   return (
     <main className="main">
-      {process.env.NEXT_PUBLIC_MAINTENANCE ? (
-        <Maintenance />
-      ) : (
         <div className="cards-wrapper">
           {data
             ? data.map((v: any, k: number) => {
@@ -44,7 +41,6 @@ export default async function Home() {
                 return <Loading key={`placeholder-${i}`} />;
               })}
         </div>
-      )}
     </main>
   );
 }

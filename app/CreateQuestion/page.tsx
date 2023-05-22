@@ -2,7 +2,6 @@
 
 import { Button, FileInput, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { showNotification } from "@mantine/notifications";
 import { useRouter } from "next/navigation";
 import { PleaseLogin } from "../(PleaseLogin)";
 import { useUser } from "@clerk/nextjs";

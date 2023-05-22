@@ -1,5 +1,5 @@
-"use server";
-
+"use server"
+ 
 import { PrismaClient, question } from "@prisma/client";
 import { SChangedQuestion, SCreateQuestion, SLike, SLiked } from "../api/messages";
 
