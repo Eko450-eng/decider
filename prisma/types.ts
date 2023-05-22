@@ -32,7 +32,7 @@ export type IQuestionWithVotesAndLikes = Prisma.questionGetPayload<
 >;
 
 export interface LikeProps {
-  userid: string;
+  userId: string;
   question: number;
 }
 

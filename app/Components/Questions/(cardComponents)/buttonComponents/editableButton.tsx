@@ -2,8 +2,6 @@
 import { useUser } from "@clerk/nextjs";
 import { Button, Text } from "@mantine/core";
 import { useRouter } from "next/navigation";
-import { showNotification } from "@mantine/notifications";
-import { EAlreadyVoted } from "@/app/api/messages";
 import {
   useState,
   experimental_useOptimistic as useOptimistic,
@@ -13,7 +11,6 @@ import { displayMessage, noLogin } from "../../helpers";
 import { useStyles } from "@/app/styles/styles";
 import { getVotes } from "./helpers";
 import { IQuestionWithVotes } from "@/prisma/types";
-import { voteApi, removeVote } from "../voteButton/apis";
 
 interface IButtonProps {
   question: IQuestionWithVotes;
@@ -44,41 +41,37 @@ export function EditableVoteButton(ButtonProps: IButtonProps) {
 
   const votes: number = getVotes(question, index);
 
-  function voting(voted: boolean) {
-    if (!user) return;
-    if (!voted) {
-      changeOptimisticVote(optimisticVotes.votes + 1);
-      setVoteStatus(index);
-      voteApi({
-        option: index,
-        question: question.id,
-        userid: user!.id,
-      }).then((res: any) => {
-        displayMessage(res, router);
-        blockRequest(false);
-      });
-    } else if (voted) {
-      changeOptimisticVote(optimisticVotes.votes - 1);
-      setVoteStatus(0);
-      removeVote({
-        option: index,
-        question: question.id,
-        userid: user!.id,
-      }).then((res: any) => {
-        displayMessage(res, router);
-        blockRequest(false);
-      });
-    }
-  }
-
-  function handleVote() {
+  async function handleVote() {
     blockRequest(true);
-    // Check if user is logged in
     if (!isSignedIn) noLogin(router);
-    // Check if the user has not already voted for something
-    else if (voteStatus === 0) voting(false);
-    else if (voteStatus === index) voting(true);
-    else showNotification(EAlreadyVoted.notification);
+    setVoteStatus(
+      voteStatus === 0
+        ? index
+        : voteStatus !== index && voteStatus !== 1
+        ? 2
+        : 1
+    );
+    console.log(voteStatus);
+    changeOptimisticVote(
+      (optimisticVotes.votes =
+        voteStatus === 0
+          ? optimisticVotes.votes + 1
+          : voteStatus === index
+          ? optimisticVotes.votes - 1
+          : optimisticVotes.votes - 1)
+    );
+
+    await fetch("/api/votes", {
+      method: "POST",
+      body: JSON.stringify({
+        option: index,
+        userId: user?.id,
+        question: question.id,
+      }),
+    }).then(async (res: any) => {
+      displayMessage(await res.json(), router);
+      blockRequest(false);
+    });
   }
 
   const [optimisticVotes, changeOptimisticVote] = useOptimistic(

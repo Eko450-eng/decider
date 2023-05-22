@@ -6,10 +6,11 @@ import { useRouter } from "next/navigation";
 import { PleaseLogin } from "../(PleaseLogin)";
 import { useUser } from "@clerk/nextjs";
 import { useState } from "react";
-// import { convertToBase64 } from "./helpers";
+import { convertToBase64 } from "./helpers";
 import { Check } from "tabler-icons-react";
 import { displayMessage } from "../Components/Questions/helpers";
-import { createQuestionApi } from "./apis";
+import { showNotification } from "@mantine/notifications";
+import { question } from "@prisma/client";
 
 export interface ImageState {
   image1: string | undefined | null;
@@ -18,7 +19,7 @@ export interface ImageState {
 
 export default function Page() {
   const router = useRouter();
-  const user = useUser();
+  const { user, isSignedIn } = useUser();
 
   const [images, setImages] = useState<ImageState>({
     image1: "",
@@ -34,45 +35,56 @@ export default function Page() {
     },
   });
 
-  // async function saveImage(option: 1 | 2, image: File | null) {
-  //   if (!image) return;
-  //
-  //   try {
-  //     // const base64String = await convertToBase64(image);
-  //     const base64String = image.toString()
-  //
-  //     if (option === 1) {
-  //       setImages({ ...images, image1: base64String });
-  //     } else {
-  //       setImages({ ...images, image2: base64String });
-  //     }
-  //   } catch (e: any) {
-  //     showNotification({
-  //       title: "Well uhhh",
-  //       message: "Seems like that image is too big",
-  //       color: "red",
-  //     });
-  //   }
-  // }
+  async function handleCreation(
+    values: Omit<
+      question,
+      "image1" | "image2" | "id" | "createdAt" | "ownerId" | "isDeleted"
+    >
+  ) {
+    if (!user) return;
+    await fetch("/api/questions", {
+      method: "POST",
+      body: JSON.stringify({
+        ...values,
+        image1: images.image1 ?? null,
+        image2: images.image2 ?? null,
+        isDeleted: false,
+        ownerId: user.id,
+      }),
+    }).then(async(res) => {
+      const r = await res.json()
+      if (r.status === 200) {
+        displayMessage(r, router, true);
+      }
+    });
+  }
+
+  async function saveImage(option: 1 | 2, image: File | null) {
+    if (!image) return;
+
+    try {
+      const base64String = await convertToBase64(image);
+
+      if (option === 1) {
+        setImages({ ...images, image1: base64String });
+      } else {
+        setImages({ ...images, image2: base64String });
+      }
+    } catch (e: any) {
+      showNotification({
+        title: "Well uhhh",
+        message: "Seems like that image is too big",
+        color: "red",
+      });
+    }
+  }
 
   return (
     <>
-      {user.isSignedIn ? (
+      {isSignedIn ? (
         <form
           className="creation-form"
-          onSubmit={form.onSubmit((values) =>
-            createQuestionApi({
-              ...values,
-              image1: images.image1 ?? null,
-              image2: images.image2 ?? null,
-              isDeleted: false,
-              ownerId: user.user.id,
-            }).then((res) => {
-              if (res.status === 200) {
-                displayMessage(res, router, true);
-              }
-            })
-          )}
+          onSubmit={form.onSubmit((values) => handleCreation(values))}
         >
           <TextInput
             label="Title"
@@ -124,7 +136,7 @@ export default function Page() {
             placeholder="Image 1"
             label="Image for first option"
             accept="image/png,image/jpeg"
-            // onChange={(v) => saveImage(1, v)}
+            onChange={(v) => saveImage(1, v)}
           />
 
           <TextInput
@@ -146,7 +158,7 @@ export default function Page() {
             placeholder="Image 1"
             label="Image for first option"
             accept="image/png,image/jpeg"
-            // onChange={(v) => saveImage(2, v)}
+            onChange={(v) => saveImage(2, v)}
           />
 
           <Button type="submit" rightIcon={<Check />}>

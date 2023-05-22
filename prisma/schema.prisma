@@ -115,6 +115,8 @@ model question_votes {
   option     Int
   // owner      account  @relation(fields: [ownerId], references: [id])
   question   question @relation(fields: [questionId], references: [id])
+
+  @@unique([questionId, ownerId])
 }
 
 model question_likes {
@@ -123,4 +125,5 @@ model question_likes {
   ownerId    String
   // owner      account  @relation(fields: [ownerId], references: [id])
   question   question @relation(fields: [questionId], references: [id])
+  @@unique([questionId, ownerId])
 }

@@ -1,33 +1,36 @@
-"use server";
-
 import { SLike, SLiked } from "@/app/api/messages";
 import prisma from "@/app/prisma";
 import { LikeProps } from "@/prisma/types";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function like(props: LikeProps) {
+export async function POST(request: NextRequest) {
+  const props: LikeProps = await request.json()
+
   const res = await prisma.question_likes
     .create({
       data: {
-        ownerId: props.userid,
+        ownerId: props.userId,
         questionId: props.question,
       },
     })
     .then(() => {
       return SLike;
     });
-  return res;
+  return NextResponse.json(res)
 }
 
-export async function removeLike(props: LikeProps) {
+export async function PUT(request: NextRequest) {
+  const props: LikeProps = await request.json()
+
   const res = await prisma.question_likes
     .deleteMany({
       where: {
-        ownerId: props.userid,
+        ownerId: props.userId,
         questionId: props.question,
       },
     })
     .then(() => {
       return SLiked;
     });
-  return res;
+  return NextResponse.json(res)
 }

@@ -10,7 +10,6 @@ import LikeSvg from "./LikeSvg";
 import { experimental_useOptimistic as useOptimistic } from "react";
 import { displayMessage } from "../../helpers";
 import { IQuestionWithLikes } from "@/prisma/types";
-import { removeLike, like } from "./apis";
 
 interface IButtonProps {
   question: IQuestionWithLikes;
@@ -24,7 +23,7 @@ export default function LikeButton({
   const { question } = ButtonProps;
   const [likeStatus, setLikeStatus] = useState<boolean>(false);
   const [blocked, block] = useState<boolean>(false);
-  const { user, isSignedIn, isLoaded } = useUser();
+  const { user, isSignedIn } = useUser();
   const router = useRouter();
 
   async function getLikeStatus() {
@@ -36,40 +35,58 @@ export default function LikeButton({
     });
   }
 
+  async function dislike() {
+    if (!user) return;
+    changeOptimisticLikes(optimisticLikes.likeCount + 1);
+    await fetch("/api/likes", {
+      method: "POST",
+      body: JSON.stringify({
+        question: question.id,
+        userid: user.id,
+      }),
+    }).then((res: any) => {
+    setLikeStatus(true);
+      displayMessage(res, router, false);
+      block(false);
+    });
+  }
+
+  async function like() {
+    console.log("like")
+    if (!user) return;
+    changeOptimisticLikes(optimisticLikes.likeCount - 1);
+    await fetch("/api/likes", {
+      method: "PUT",
+      body: JSON.stringify({
+        question: question.id,
+        userid: user.id,
+      }),
+    }).then((res: any) => {
+      displayMessage(res, router, false);
+      setLikeStatus(false);
+      block(false);
+    });
+  }
+
   function handleLike() {
     block(true);
+    console.log("like")
     if (!isSignedIn || !question) {
       router.push("/Signin");
       return showNotification(ENoLogon.notification);
     }
-    // Mutate Optimistic
-    if (likeStatus) {
-      removeLike({ question: question.id, userid: user.id }).then(
-        (res: any) => {
-          displayMessage(res, router);
-          block(false);
-        }
-      );
-      changeOptimisticLikes(optimisticLikes.likeCount - 1);
-      setLikeStatus(false);
-    } else if (!likeStatus) {
-      like({ question: question.id, userid: user.id }).then((res: any) => {
-        displayMessage(res, router);
-        block(false);
-      });
-      changeOptimisticLikes(optimisticLikes.likeCount + 1);
-      setLikeStatus(true);
-    }
+    if (likeStatus) like();
+    else if (!likeStatus) dislike();
   }
 
   useEffect(() => {
     getLikeStatus();
-  }, [isLoaded]);
+  }, []);
 
   const likeCount = question.likes.length;
 
   const [optimisticLikes, changeOptimisticLikes] = useOptimistic(
-    { likeCount, likeStatus },
+    { likeCount },
     (state, newLikeCount: number) => ({
       ...state,
       likeCount: newLikeCount,
@@ -96,7 +113,7 @@ export default function LikeButton({
         <LikeSvg likeStatus={likeStatus ? true : false} />
       </motion.div>
       <Text>{likeStatus}</Text>
-      <Text>{optimisticLikes.likeCount} </Text>
+      <Text>{optimisticLikes.likeCount}</Text>
     </Group>
   );
 }
