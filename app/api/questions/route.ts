@@ -14,6 +14,7 @@ export async function GET(){
       isDeleted: false,
     },
   });
+  prisma.$disconnect
   return NextResponse.json(questions);
 }
 
