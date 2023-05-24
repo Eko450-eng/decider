@@ -1,9 +1,9 @@
 import db from "@/db/db";
 import { NextRequest, NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
-import { LikeProps } from "@/prisma/types";
 import { SLike, SLiked } from "../messages";
 import { QuestionLikes } from "@/db/migrations/schema";
+import { LikeProps } from "@/db/types";
 
 export async function POST(request: NextRequest) {
   const props: LikeProps = await request.json();

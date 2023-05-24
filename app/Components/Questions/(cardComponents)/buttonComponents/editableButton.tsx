@@ -85,6 +85,7 @@ export function EditableVoteButton(ButtonProps: IButtonProps) {
 
   useEffect(() => {
     if (!optimisticVotes.sending) revalidate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [optimisticVotes.sending]);
 
   return (

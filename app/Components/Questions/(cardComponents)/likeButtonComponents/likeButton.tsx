@@ -8,12 +8,11 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import LikeSvg from "./LikeSvg";
 import { experimental_useOptimistic as useOptimistic } from "react";
-import { IQuestionWithLikes } from "@/prisma/types";
-import { QuestionLikes } from "@/db/types";
+import { QuestionLikes, QuestionWithVotesAndLikes } from "@/db/types";
 import { displayMessage } from "../../helpers";
 
 interface IButtonProps {
-  question: IQuestionWithLikes;
+  question: QuestionWithVotesAndLikes;
 }
 
 export default function LikeButton({
@@ -46,7 +45,7 @@ export default function LikeButton({
         userId: user.id,
       }),
     }).then((res: any) => {
-    setLikeStatus(true);
+      setLikeStatus(true);
       displayMessage(res, router, false);
       block(false);
     });
@@ -80,6 +79,7 @@ export default function LikeButton({
 
   useEffect(() => {
     getLikeStatus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded]);
 
   const likeCount = question.likes.length;

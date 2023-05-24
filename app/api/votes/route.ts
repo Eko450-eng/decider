@@ -1,6 +1,6 @@
 import db from "@/db/db";
 import { QuestionVotes } from "@/db/migrations/schema";
-import { VoteProps } from "@/prisma/types";
+import { VoteProps } from "@/db/types";
 import { and, eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 

@@ -15,11 +15,11 @@ import LikeButton from "./(cardComponents)/likeButtonComponents/likeButton";
 import { useStyles } from "@/app/styles/styles";
 import { showNotification } from "@mantine/notifications";
 import { ENoLogon } from "@/app/api/messages";
-import { IQuestionWithVotesAndLikes } from "@/prisma/types";
 import VoteButton from "./(cardComponents)/voteButton/voteButton";
+import { QuestionWithVotesAndLikes } from "@/db/types";
 
 interface IButtonProps {
-  question: IQuestionWithVotesAndLikes;
+  question: QuestionWithVotesAndLikes;
   unmount?: () => void;
   index: number;
 }
@@ -30,6 +30,7 @@ export default function Questioncard(ButtonProps: IButtonProps) {
   const [imageByte1, setImage1] = useState<string>("");
   const [imageByte2, setImage2] = useState<string>("");
   const { isSignedIn, user } = useUser();
+  const { classes } = useStyles();
   const router = useRouter();
   const props = { router: router, user: user, isSignedIn: isSignedIn };
 
@@ -50,10 +51,6 @@ export default function Questioncard(ButtonProps: IButtonProps) {
     );
   }
 
-  useEffect(() => {
-    getImages();
-  }, []);
-
   const form = useForm({
     initialValues: {
       title: question.title,
@@ -64,7 +61,10 @@ export default function Questioncard(ButtonProps: IButtonProps) {
     },
   });
 
-  const { classes } = useStyles();
+  useEffect(() => {
+    getImages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <AnimatePresence>
@@ -76,10 +76,13 @@ export default function Questioncard(ButtonProps: IButtonProps) {
         transition={{ duration: 0.1, delay: ButtonProps.index * 0.2 }}
       >
         {question && (
-          <Card withBorder padding="lg" radius="md" className={classes.outerCardWrapper}>
-            <form
-              className="unstyled-form"
-            >
+          <Card
+            withBorder
+            padding="lg"
+            radius="md"
+            className={classes.outerCardWrapper}
+          >
+            <form className="unstyled-form">
               <Stack className={classes.innerCardWrapper}>
                 <Stack>
                   <Group className={classes.title} position="apart">
@@ -127,14 +130,16 @@ export default function Questioncard(ButtonProps: IButtonProps) {
                           if (!isSignedIn || !question || !user) {
                             return showNotification(ENoLogon.notification);
                           }
-                          {/*editQuestionApi({
+                          {
+                            /*editQuestionApi({
                             question: {
                               ...question,
                               isDeleted: true,
                             },
                             userid: user.id,
-                          });*/}
-                        }} 
+                          });*/
+                          }
+                        }}
                         toggleOpen={toggleOpen}
                       />
                     </Group>
