@@ -1,26 +1,18 @@
+import { Question, QuestionWithVotesAndLikes } from "@/db/types";
 import Questioncard from "./Components/Questions/Card";
 import Loading from "./loading";
 
 async function getData() {
-  "use server";
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_HOSTING_SERVER}/questions`,
-    {
-      method: "GET",
-      next: {
-        revalidate: 1,
-        tags: ["main"]
-      },
-    }
-  ).then(async (res) => {
-    return await res.json();
+  const res = await fetch("http://localhost:3000/api/questions", {
+    method: "GET",
+    cache: "no-store",
   });
-  if(!res) return null
-  return res;
+
+  return await res.json();
 }
 
 export default async function Home() {
-  const data = await getData();
+  const { data }: { data: Question[] } = await getData();
 
   return (
     <main className="main">
@@ -37,9 +29,8 @@ export default async function Home() {
                 />
               );
             })
-          :
-          [...Array(20).keys()].map((i: number) => {
-              return <Loading key={`placeholder-${i}`}/>;
+          : [...Array(20).keys()].map((i: number) => {
+              return <Loading key={`placeholder-${i}`} />;
             })}
       </div>
     </main>

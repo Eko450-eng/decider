@@ -1,3 +1,4 @@
+"use client"
 import { ActionIcon, Group } from "@mantine/core";
 import { Check, Trash, X } from "tabler-icons-react";
 

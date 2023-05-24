@@ -8,10 +8,11 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import LikeSvg from "./LikeSvg";
 import { experimental_useOptimistic as useOptimistic } from "react";
-import { like } from "../../logic";
+import { QuestionLikes, QuestionWithVotesAndLikes } from "@/db/types";
+import { displayMessage } from "../../helpers";
 
 interface IButtonProps {
-  questionid: number;
+  question: QuestionWithVotesAndLikes;
 }
 
 export default function LikeButton({
@@ -19,61 +20,72 @@ export default function LikeButton({
 }: {
   ButtonProps: IButtonProps;
 }) {
-
-  const { questionid } = ButtonProps;
-  const [likeStatus, setLikeStatus] = useState(false);
-  const [question, setQuestion] = useState<string[]>([""]);
+  const { question } = ButtonProps;
+  const [likeStatus, setLikeStatus] = useState<boolean>(false);
+  const [blocked, block] = useState<boolean>(false);
   const { user, isSignedIn, isLoaded } = useUser();
   const router = useRouter();
 
   async function getLikeStatus() {
     if (!isSignedIn || !question) return;
-    if (question.includes(user.id)) setLikeStatus(true);
-    else if (!question.includes(user.id)) setLikeStatus(false);
-  }
-
-  function displayMessage(res: any) {
-    if (res.notification) showNotification(res.notification);
-    getQuestion();
-  }
-
-  function handleLike() {
-    if (!isSignedIn || !question || !user) {
-      router.push("/Signin");
-      return showNotification(ENoLogon.notification);
-    }
-    if (user && question.includes(user.id)) {
-      changeOptimisticLikes(optimisticLikes.likeCount - 1);
-      setLikeStatus(false);
-    } else if (user && !question.includes(user.id)) {
-      changeOptimisticLikes(optimisticLikes.likeCount + 1);
-      setLikeStatus(true);
-    }
-    like(questionid, user.id).then((res: any) => displayMessage(res));
-  }
-
-  async function getQuestion() {
-    await fetch(
-      `${process.env.NEXT_PUBLIC_HOSTING_SERVER}/likes?id=${questionid}`,
-      { method: "GET", cache: "no-store" }
-    ).then(async (res: any) => {
-      const data = await res.json();
-      setQuestion(data);
+    question.likes.map((like: QuestionLikes) => {
+      if (like.ownerId === user.id) {
+        setLikeStatus(true);
+      }
     });
   }
 
-  useEffect(() => {
-    getQuestion();
-  }, [isLoaded]);
+  async function dislike() {
+    if (!user) return;
+    changeOptimisticLikes(optimisticLikes.likeCount + 1);
+    await fetch("/api/likes", {
+      method: "POST",
+      body: JSON.stringify({
+        question: question.id,
+        userId: user.id,
+      }),
+    }).then((res: any) => {
+      setLikeStatus(true);
+      displayMessage(res, router, false);
+      block(false);
+    });
+  }
+
+  async function like() {
+    if (!user) return;
+    changeOptimisticLikes(optimisticLikes.likeCount - 1);
+    await fetch("/api/likes", {
+      method: "POST",
+      body: JSON.stringify({
+        question: question.id,
+        userId: user.id,
+      }),
+    }).then((res: any) => {
+      displayMessage(res, router, false);
+      setLikeStatus(false);
+      block(false);
+    });
+  }
+
+  function handleLike() {
+    block(true);
+    if (!isSignedIn || !question) {
+      router.push("/Signin");
+      return showNotification(ENoLogon.notification);
+    }
+    if (likeStatus) like();
+    else if (!likeStatus) dislike();
+  }
 
   useEffect(() => {
     getLikeStatus();
-  }, [question]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoaded]);
 
-  const likeCount = question.length;
+  const likeCount = question.likes.length;
 
   const [optimisticLikes, changeOptimisticLikes] = useOptimistic(
-    { likeCount, likeStatus },
+    { likeCount },
     (state, newLikeCount: number) => ({
       ...state,
       likeCount: newLikeCount,
@@ -84,6 +96,7 @@ export default function LikeButton({
     <Group spacing="xxs">
       <motion.div
         onClick={async () => {
+          if (blocked) return;
           handleLike();
         }}
         className="btn-icon"
@@ -99,7 +112,7 @@ export default function LikeButton({
         <LikeSvg likeStatus={likeStatus ? true : false} />
       </motion.div>
       <Text>{likeStatus}</Text>
-      <Text>{optimisticLikes.likeCount}   </Text>
+      <Text>{optimisticLikes.likeCount}</Text>
     </Group>
   );
 }

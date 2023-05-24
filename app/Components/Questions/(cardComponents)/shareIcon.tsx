@@ -1,4 +1,5 @@
 "use client"
+import { useStyles } from "@/app/styles/styles";
 import { showNotification } from "@mantine/notifications";
 import { Share } from "tabler-icons-react";
 interface IButtonProps {
@@ -10,10 +11,11 @@ interface IButtonProps {
 
 export default function ShareIcon(ButtonProps: IButtonProps) {
   const { link, color, message, title } = ButtonProps;
+  const {classes} = useStyles()
   return (
     <Share
       size={"1rem"}
-      className="icon-floating"
+      className={classes.iconFloating}
       onClick={() => {
         navigator.clipboard.writeText(link);
         showNotification({

@@ -2,13 +2,15 @@
 
 import { Button, FileInput, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { showNotification } from "@mantine/notifications";
 import { useRouter } from "next/navigation";
 import { PleaseLogin } from "../(PleaseLogin)";
 import { useUser } from "@clerk/nextjs";
 import { useState } from "react";
-import { convertToBase64, createQuestion } from "./logic";
+import { convertToBase64 } from "./helpers";
 import { Check } from "tabler-icons-react";
+import { displayMessage } from "../Components/Questions/helpers";
+import { showNotification } from "@mantine/notifications";
+import { Question } from "@/db/types";
 
 export interface ImageState {
   image1: string | undefined | null;
@@ -17,7 +19,7 @@ export interface ImageState {
 
 export default function Page() {
   const router = useRouter();
-  const user = useUser();
+  const { user, isSignedIn } = useUser();
 
   const [images, setImages] = useState<ImageState>({
     image1: "",
@@ -32,6 +34,30 @@ export default function Page() {
       option2: "",
     },
   });
+
+  async function handleCreation(
+    values: Omit<
+      Question,
+      "image1" | "image2" | "id" | "createdAt" | "ownerId" | "isDeleted"
+    >
+  ) {
+    if (!user) return;
+    await fetch("/api/questions", {
+      method: "POST",
+      body: JSON.stringify({
+        ...values,
+        image1: images.image1 ?? null,
+        image2: images.image2 ?? null,
+        isDeleted: false,
+        ownerId: user.id,
+      }),
+    }).then(async(res) => {
+      const r = await res.json()
+      if (r.status === 200) {
+        displayMessage(r, router, true);
+      }
+    });
+  }
 
   async function saveImage(option: 1 | 2, image: File | null) {
     if (!image) return;
@@ -55,23 +81,10 @@ export default function Page() {
 
   return (
     <>
-      {user.isSignedIn ? (
+      {isSignedIn ? (
         <form
           className="creation-form"
-          onSubmit={form.onSubmit((values) =>
-            createQuestion({
-              user: user,
-              question: values,
-              images: images,
-            }).then((res) => {
-              if (res === 200) {
-                setTimeout(() => {
-                  router.push("/");
-                  router.refresh();
-                }, 250);
-              }
-            })
-          )}
+          onSubmit={form.onSubmit((values) => handleCreation(values))}
         >
           <TextInput
             label="Title"
