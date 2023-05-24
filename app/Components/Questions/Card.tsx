@@ -76,7 +76,7 @@ export default function Questioncard(ButtonProps: IButtonProps) {
         transition={{ duration: 0.1, delay: ButtonProps.index * 0.2 }}
       >
         {question && (
-          <Card withBorder padding="lg" radius="md" className="card-closed">
+          <Card withBorder padding="lg" radius="md" className={classes.outerCardWrapper}>
             <form
               className="unstyled-form"
             >

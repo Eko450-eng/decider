@@ -10,7 +10,7 @@ import { convertToBase64 } from "./helpers";
 import { Check } from "tabler-icons-react";
 import { displayMessage } from "../Components/Questions/helpers";
 import { showNotification } from "@mantine/notifications";
-import { question } from "@prisma/client";
+import { Question } from "@/db/types";
 
 export interface ImageState {
   image1: string | undefined | null;
@@ -37,7 +37,7 @@ export default function Page() {
 
   async function handleCreation(
     values: Omit<
-      question,
+      Question,
       "image1" | "image2" | "id" | "createdAt" | "ownerId" | "isDeleted"
     >
   ) {

@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate": "drizzle-kit generate:pg",
+    "dup": "drizzle-kit up:pg"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.17.3",
@@ -25,7 +27,6 @@
     "@mantine/notifications": "^6.0.10",
     "@mantine/nprogress": "^6.0.10",
     "@mantine/prism": "^6.0.10",
-    "@prisma/client": "4.14.1",
     "@mantine/spotlight": "^6.0.10",
     "@mantine/tiptap": "^6.0.10",
     "@tabler/icons-react": "^2.18.0",
@@ -53,6 +54,8 @@
     "bcryptjs-react": "^2.4.6",
     "browser-image-compression": "^2.0.2",
     "dayjs": "^1.11.7",
+    "drizzle-kit": "^0.18.0",
+    "drizzle-orm": "^0.26.0",
     "eslint": "8.40.0",
     "eslint-config-next": "13.4.2",
     "firebase": "^9.21.0",
@@ -60,15 +63,16 @@
     "framer-motion": "^10.12.10",
     "fs": "0.0.1-security",
     "gyp": "^0.5.0",
-    "navigation": "link:@types/next/navigation",
     "next": "13.4.2",
     "pg": "^8.10.0",
+    "pg-native": "^3.0.1",
+    "postgres": "^3.3.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tabler-icons-react": "^1.56.0"
   },
   "devDependencies": {
-    "prisma": "4.14.1",
+    "react-test-renderer": "^18.2.0",
     "sass": "^1.62.1",
     "typescript": "5.0.4"
   }

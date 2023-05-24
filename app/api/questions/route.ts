@@ -1,39 +1,47 @@
-import { PrismaClient, question } from "@prisma/client";
+import db from "@/db/db";
 import { NextRequest, NextResponse } from "next/server";
 import { SCreateQuestion } from "../messages";
+import { Question } from "@/db/migrations/schema";
 
-const prisma = new PrismaClient()
+type questionProps = {
+  title: string;
+  desc: string;
+  option1: string;
+  option2: string;
+  image1: string;
+  image2: string;
+  ownerId: string;
+};
 
-export async function GET(){
-  const questions = await prisma.question.findMany({
-    include: {
-      votes: true,
+export async function GET() {
+  const res = await db.query.Question.findMany({
+    with: {
       likes: true,
+      votes: true,
     },
-    where: {
-      isDeleted: false,
-    },
+    orderBy: (Question, { desc }) => [desc(Question.createdAt)],
   });
-  prisma.$disconnect
-  return NextResponse.json(questions);
+
+  return NextResponse.json({ status: 200, data: res });
 }
 
-export async function POST(request: NextRequest){
-  const props: Omit<question, "id" | "createdAt"> = await request.json()
-  const res = prisma.question
-    .create({
-      data: {
-        title: props.title,
-        desc: props.desc,
-        option1: props.option1,
-        option2: props.option2,
-        image1: props.image1 ? props.image1 : null,
-        image2: props.image2 ? props.image2 : null,
-        ownerId: props.ownerId,
-      },
+export async function POST(request: NextRequest) {
+  const props: questionProps = await request.json();
+  const { title, desc, option1, option2, image1, image2, ownerId } = props;
+
+  const res = await db
+    .insert(Question)
+    .values({
+      title: title,
+      desc: desc,
+      option1: option1,
+      option2: option2,
+      ownerId: ownerId,
+      image1: image1,
+      image2: image2,
+      isDeleted: false,
     })
     .then(() => {
-      prisma.$disconnect
       return SCreateQuestion;
     });
   return NextResponse.json(res);

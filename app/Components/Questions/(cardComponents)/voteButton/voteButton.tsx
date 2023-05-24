@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { EditableVoteButton } from "../buttonComponents/editableButton";
 import { FullscreenImageModal, VoteImage } from "./voteButtonComponents";
 import { useUser } from "@clerk/nextjs";
-import { IQuestionWithVotes } from "@/prisma/types";
+import { QuestionVotes, QuestionWithVotes } from "@/db/types";
 
 interface IButtonProps {
   setOption1: (values: string) => void;
@@ -12,7 +12,7 @@ interface IButtonProps {
   isOpen: boolean;
   imageByte1: string;
   imageByte2: string;
-  question: IQuestionWithVotes;
+  question: QuestionWithVotes;
 }
 
 export default function VoteButton(ButtonProps: IButtonProps) {
@@ -24,7 +24,7 @@ export default function VoteButton(ButtonProps: IButtonProps) {
 
   function validateVotes() {
     if (!isSignedIn || !question) return;
-    question.votes.map((vote) => {
+    question.votes.map((vote: QuestionVotes) => {
       if (vote.ownerId === user.id) {
         setVoteStatus(vote.option);
       }
@@ -73,7 +73,7 @@ export default function VoteButton(ButtonProps: IButtonProps) {
               />
             )}
             <EditableVoteButton
-              setVoteStatus={(index) => console.log(index)}
+              setVoteStatus={(index) => setVoteStatus(index)}
               setValue={setOption2}
               isOpen={isOpen}
               question={question}

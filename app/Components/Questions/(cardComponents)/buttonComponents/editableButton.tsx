@@ -9,11 +9,11 @@ import {
 } from "react";
 import { displayMessage, noLogin } from "../../helpers";
 import { useStyles } from "@/app/styles/styles";
-import { getVotes } from "./helpers";
-import { IQuestionWithVotes } from "@/prisma/types";
+import { getVoteCount } from "./helpers";
+import { QuestionWithVotes } from "@/db/types";
 
 interface IButtonProps {
-  question: IQuestionWithVotes;
+  question: QuestionWithVotes;
   option: string;
   index: number;
   isOpen: boolean;
@@ -39,7 +39,7 @@ export function EditableVoteButton(ButtonProps: IButtonProps) {
     setVoteStatus,
   } = ButtonProps;
 
-  const votes: number = getVotes(question, index);
+  const votes: number = getVoteCount(question, index);
 
   async function handleVote() {
     blockRequest(true);
@@ -51,7 +51,7 @@ export function EditableVoteButton(ButtonProps: IButtonProps) {
         ? 2
         : 1
     );
-    console.log(voteStatus);
+
     changeOptimisticVote(
       (optimisticVotes.votes =
         voteStatus === 0

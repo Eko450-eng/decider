@@ -1,23 +1,18 @@
-"use client";
-import { useEffect, useState } from "react";
+import { Question, QuestionWithVotesAndLikes } from "@/db/types";
 import Questioncard from "./Components/Questions/Card";
 import Loading from "./loading";
-import { IQuestionWithVotesAndLikes } from "@/prisma/types";
 
-export default function Home() {
-  const [data, setData] = useState<IQuestionWithVotesAndLikes[] | null>(null);
-
-  async function getData() {
-    const res = await fetch("/api/questions", {
-      method: "GET",
-      cache: "no-store",
-    });
-    setData(await res.json());
-  }
-
-  useEffect(() => {
-    getData();
+async function getData() {
+  const res = await fetch("http://localhost:3000/api/questions", {
+    method: "GET",
+    cache: "no-store",
   });
+
+  return await res.json();
+}
+
+export default async function Home() {
+  const { data }: { data: Question[] } = await getData();
 
   return (
     <main className="main">

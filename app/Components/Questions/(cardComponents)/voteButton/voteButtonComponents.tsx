@@ -1,4 +1,5 @@
 "use client"
+import { useStyles } from "@/app/styles/styles";
 import { Center, Modal } from "@mantine/core";
 
 interface ImageProps {
@@ -15,10 +16,11 @@ interface ModalProps {
 
 export function VoteImage(props: ImageProps) {
   const { image, setModal, altText, fullscreen } = props;
+  const {classes} = useStyles() 
   return (
     <Center>
       <img
-        className={`${fullscreen ? "fullscreen-image" : ""}`}
+        className={fullscreen ? classes.fullscreenImage : undefined}
         alt={altText}
         onClick={() => setModal()}
         src={`${image}`}

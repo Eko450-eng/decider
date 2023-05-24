@@ -1,30 +1,31 @@
-import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import db from "@/db/db";
+import { QuestionVotes } from "@/db/migrations/schema";
 import { VoteProps } from "@/prisma/types";
-
-const prisma = new PrismaClient();
+import { and, eq } from "drizzle-orm";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   const props: VoteProps = await request.json();
 
-  const currentState = await prisma.question_votes.findFirst({
-    where: {
-      questionId: props.question,
-      ownerId: props.userId,
-    },
-  });
+  const currentState = await db
+    .select()
+    .from(QuestionVotes)
+    .where(
+      and(
+        eq(QuestionVotes.ownerId, props.userId),
+        eq(QuestionVotes.questionId, props.question)
+      )
+    );
 
-  if (!currentState) {
-    const res = await prisma.question_votes
-      .create({
-        data: {
-          option: props.option,
-          ownerId: props.userId,
-          questionId: props.question,
-        },
+  if (currentState.length <= 0) {
+    const res = await db
+      .insert(QuestionVotes)
+      .values({
+        option: props.option,
+        ownerId: props.userId,
+        questionId: props.question,
       })
       .then(() => {
-        prisma.$disconnect;
         return {
           status: 200,
           notification: {
@@ -36,36 +37,32 @@ export async function POST(request: NextRequest) {
       });
     return NextResponse.json(res);
   } else {
-    const res = await prisma.question_votes
-      .upsert({
-        where: { id: currentState.id },
-        // Update the vote
-        update: {
-          option:
-            // remove vote
-            currentState.option === props.option
-              ? 0
-              : // Change vote
-                props.option,
-        },
-        // Create vote
-        create: {
-          option: props.option,
-          ownerId: props.userId,
-          questionId: props.question,
-        },
+    const res = await db
+      .update(QuestionVotes)
+      .set({
+        // remove vote
+        option:
+          currentState[0].option === props.option
+            ? 0
+            : // Change vote
+              props.option,
       })
+      .where(
+        and(
+          eq(QuestionVotes.ownerId, props.userId),
+          eq(QuestionVotes.questionId, props.question)
+        )
+      )
       .then(() => {
-        prisma.$disconnect;
         return {
           status: 200,
           notification: {
             title: "Ok",
             message:
-              currentState.option === props.option
+              currentState[0].option === props.option
                 ? "Your vote was removed"
-                : currentState.option !== 0 &&
-                  currentState.option !== props.option
+                : currentState[0].option !== 0 &&
+                  currentState[0].option !== props.option
                 ? "You changed your vote"
                 : "You have voted",
             color: "green",

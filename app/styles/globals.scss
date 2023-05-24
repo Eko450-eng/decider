@@ -17,16 +17,6 @@ body {
   color: #cecece;
   height: 1.2rem;
   cursor: pointer;
-  &-floating {
-    cursor: pointer;
-    display: inline;
-    font-size: 0.5rem;
-  }
-  &-hot {
-    @extend .icon;
-    height: 1rem;
-    padding-right: 0.2rem;
-  }
   &-edit {
     @extend .icon;
     display: flex;
@@ -36,10 +26,6 @@ body {
     margin: 0.5rem;
     height: max-content;
   }
-}
-
-.red {
-  color: #e41f24;
 }
 
 .animated {
@@ -171,30 +157,4 @@ ul {
 
 .mantine-Card-root {
   color: white;
-}
-
-.card-closed {
-  box-shadow: 0px 5px 10px rgba($color: #ffffff, $alpha: 0.1);
-  width: 100%;
-  margin: 1rem;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  justify-content: space-between;
-  align-items: space-between;
-}
-
-.card-open {
-  top: 1rem;
-  z-index: 100;
-}
-
-.fullscreen-image {
-  max-width: 100%;
-  max-height: 100%;
-  z-index: 2;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }

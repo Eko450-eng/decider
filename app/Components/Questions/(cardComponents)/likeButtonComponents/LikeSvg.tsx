@@ -1,4 +1,5 @@
 "use client"
+import { useStyles } from "@/app/styles/styles";
 import { motion } from "framer-motion";
 
 const iconColors = {
@@ -12,6 +13,7 @@ interface Props {
 
 export default function LikeSvg(props: Props) {
   const { likeStatus } = props;
+  const {classes} = useStyles()
   return (
     <motion.svg
       whileHover={{
@@ -24,7 +26,7 @@ export default function LikeSvg(props: Props) {
           repeat: 1,
         },
       }}
-      className={`${likeStatus ? "icon-hot red" : "icon-hot"}`}
+      className={likeStatus ? classes.iconHotRed : classes.iconHot}
       viewBox="0 0 220 312"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

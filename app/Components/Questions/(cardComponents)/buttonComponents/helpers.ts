@@ -1,10 +1,10 @@
 "use client"
 
-import { IQuestionWithVotes } from "@/prisma/types";
+import { QuestionVotes, QuestionWithVotes } from "@/db/types"
 
-  export function getVotes(question: IQuestionWithVotes, voteNumber: number): number {
+  export function getVoteCount(question: QuestionWithVotes, voteNumber: number): number {
     const ret: String[] = [];
-    question.votes.map((ev) => {
+    question.votes.map((ev: QuestionVotes) => {
       if (ev.option === voteNumber) ret.push(ev.ownerId);
     });
     return ret.length;

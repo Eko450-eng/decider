@@ -8,8 +8,9 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import LikeSvg from "./LikeSvg";
 import { experimental_useOptimistic as useOptimistic } from "react";
-import { displayMessage } from "../../helpers";
 import { IQuestionWithLikes } from "@/prisma/types";
+import { QuestionLikes } from "@/db/types";
+import { displayMessage } from "../../helpers";
 
 interface IButtonProps {
   question: IQuestionWithLikes;
@@ -23,12 +24,12 @@ export default function LikeButton({
   const { question } = ButtonProps;
   const [likeStatus, setLikeStatus] = useState<boolean>(false);
   const [blocked, block] = useState<boolean>(false);
-  const { user, isSignedIn } = useUser();
+  const { user, isSignedIn, isLoaded } = useUser();
   const router = useRouter();
 
   async function getLikeStatus() {
     if (!isSignedIn || !question) return;
-    question.likes.map((like) => {
+    question.likes.map((like: QuestionLikes) => {
       if (like.ownerId === user.id) {
         setLikeStatus(true);
       }
@@ -36,48 +37,39 @@ export default function LikeButton({
   }
 
   async function dislike() {
-    showNotification({
-      title: "Under construction",
-      message: "Will be available again soon",
-    })
     if (!user) return;
     changeOptimisticLikes(optimisticLikes.likeCount + 1);
-    // await fetch("/api/likes", {
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     question: question.id,
-    //     userid: user.id,
-    //   }),
-    // }).then((res: any) => {
-    // setLikeStatus(true);
-    //   displayMessage(res, router, false);
-    //   block(false);
-    // });
+    await fetch("/api/likes", {
+      method: "POST",
+      body: JSON.stringify({
+        question: question.id,
+        userId: user.id,
+      }),
+    }).then((res: any) => {
+    setLikeStatus(true);
+      displayMessage(res, router, false);
+      block(false);
+    });
   }
 
   async function like() {
-    showNotification({
-      title: "Under construction",
-      message: "Will be available again soon",
-    })
     if (!user) return;
     changeOptimisticLikes(optimisticLikes.likeCount - 1);
-    // await fetch("/api/likes", {
-    //   method: "PUT",
-    //   body: JSON.stringify({
-    //     question: question.id,
-    //     userid: user.id,
-    //   }),
-    // }).then((res: any) => {
-    //   displayMessage(res, router, false);
-    //   setLikeStatus(false);
-    //   block(false);
-    // });
+    await fetch("/api/likes", {
+      method: "POST",
+      body: JSON.stringify({
+        question: question.id,
+        userId: user.id,
+      }),
+    }).then((res: any) => {
+      displayMessage(res, router, false);
+      setLikeStatus(false);
+      block(false);
+    });
   }
 
   function handleLike() {
     block(true);
-    console.log("like")
     if (!isSignedIn || !question) {
       router.push("/Signin");
       return showNotification(ENoLogon.notification);
@@ -88,7 +80,7 @@ export default function LikeButton({
 
   useEffect(() => {
     getLikeStatus();
-  }, []);
+  }, [isLoaded]);
 
   const likeCount = question.likes.length;
 
