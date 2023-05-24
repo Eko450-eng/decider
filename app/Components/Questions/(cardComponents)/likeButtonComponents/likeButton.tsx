@@ -22,6 +22,7 @@ export default function LikeButton({
 }) {
   const { question } = ButtonProps;
   const [likeStatus, setLikeStatus] = useState<boolean>(false);
+  const [likeCount, setLikeCount] = useState<number>(question.likes.length);
   const [blocked, block] = useState<boolean>(false);
   const { user, isSignedIn, isLoaded } = useUser();
   const router = useRouter();
@@ -35,35 +36,28 @@ export default function LikeButton({
     });
   }
 
-  async function dislike() {
-    if (!user) return;
-    changeOptimisticLikes(optimisticLikes.likeCount + 1);
-    await fetch("/api/likes", {
-      method: "POST",
-      body: JSON.stringify({
-        question: question.id,
-        userId: user.id,
-      }),
-    }).then((res: any) => {
+  function changeState() {
+    if (likeStatus) {
+      changeOptimisticLikes(optimisticLikes.likeCount - 1);
+      setLikeStatus(false);
+    } else {
+      changeOptimisticLikes(optimisticLikes.likeCount + 1);
       setLikeStatus(true);
-      displayMessage(res, router, false);
-      block(false);
-    });
+    }
+    block(false);
   }
 
   async function like() {
     if (!user) return;
-    changeOptimisticLikes(optimisticLikes.likeCount - 1);
     await fetch("/api/likes", {
       method: "POST",
       body: JSON.stringify({
         question: question.id,
         userId: user.id,
       }),
-    }).then((res: any) => {
-      displayMessage(res, router, false);
-      setLikeStatus(false);
-      block(false);
+    }).then(async (res: any) => {
+      displayMessage(await res.json(), router, false)
+      changeState()
     });
   }
 
@@ -73,16 +67,20 @@ export default function LikeButton({
       router.push("/Signin");
       return showNotification(ENoLogon.notification);
     }
-    if (likeStatus) like();
-    else if (!likeStatus) dislike();
+    like();
   }
 
   useEffect(() => {
+    if (!isSignedIn) return;
     getLikeStatus();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded]);
 
-  const likeCount = question.likes.length;
+  useEffect(()=>{
+    setLikeCount(question.likes.length)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [question])
+
 
   const [optimisticLikes, changeOptimisticLikes] = useOptimistic(
     { likeCount },
@@ -111,7 +109,6 @@ export default function LikeButton({
       >
         <LikeSvg likeStatus={likeStatus ? true : false} />
       </motion.div>
-      <Text>{likeStatus}</Text>
       <Text>{optimisticLikes.likeCount}</Text>
     </Group>
   );

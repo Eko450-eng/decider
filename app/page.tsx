@@ -1,4 +1,4 @@
-import { Question, QuestionWithVotesAndLikes } from "@/db/types";
+import { Question } from "@/db/types";
 import Questioncard from "./Components/Questions/Card";
 import Loading from "./loading";
 
@@ -6,6 +6,9 @@ async function getData() {
   const res = await fetch("http://localhost:3000/api/questions", {
     method: "GET",
     cache: "no-store",
+    next: {
+      tags: ["questions"]
+    }
   });
 
   return await res.json();

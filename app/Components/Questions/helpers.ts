@@ -3,6 +3,10 @@ import { ENoLogon } from "@/app/api/messages";
 import { showNotification } from "@mantine/notifications";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 
+export async function revalidateTagFunction(tag: string){
+  const res = await fetch(`/api/revalidate?tag=${tag}`,{method: "GET", cache: "no-store"})
+}
+
 export function displayMessage(
   res: any,
   router: AppRouterInstance,

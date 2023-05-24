@@ -29,6 +29,7 @@ export async function POST(request: NextRequest) {
   const props: questionProps = await request.json();
   const { title, desc, option1, option2, image1, image2, ownerId } = props;
 
+  // TODO: Use S3 Buckets or some other storage alternative for images
   const res = await db
     .insert(Question)
     .values({
