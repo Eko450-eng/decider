@@ -1,11 +1,14 @@
-import { Question, QuestionWithVotesAndLikes } from "@/db/types";
+import { Question } from "@/db/types";
 import Questioncard from "./Components/Questions/Card";
 import Loading from "./loading";
 
 async function getData() {
-  const res = await fetch("http://localhost:3000/api/questions", {
+  const res = await fetch(`http://localhost:3000/api/questions`, {
     method: "GET",
     cache: "no-store",
+    next: {
+      tags: ["questions"]
+    }
   });
 
   return await res.json();
@@ -13,11 +16,13 @@ async function getData() {
 
 export default async function Home() {
   const { data }: { data: Question[] } = await getData();
+  console.log(data)
+  const prod = true 
 
   return (
     <main className="main">
       <div className="cards-wrapper">
-        {data
+        {(prod && data)
           ? data.map((v: any, k: number) => {
               const { createdAt, ...question } = v;
               return (

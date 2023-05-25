@@ -12,5 +12,6 @@ module.exports = withPWA({
   },
   experimental: {
     serverActions: true,
-  },
+    enableUndici: true,
+  }
 });

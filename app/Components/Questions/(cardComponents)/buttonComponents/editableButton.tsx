@@ -10,7 +10,7 @@ import {
 import { displayMessage, noLogin } from "../../helpers";
 import { useStyles } from "@/app/styles/styles";
 import { getVoteCount } from "./helpers";
-import { QuestionWithVotes } from "@/db/types";
+import { QuestionVotes, QuestionWithVotes } from "@/db/types";
 
 interface IButtonProps {
   question: QuestionWithVotes;
@@ -26,39 +26,32 @@ interface IButtonProps {
 export function EditableVoteButton(ButtonProps: IButtonProps) {
   const router = useRouter();
   const { classes } = useStyles();
-  const { user, isSignedIn } = useUser();
+  const { user, isSignedIn, isLoaded } = useUser();
   const [blocked, blockRequest] = useState(false);
-  const {
-    revalidate,
-    setValue,
-    question,
-    option,
-    index,
-    isOpen,
-    voteStatus,
-    setVoteStatus,
-  } = ButtonProps;
+  const { setValue, question, option, index, isOpen } = ButtonProps;
+  const [votes, setVotes] = useState<number>(getVoteCount(question, index));
+  const [voteStatus, _setVoteStatus] = useState<boolean>(false);
 
-  const votes: number = getVoteCount(question, index);
+  function validateVotes() {
+    if (!isSignedIn || !question) return;
+    question.votes.map((vote: QuestionVotes) => {
+      if (vote.ownerId === user.id && vote.option === index) {
+        changeOptimisticVoteStatus(true);
+      } else {
+        changeOptimisticVoteStatus(false);
+      }
+    });
+    if (question.votes.length <= 0) changeOptimisticVoteStatus(false);
+  }
 
   async function handleVote() {
     blockRequest(true);
     if (!isSignedIn) noLogin(router);
-    setVoteStatus(
-      voteStatus === 0
-        ? index
-        : voteStatus !== index && voteStatus !== 1
-        ? 2
-        : 1
-    );
 
     changeOptimisticVote(
-      (optimisticVotes.votes =
-        voteStatus === 0
-          ? optimisticVotes.votes + 1
-          : voteStatus === index
-          ? optimisticVotes.votes - 1
-          : optimisticVotes.votes - 1)
+      (optimisticVotes.votes = voteStatus
+        ? optimisticVotes.votes + 1
+        : optimisticVotes.votes - 1)
     );
 
     await fetch("/api/votes", {
@@ -74,25 +67,33 @@ export function EditableVoteButton(ButtonProps: IButtonProps) {
     });
   }
 
+  const [optimisticVoteStatus, changeOptimisticVoteStatus] = useOptimistic(
+    { status: voteStatus },
+    (state, newState: boolean) => ({
+      ...state,
+      status: newState,
+    })
+  );
+
   const [optimisticVotes, changeOptimisticVote] = useOptimistic(
-    { votes, sending: false },
+    { votes },
     (state, newVoteCount: number) => ({
       ...state,
-      sending: true,
       votes: newVoteCount,
     })
   );
 
   useEffect(() => {
-    if (!optimisticVotes.sending) revalidate();
+    setVotes(getVoteCount(question, index));
+    validateVotes();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [optimisticVotes.sending]);
+  }, [question, isLoaded]);
 
   return (
     <>
       <Button
         className={
-          voteStatus === index
+          optimisticVoteStatus.status
             ? classes.buttonSelected
             : classes.buttonUnselected
         }

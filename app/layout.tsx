@@ -3,8 +3,8 @@ import { ClerkProvider } from "@clerk/nextjs/app-beta";
 import { dark } from "@clerk/themes";
 import { lazy } from "react";
 
-const Navigation = lazy(()=>import("./(navigation)")) ;
-const RootStyleRegistry = lazy(()=>import("./emotion")) ;
+const Navigation = lazy(() => import("./(navigation)"));
+const RootStyleRegistry = lazy(() => import("./emotion"));
 
 export const metadata = {
   title: "Decider",
@@ -23,10 +23,11 @@ export const metadata = {
   },
 };
 
-
-export default function RootLayout(
-  { children }: { children: React.ReactNode },
-) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body>
