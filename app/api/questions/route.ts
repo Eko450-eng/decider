@@ -1,10 +1,11 @@
 import db from "@/db/db";
 import { NextRequest, NextResponse } from "next/server";
-import { SCreateQuestion } from "../messages";
+import { SChangedQuestion, SCreateQuestion } from "../messages";
 import { Question } from "@/db/migrations/schema";
-import { eq, ne } from "drizzle-orm";
+import { and, eq, ne } from "drizzle-orm";
+import { QuestionLikes } from "@/lib/db";
 
-type questionProps = {
+export type questionProps = {
   title: string;
   desc: string;
   option1: string;
@@ -14,16 +15,20 @@ type questionProps = {
   ownerId: string;
 };
 
+export interface updateProps extends Omit<questionProps, "image1" | "image2"> {
+  id: number;
+  isDeleted: boolean;
+}
+
 export async function GET() {
   const res = await db.query.Question.findMany({
     with: {
-      likes: true,
       votes: true,
+      likes: true
     },
-    where: (table, {sql}) => ne(Question.isDeleted, true),
+    where: (table, { sql }) => ne(Question.isDeleted, true),
     orderBy: (Question, { desc }) => [desc(Question.createdAt)],
   });
-  console.log(res)
 
   return NextResponse.json({ status: 200, data: res });
 }
@@ -47,6 +52,27 @@ export async function POST(request: NextRequest) {
     })
     .then(() => {
       return SCreateQuestion;
+    });
+  return NextResponse.json(res);
+}
+
+export async function PATCH(request: NextRequest) {
+  const props: updateProps = await request.json();
+  const { title, desc, option1, option2, ownerId, id, isDeleted } = props;
+
+  const res = await db
+    .update(Question)
+    .set({
+      title: title,
+      desc: desc,
+      option1: option1,
+      option2: option2,
+      ownerId: ownerId,
+      isDeleted: isDeleted,
+    })
+    .where(and(eq(Question.ownerId, ownerId), eq(Question.id, id)))
+    .then(() => {
+      return SChangedQuestion;
     });
   return NextResponse.json(res);
 }

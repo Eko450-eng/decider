@@ -155,7 +155,7 @@ export default function Page() {
           />
 
           <FileInput
-            placeholder="Image 1"
+            placeholder="Image 2"
             label="Image for first option"
             accept="image/png,image/jpeg"
             onChange={(v) => saveImage(2, v)}

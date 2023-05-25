@@ -16,7 +16,6 @@ async function getData() {
 
 export default async function Home() {
   const { data }: { data: Question[] } = await getData();
-  console.log(data)
   const prod = true 
 
   return (

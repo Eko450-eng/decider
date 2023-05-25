@@ -2,21 +2,20 @@
 
 import { useUser } from "@clerk/nextjs";
 import { AnimatePresence, motion, useCycle } from "framer-motion";
-import { Card, Group, Stack } from "@mantine/core";
+import { ActionIcon, Card, Group, Stack, Switch } from "@mantine/core";
 import React, { useEffect, useState } from "react";
 import { boxVariant } from "@/app/framer";
 import { useRouter } from "next/navigation";
 import { useForm } from "@mantine/form";
-import DeleteButton from "./(cardComponents)/buttonComponents/deleteButton";
 import { EditableTextField } from "./(cardComponents)/buttonComponents/editableTextField";
 import EditButton from "./(cardComponents)/buttonComponents/editButton";
 import ShareIcon from "./(cardComponents)/shareIcon";
 import LikeButton from "./(cardComponents)/likeButtonComponents/likeButton";
 import { useStyles } from "@/app/styles/styles";
-import { showNotification } from "@mantine/notifications";
-import { ENoLogon } from "@/app/api/messages";
 import VoteButton from "./(cardComponents)/voteButton/voteButton";
 import { QuestionWithVotesAndLikes } from "@/db/types";
+import { displayMessage } from "./helpers";
+import { Check, Trash, X } from "tabler-icons-react";
 
 interface IButtonProps {
   question: QuestionWithVotesAndLikes;
@@ -24,15 +23,22 @@ interface IButtonProps {
   index: number;
 }
 
+interface updateProps {
+  title: string;
+  desc: string | null;
+  option1: string;
+  option2: string;
+}
+
 export default function Questioncard(ButtonProps: IButtonProps) {
   const { question } = ButtonProps;
   const [isOpen, toggleOpen] = useCycle(false, true);
+  const [deleted, setDeleted] = useState(false);
   const [imageByte1, setImage1] = useState<string>("");
   const [imageByte2, setImage2] = useState<string>("");
   const { isSignedIn, user } = useUser();
   const { classes } = useStyles();
   const router = useRouter();
-  const props = { router: router, user: user, isSignedIn: isSignedIn };
 
   async function getImages() {
     setImage1(
@@ -57,9 +63,27 @@ export default function Questioncard(ButtonProps: IButtonProps) {
       desc: question.desc,
       option1: question.option1,
       option2: question.option2,
-      deleted: question.isDeleted,
     },
   });
+
+  async function editQuestion(values: updateProps, deleted: boolean) {
+    if (!user) return;
+    await fetch("/api/questions", {
+      method: "PATCH",
+      body: JSON.stringify({
+        ...values,
+        id: question.id,
+        isDeleted: deleted,
+        ownerId: user.id,
+      }),
+    }).then(async (res) => {
+      const r = await res.json();
+      if (r.status === 200) {
+        displayMessage(r, router, true);
+      }
+      toggleOpen();
+    });
+  }
 
   useEffect(() => {
     getImages();
@@ -82,7 +106,12 @@ export default function Questioncard(ButtonProps: IButtonProps) {
             radius="md"
             className={classes.outerCardWrapper}
           >
-            <form className="unstyled-form">
+            <form
+              className="unstyled-form"
+              onSubmit={form.onSubmit((values) =>
+                editQuestion(values, deleted)
+              )}
+            >
               <Stack className={classes.innerCardWrapper}>
                 <Stack>
                   <Group className={classes.title} position="apart">
@@ -122,31 +151,22 @@ export default function Questioncard(ButtonProps: IButtonProps) {
                     question={question}
                   />
                   {isOpen ? (
-                    <Group>
-                      <DeleteButton
-                        isOpen={isOpen}
-                        handleDelete={() => {
-                          const { isSignedIn, user } = props;
-                          if (!isSignedIn || !question || !user) {
-                            return showNotification(ENoLogon.notification);
-                          }
-                          {
-                            /*editQuestionApi({
-                            question: {
-                              ...question,
-                              isDeleted: true,
-                            },
-                            userid: user.id,
-                          });*/
-                          }
-                        }}
-                        toggleOpen={toggleOpen}
+                    <Group position="apart">
+                      <Switch
+                        onLabel={<Trash size="1rem" color="red" />}
+                        offLabel={<X size="1rem" color="white" />}
+                        onChange={(event) =>
+                          setDeleted(event.currentTarget.checked)
+                        }
                       />
+                      <ActionIcon color="nord_success" type="submit">
+                        <Check />
+                      </ActionIcon>
                     </Group>
                   ) : (
                     <Group position="apart">
                       <ShareIcon
-                        link={`https://wipdesign.eu/question/${question.id}`}
+                        link={`${process.env.HOSTURL}/question/${question.id}`}
                       />
                       <LikeButton ButtonProps={{ question: question }} />
                     </Group>
