@@ -10,6 +10,7 @@ const pool = new Pool({
   database: `${process.env.NEXT_PUBLIC_POSTGRES_DB}`,
 });
 
+//@ts-ignore
 const db = drizzle(pool, {schema});
 
 export default db
