@@ -10,9 +10,11 @@ module.exports = withPWA({
   images: {
     domains: ["images.clerk.dev", "www.gravatar.com", "gravatar.com"],
   },
-  serverComponentsExternalPackages: ["pg"],
+  serverComponentsExternalPackages: ["pg", "pg-native"],
   experimental: {
-    serverComponentsExternalPackages: ["pg"],
+    serverComponentsExternalPackages: ["pg", "pg-native"],
     serverActions: true,
+    enableUndici: true,
   },
+  enableUndici: true,
 });

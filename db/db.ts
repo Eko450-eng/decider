@@ -1,5 +1,5 @@
 import { Pool } from 'pg';
-import { drizzle } from "drizzle-orm/vercel-postgres";
+import { drizzle } from "drizzle-orm/node-postgres";
 import * as schema from "@/db/migrations/schema"
 
 const pool = new Pool({
@@ -10,7 +10,6 @@ const pool = new Pool({
   database: `${process.env.NEXT_PUBLIC_POSTGRES_DB}`,
 });
 
-//@ts-ignore
 const db = drizzle(pool, {schema});
 
 export default db

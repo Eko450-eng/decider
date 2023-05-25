@@ -21,6 +21,7 @@ export async function GET() {
     },
     orderBy: (Question, { desc }) => [desc(Question.createdAt)],
   });
+  console.log(res)
 
   return NextResponse.json({ status: 200, data: res });
 }
