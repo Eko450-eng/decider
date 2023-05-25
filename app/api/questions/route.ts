@@ -2,6 +2,7 @@ import db from "@/db/db";
 import { NextRequest, NextResponse } from "next/server";
 import { SCreateQuestion } from "../messages";
 import { Question } from "@/db/migrations/schema";
+import { eq, ne } from "drizzle-orm";
 
 type questionProps = {
   title: string;
@@ -19,6 +20,7 @@ export async function GET() {
       likes: true,
       votes: true,
     },
+    where: (table, {sql}) => ne(Question.isDeleted, true),
     orderBy: (Question, { desc }) => [desc(Question.createdAt)],
   });
   console.log(res)
