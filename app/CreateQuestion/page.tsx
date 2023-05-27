@@ -32,6 +32,11 @@ export default function Page() {
       option1: "",
       option2: "",
     },
+    validate: {
+      title: (value)=> value.replaceAll(" ", "").length >= 2 ? null : "Please enter a title",
+      option1: (value)=> value.replaceAll(" ", "").length >= 2 ? null : "Please enter a first option",
+      option2: (value)=> value.replaceAll(" ", "").length >= 2 ? null : "Please enter a second option"
+    }
   });
 
   async function handleCreation(
@@ -59,14 +64,11 @@ export default function Page() {
     });
 
     const storage = getStorage();
-    const storageRef = ref(storage, "");
+    const storageRef1 = ref(storage, `${values.title}+${values.option1}`);
+    const storageRef2 = ref(storage, `${values.title}+${values.option2}`);
 
-    uploadBytes(storageRef, images.image1 as Blob).then((snapshot) => {
-      console.log("Uploaded a blob or file!");
-    });
-    uploadBytes(storageRef, images.image2 as Blob).then((snapshot) => {
-      console.log("Uploaded a blob or file!");
-    });
+    if (images.image1) uploadBytes(storageRef1, images.image1 as Blob);
+    if (images.image2) uploadBytes(storageRef2, images.image2 as Blob);
   }
 
   return (
