@@ -3,7 +3,7 @@ import Questioncard from "./Components/Questions/Card";
 import Loading from "./loading";
 
 async function getData() {
-  const res = await fetch(`http://localhost:3000/api/questions`, {
+  const res = await fetch(`https://wipdesign.eu/api/questions`, {
     method: "GET",
     cache: "no-store",
     next: {
