@@ -1,6 +1,10 @@
-"use client"
+"use client";
+
 import { useStyles } from "@/app/styles/styles";
 import { Center, Modal } from "@mantine/core";
+import { getDownloadURL, getStorage, listAll, ref } from "firebase/storage";
+import { useState } from "react";
+import Image from "next/image";
 
 interface ImageProps {
   image: string;
@@ -16,18 +20,63 @@ interface ModalProps {
 
 export function VoteImage(props: ImageProps) {
   const { image, setModal, altText, fullscreen } = props;
-  const {classes} = useStyles() 
+  const [imageUrl, setImageUrl] = useState<string | null>();
+  const { classes } = useStyles();
+  const storage = getStorage();
+  const imageRef = ref(storage, "/");
+
+  listAll(imageRef).then((res) => {
+    res.items.forEach((imageRef) => {
+      if (imageRef.fullPath === image) {
+        getDownloadURL(imageRef).then((url) => setImageUrl(url));
+      }
+    });
+  });
+
   return (
     <Center>
-      <img
-        className={fullscreen ? classes.fullscreenImage : undefined}
-        alt={altText}
-        onClick={() => setModal()}
-        src={`${image}`}
-        width={500}
-        height={500}
-        style={fullscreen ? {} : { maxWidth: "5rem", maxHeight: "5rem" }}
-      />
+      {imageUrl &&
+        (fullscreen ? (
+          <div
+            style={{
+              position: "fixed",
+              height: "100%",
+              width: "100%",
+              maxWidth: "90%",
+              maxHeight: "90%",
+              objectFit: "contain",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          >
+            <Image
+              alt={altText}
+              onClick={() => setModal()}
+              src={imageUrl}
+              fill
+              sizes="80vw"
+              style={{
+                maxWidth: "90%",
+                maxHeight: "90%",
+                objectFit: "contain",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+              }}
+            />
+          </div>
+        ) : (
+          <Image
+            className={fullscreen ? classes.fullscreenImage : undefined}
+            alt={altText}
+            onClick={() => setModal()}
+            src={imageUrl}
+            width={500}
+            height={500}
+            style={fullscreen ? {} : { maxWidth: "5rem", maxHeight: "5rem" }}
+          />
+        ))}
     </Center>
   );
 }

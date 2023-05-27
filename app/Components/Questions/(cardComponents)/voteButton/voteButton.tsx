@@ -34,13 +34,11 @@ export default function VoteButton(ButtonProps: IButtonProps) {
 
   useEffect(() => {
     validateVotes();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSignedIn, user]);
 
   return (
     <>
       {/* TODO: Make both Images be displayed in a carousel */}
-      {/* TODO: Image sizing */}
       <FullscreenImageModal
         imageModal={imageModal}
         setModal={() => setImageModal(null)}

@@ -48,6 +48,7 @@ export function EditableVoteButton(ButtonProps: IButtonProps) {
     blockRequest(true);
     if (!isSignedIn) noLogin(router);
 
+    // ToDo: Figure out a fix for this
     changeOptimisticVote(
       (optimisticVotes.votes = voteStatus
         ? optimisticVotes.votes + 1

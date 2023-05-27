@@ -46,13 +46,15 @@ export default function Page() {
     >
   ) {
     if (!user) return;
+    const option1Name = (values.option1 + values.title).replaceAll("[^a-zA-Z0-9]+", "")
+    const option2Name = (values.option2 + values.title).replaceAll("[^a-zA-Z0-9]+", "")
 
     await fetch("/api/questions", {
       method: "POST",
       body: JSON.stringify({
         ...values,
-        image1: images.image1 ?? null,
-        image2: images.image2 ?? null,
+        image1: images.image1 ? option1Name : null,
+        image2: images.image2 ? option2Name : null,
         isDeleted: false,
         ownerId: user.id,
       }),
@@ -64,9 +66,8 @@ export default function Page() {
     });
 
     const storage = getStorage();
-    const storageRef1 = ref(storage, `${values.title}+${values.option1}`);
-    const storageRef2 = ref(storage, `${values.title}+${values.option2}`);
-
+    const storageRef1 = ref(storage, option1Name);
+    const storageRef2 = ref(storage, option2Name);
     if (images.image1) uploadBytes(storageRef1, images.image1 as Blob);
     if (images.image2) uploadBytes(storageRef2, images.image2 as Blob);
   }

@@ -3,7 +3,7 @@
 import { useUser } from "@clerk/nextjs";
 import { AnimatePresence, motion, useCycle } from "framer-motion";
 import { ActionIcon, Card, Group, Stack, Switch } from "@mantine/core";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { boxVariant } from "@/app/framer";
 import { useRouter } from "next/navigation";
 import { useForm } from "@mantine/form";
@@ -34,28 +34,11 @@ export default function Questioncard(ButtonProps: IButtonProps) {
   const { question } = ButtonProps;
   const [isOpen, toggleOpen] = useCycle(false, true);
   const [deleted, setDeleted] = useState(false);
-  const [imageByte1, setImage1] = useState<string>("");
-  const [imageByte2, setImage2] = useState<string>("");
   const { isSignedIn, user } = useUser();
   const { classes } = useStyles();
   const router = useRouter();
-
-  async function getImages() {
-    setImage1(
-      `${
-        question.image1
-          ? `data:image/png;base64,${question.image1.toString()}`
-          : ""
-      }`
-    );
-    setImage2(
-      `${
-        question.image2
-          ? `data:image/png;base64,${question.image2.toString()}`
-          : ""
-      }`
-    );
-  }
+  const image1 = question.image1 ? question.image1.toString() : ""
+  const image2 = question.image2 ? question.image2.toString() : ""
 
   const form = useForm({
     initialValues: {
@@ -84,11 +67,6 @@ export default function Questioncard(ButtonProps: IButtonProps) {
       toggleOpen();
     });
   }
-
-  useEffect(() => {
-    getImages();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <AnimatePresence>
@@ -146,8 +124,8 @@ export default function Questioncard(ButtonProps: IButtonProps) {
                       form.setValues((prev) => ({ ...prev, option2: value }));
                     }}
                     isOpen={isOpen}
-                    imageByte1={imageByte1}
-                    imageByte2={imageByte2}
+                    imageByte1={image1}
+                    imageByte2={image2}
                     question={question}
                   />
                   {isOpen ? (
