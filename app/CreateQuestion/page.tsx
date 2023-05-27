@@ -1,20 +1,19 @@
 "use client";
 
 import { Button, FileInput, TextInput } from "@mantine/core";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 import { useForm } from "@mantine/form";
 import { useRouter } from "next/navigation";
 import { PleaseLogin } from "../(PleaseLogin)";
 import { useUser } from "@clerk/nextjs";
 import { useState } from "react";
-import { convertToBase64 } from "./helpers";
 import { Check } from "tabler-icons-react";
 import { displayMessage } from "../Components/Questions/helpers";
-import { showNotification } from "@mantine/notifications";
 import { Question } from "@/db/types";
 
 export interface ImageState {
-  image1: string | undefined | null;
-  image2: string | undefined | null;
+  image1: Blob | undefined | null;
+  image2: Blob | undefined | null;
 }
 
 export default function Page() {
@@ -22,8 +21,8 @@ export default function Page() {
   const { user, isSignedIn } = useUser();
 
   const [images, setImages] = useState<ImageState>({
-    image1: "",
-    image2: "",
+    image1: null,
+    image2: null,
   });
 
   const form = useForm({
@@ -42,6 +41,7 @@ export default function Page() {
     >
   ) {
     if (!user) return;
+
     await fetch("/api/questions", {
       method: "POST",
       body: JSON.stringify({
@@ -51,32 +51,22 @@ export default function Page() {
         isDeleted: false,
         ownerId: user.id,
       }),
-    }).then(async(res) => {
-      const r = await res.json()
+    }).then(async (res) => {
+      const r = await res.json();
       if (r.status === 200) {
         displayMessage(r, router, true);
       }
     });
-  }
 
-  async function saveImage(option: 1 | 2, image: File | null) {
-    if (!image) return;
+    const storage = getStorage();
+    const storageRef = ref(storage, "");
 
-    try {
-      const base64String = await convertToBase64(image);
-
-      if (option === 1) {
-        setImages({ ...images, image1: base64String });
-      } else {
-        setImages({ ...images, image2: base64String });
-      }
-    } catch (e: any) {
-      showNotification({
-        title: "Well uhhh",
-        message: "Seems like that image is too big",
-        color: "red",
-      });
-    }
+    uploadBytes(storageRef, images.image1 as Blob).then((snapshot) => {
+      console.log("Uploaded a blob or file!");
+    });
+    uploadBytes(storageRef, images.image2 as Blob).then((snapshot) => {
+      console.log("Uploaded a blob or file!");
+    });
   }
 
   return (
@@ -136,7 +126,11 @@ export default function Page() {
             placeholder="Image 1"
             label="Image for first option"
             accept="image/png,image/jpeg"
-            onChange={(v) => saveImage(1, v)}
+            onChange={(v) =>
+              setImages((prev: ImageState) => {
+                return { ...prev, image1: v };
+              })
+            }
           />
 
           <TextInput
@@ -158,7 +152,11 @@ export default function Page() {
             placeholder="Image 2"
             label="Image for first option"
             accept="image/png,image/jpeg"
-            onChange={(v) => saveImage(2, v)}
+            onChange={(v) =>
+              setImages((prev: ImageState) => {
+                return { ...prev, image2: v };
+              })
+            }
           />
 
           <Button type="submit" rightIcon={<Check />}>

@@ -135,7 +135,7 @@ dependencies:
     version: 0.18.0
   drizzle-orm:
     specifier: ^0.26.1
-    version: 0.26.1(@vercel/postgres@0.3.0)
+    version: 0.26.1(@vercel/postgres@0.3.0)(postgres@3.3.4)
   eslint:
     specifier: 8.40.0
     version: 8.40.0
@@ -157,6 +157,9 @@ dependencies:
   next:
     specifier: 13.4.2
     version: 13.4.2(@babel/core@7.21.8)(react-dom@18.2.0)(react@18.2.0)(sass@1.62.1)
+  postgres:
+    specifier: ^3.3.4
+    version: 3.3.4
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -4873,7 +4876,7 @@ packages:
       - supports-color
     dev: false
 
-  /drizzle-orm@0.26.1(@vercel/postgres@0.3.0):
+  /drizzle-orm@0.26.1(@vercel/postgres@0.3.0)(postgres@3.3.4):
     resolution: {integrity: sha512-PgHPBJ4BUi/xWEjBbaYo4eiVC7hIwPtSEAVO3QuGMzLV+YwD2jPyV2Y7nvP1jHZlA4IV9wLmkcpicBO/255XFg==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
@@ -4933,6 +4936,7 @@ packages:
         optional: true
     dependencies:
       '@vercel/postgres': 0.3.0
+      postgres: 3.3.4
     dev: false
 
   /duplexer2@0.1.4:
@@ -7744,6 +7748,10 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       xtend: 4.0.2
+    dev: false
+
+  /postgres@3.3.4:
+    resolution: {integrity: sha512-XVu0+d/Y56pl2lSaf0c7V19AhAEfpVrhID1IENWN8nf0xch6hFq6dAov5dtUX6ZD46wfr1TxvLhxLtV8WnNsOg==}
     dev: false
 
   /prelude-ls@1.1.2:
