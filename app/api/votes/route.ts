@@ -17,6 +17,7 @@ export async function POST(request: NextRequest) {
       )
     );
 
+    console.log(props.option)
   if (currentState.length <= 0) {
     const res = await db
       .insert(QuestionVotes)
@@ -41,11 +42,7 @@ export async function POST(request: NextRequest) {
       .update(QuestionVotes)
       .set({
         // remove vote
-        option:
-          currentState[0].option === props.option
-            ? 0
-            : // Change vote
-              props.option,
+        option: currentState[0].option === props.option ? 0 : props.option,
       })
       .where(
         and(

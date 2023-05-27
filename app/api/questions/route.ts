@@ -9,8 +9,12 @@ export type questionProps = {
   desc: string;
   option1: string;
   option2: string;
+  option3: string;
+  option4: string;
   image1: string;
   image2: string;
+  image3: string;
+  image4: string;
   ownerId: string;
 };
 
@@ -34,7 +38,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   const props: questionProps = await request.json();
-  const { title, desc, option1, option2, image1, image2, ownerId } = props;
+  const { title, desc, option1, option2, option3, option4, image1, image2, image3, image4, ownerId } = props;
 
   // TODO: Use S3 Buckets or some other storage alternative for images
   // const storage =  getStorage()
@@ -51,9 +55,13 @@ export async function POST(request: NextRequest) {
       desc: desc,
       option1: option1,
       option2: option2,
+      option3: option3,
+      option4: option4,
       ownerId: ownerId,
       image1: image1,
       image2: image2,
+      image3: image3,
+      image4: image4,
       isDeleted: false,
     })
     .then(() => {
@@ -64,7 +72,7 @@ export async function POST(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   const props: updateProps = await request.json();
-  const { title, desc, option1, option2, ownerId, id, isDeleted } = props;
+  const { title, desc, option1, option2, option3, option4, ownerId, id, isDeleted } = props;
 
   const res = await db
     .update(Question)
@@ -73,6 +81,8 @@ export async function PATCH(request: NextRequest) {
       desc: desc,
       option1: option1,
       option2: option2,
+      option3: option3,
+      option4: option4,
       ownerId: ownerId,
       isDeleted: isDeleted,
     })

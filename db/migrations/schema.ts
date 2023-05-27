@@ -1,6 +1,13 @@
 import { relations } from "drizzle-orm";
 import { pgTable, serial, text, varchar, timestamp, boolean, date, integer } from "drizzle-orm/pg-core"
 
+export const Accounts = pgTable("accounts", {
+	id: serial("id").notNull().primaryKey(),
+	userName: varchar("user_name", { length: 100 }).notNull(),
+  userId: text("user_id").notNull(),
+  role: integer("role").default(0)
+})
+
 export const Question = pgTable("question", {
 	id: serial("id").notNull().primaryKey(),
 	title: varchar("title", { length: 100 }).notNull(),
@@ -8,9 +15,13 @@ export const Question = pgTable("question", {
 	createdAt: timestamp("createdAt", { precision: 6, mode: 'string' }).defaultNow(),
 	option1: varchar("option1", { length: 30 }).notNull(),
 	option2: varchar("option2", { length: 30 }).notNull(),
+	option3: varchar("option3", { length: 30 }),
+	option4: varchar("option4", { length: 30 }),
 	ownerId: text("ownerId").notNull(),
 	image1: text("image1"),
 	image2: text("image2"),
+	image3: text("image3"),
+	image4: text("image4"),
 	isDeleted: boolean("isDeleted").notNull(),
 });
 

@@ -8,6 +8,27 @@
       "when": 1685006596631,
       "tag": "0000_flashy_zodiak",
       "breakpoints": false
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1685219726482,
+      "tag": "0001_majestic_patch",
+      "breakpoints": false
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1685219756062,
+      "tag": "0002_greedy_punisher",
+      "breakpoints": false
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1685220287961,
+      "tag": "0003_wet_pandemic",
+      "breakpoints": false
     }
   ]
 }

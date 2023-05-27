@@ -11,14 +11,15 @@ import { displayMessage, noLogin } from "../../helpers";
 import { useStyles } from "@/app/styles/styles";
 import { getVoteCount } from "./helpers";
 import { QuestionVotes, QuestionWithVotes } from "@/db/types";
+import { voteNumber } from "../voteButton/voteButton";
 
 interface IButtonProps {
   question: QuestionWithVotes;
   option: string;
-  index: number;
+  index: voteNumber;
   isOpen: boolean;
-  voteStatus: number;
-  setVoteStatus: (index: number) => void;
+  voteStatus: voteNumber;
+  setVoteStatus: (index: voteNumber) => void;
   setValue: (v: string) => void;
   revalidate: () => void;
 }
@@ -26,16 +27,18 @@ interface IButtonProps {
 export function EditableVoteButton(ButtonProps: IButtonProps) {
   const router = useRouter();
   const { classes } = useStyles();
-  const { user, isSignedIn, isLoaded } = useUser();
-  const [blocked, blockRequest] = useState(false);
   const { setValue, question, option, index, isOpen } = ButtonProps;
+  const { user, isSignedIn, isLoaded } = useUser();
+
+  const [blockedRequest, setBlockRequest] = useState(false);
   const [votes, setVotes] = useState<number>(getVoteCount(question, index));
-  const [voteStatus, _setVoteStatus] = useState<boolean>(false);
+  const [isVoted, _setIsVoted] = useState<boolean>(false);
 
   function validateVotes() {
     if (!isSignedIn || !question) return;
     question.votes.map((vote: QuestionVotes) => {
       if (vote.ownerId === user.id && vote.option === index) {
+        console.log(index)
         changeOptimisticVoteStatus(true);
       } else {
         changeOptimisticVoteStatus(false);
@@ -45,12 +48,12 @@ export function EditableVoteButton(ButtonProps: IButtonProps) {
   }
 
   async function handleVote() {
-    blockRequest(true);
-    if (!isSignedIn) noLogin(router);
+    setBlockRequest(true);
+    if (!isSignedIn) return noLogin(router);
 
     // ToDo: Figure out a fix for this
     changeOptimisticVote(
-      (optimisticVotes.votes = voteStatus
+      (optimisticVotes.votes = isVoted
         ? optimisticVotes.votes + 1
         : optimisticVotes.votes - 1)
     );
@@ -59,17 +62,17 @@ export function EditableVoteButton(ButtonProps: IButtonProps) {
       method: "POST",
       body: JSON.stringify({
         option: index,
-        userId: user?.id,
+        userId: user.id,
         question: question.id,
       }),
     }).then(async (res: any) => {
       displayMessage(await res.json(), router);
-      blockRequest(false);
+      setBlockRequest(false);
     });
   }
 
   const [optimisticVoteStatus, changeOptimisticVoteStatus] = useOptimistic(
-    { status: voteStatus },
+    { status: isVoted },
     (state, newState: boolean) => ({
       ...state,
       status: newState,
@@ -93,19 +96,21 @@ export function EditableVoteButton(ButtonProps: IButtonProps) {
   return (
     <>
       <Button
-        className={
-          optimisticVoteStatus.status
-            ? classes.buttonSelected
-            : classes.buttonUnselected
-        }
         suppressContentEditableWarning={true}
         contentEditable={isOpen}
         onInput={(value) => {
           if (!isOpen) return;
           setValue(value.currentTarget.children[0].children[0].innerHTML);
         }}
+
+        className={
+          optimisticVoteStatus.status
+            ? classes.buttonSelected
+            : classes.buttonUnselected
+        }
+
         onClick={() => {
-          if (isOpen || blocked) return;
+          if (isOpen || blockedRequest) return;
           handleVote();
         }}
       >

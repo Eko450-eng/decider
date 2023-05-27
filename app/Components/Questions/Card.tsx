@@ -39,6 +39,8 @@ export default function Questioncard(ButtonProps: IButtonProps) {
   const router = useRouter();
   const image1 = question.image1 ? question.image1.toString() : ""
   const image2 = question.image2 ? question.image2.toString() : ""
+  const image3 = question.image3 ? question.image3.toString() : ""
+  const image4 = question.image4 ? question.image4.toString() : ""
 
   const form = useForm({
     initialValues: {
@@ -123,9 +125,17 @@ export default function Questioncard(ButtonProps: IButtonProps) {
                     setOption2={(value) => {
                       form.setValues((prev) => ({ ...prev, option2: value }));
                     }}
+                    setOption3={(value) => {
+                      form.setValues((prev) => ({ ...prev, option3: value }));
+                    }}
+                    setOption4={(value) => {
+                      form.setValues((prev) => ({ ...prev, option4: value }));
+                    }}
                     isOpen={isOpen}
                     imageByte1={image1}
                     imageByte2={image2}
+                    imageByte3={image3}
+                    imageByte4={image4}
                     question={question}
                   />
                   {isOpen ? (
