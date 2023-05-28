@@ -47,6 +47,7 @@ export async function POST(request: NextRequest) {
   // uploadBytes(storageRef, image1).then((snapshot) => {
   //   console.log("Uploaded a blob or file!");
   // });
+  console.log(props)
 
   const res = await db
     .insert(Question)

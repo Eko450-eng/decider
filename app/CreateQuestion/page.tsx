@@ -10,6 +10,7 @@ import { useState } from "react";
 import { Check } from "tabler-icons-react";
 import { displayMessage } from "../Components/Questions/helpers";
 import { Question } from "@/db/types";
+import {v4 as uuid} from 'uuid'
 
 export interface ImageState {
   image1: Blob | undefined | null;
@@ -61,22 +62,10 @@ export default function Page() {
     >
   ) {
     if (!user) return;
-    const option1Name = (values.option1 + values.title).replaceAll(
-      "[^a-zA-Z0-9]+",
-      ""
-    );
-    const option2Name = (values.option2 + values.title).replaceAll(
-      "[^a-zA-Z0-9]+",
-      ""
-    );
-    const option3Name = (values.option3 + values.title).replaceAll(
-      "[^a-zA-Z0-9]+",
-      ""
-    );
-    const option4Name = (values.option4 + values.title).replaceAll(
-      "[^a-zA-Z0-9]+",
-      ""
-    );
+    const option1Name = uuid() 
+    const option2Name = uuid()
+    const option3Name = uuid()
+    const option4Name = uuid()
 
     await fetch("/api/questions", {
       method: "POST",
