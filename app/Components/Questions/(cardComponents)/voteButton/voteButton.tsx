@@ -30,12 +30,12 @@ export default function VoteButton(ButtonProps: IButtonProps) {
 
   function validateVotes() {
     if (!isSignedIn || !question) return;
+    if (question.votes.length <= 0) setVoteStatus(0);
     question.votes.map((vote: QuestionVotes) => {
       if (vote.ownerId === user.id) {
         setVoteStatus(vote.option as voteNumber);
       }
     });
-    if (question.votes.length <= 0) setVoteStatus(0);
   }
 
   useEffect(() => {
@@ -67,7 +67,6 @@ export default function VoteButton(ButtonProps: IButtonProps) {
               option={question.option1}
               index={1}
               voteStatus={voteStatus}
-              revalidate={() => validateVotes()}
             />
           </Stack>
           <Stack>
@@ -86,7 +85,6 @@ export default function VoteButton(ButtonProps: IButtonProps) {
               option={question.option2}
               index={2}
               voteStatus={voteStatus}
-              revalidate={() => validateVotes()}
             />
           </Stack>
           {question.option3 && (
@@ -107,7 +105,6 @@ export default function VoteButton(ButtonProps: IButtonProps) {
                   option={question.option3}
                   index={3}
                   voteStatus={voteStatus}
-                  revalidate={() => validateVotes()}
                 />
               </Stack>
             </>
@@ -130,7 +127,6 @@ export default function VoteButton(ButtonProps: IButtonProps) {
                   option={question.option4}
                   index={4}
                   voteStatus={voteStatus}
-                  revalidate={() => validateVotes()}
                 />
               </Stack>
             </>

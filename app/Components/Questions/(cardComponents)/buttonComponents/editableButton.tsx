@@ -21,7 +21,6 @@ interface IButtonProps {
   voteStatus: voteNumber;
   setVoteStatus: (index: voteNumber) => void;
   setValue: (v: string) => void;
-  revalidate: () => void;
 }
 
 export function EditableVoteButton(ButtonProps: IButtonProps) {
@@ -31,10 +30,10 @@ export function EditableVoteButton(ButtonProps: IButtonProps) {
   const { user, isSignedIn, isLoaded } = useUser();
 
   const [blockedRequest, setBlockRequest] = useState(false);
-  const [votes, setVotes] = useState<number>(getVoteCount(question, index));
-  const [isVoted, _setIsVoted] = useState<boolean>(false);
+  const [votes, setVotes] = useState<number>(0);
+  const [isVoted, setIsVoted] = useState<boolean>(false);
 
-  function validateVotes() {
+  async function validateVotes() {
     if (!isSignedIn || !question) return;
     question.votes.map((vote: QuestionVotes) => {
       if (vote.ownerId === user.id && vote.option === index) {
@@ -45,6 +44,8 @@ export function EditableVoteButton(ButtonProps: IButtonProps) {
       }
     });
     if (question.votes.length <= 0) changeOptimisticVoteStatus(false);
+    const voteCountPromise = await getVoteCount(question, index)
+    setVotes(voteCountPromise)
   }
 
   async function handleVote() {
@@ -88,7 +89,6 @@ export function EditableVoteButton(ButtonProps: IButtonProps) {
   );
 
   useEffect(() => {
-    setVotes(getVoteCount(question, index));
     validateVotes();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [question, isLoaded]);

@@ -6,7 +6,7 @@ import { useForm } from "@mantine/form";
 import { useRouter } from "next/navigation";
 import { PleaseLogin } from "../(PleaseLogin)";
 import { useUser } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Check } from "tabler-icons-react";
 import { displayMessage } from "../Components/Questions/helpers";
 import { Question } from "@/db/types";
@@ -21,9 +21,9 @@ export interface ImageState {
 
 export default function Page() {
   const router = useRouter();
-  const { user, isSignedIn, isLoaded } = useUser();
+  const { user, isSignedIn } = useUser();
   //ToDo: This auth
-  const [premium, setPremium] = useState<boolean>(true)
+  const [premium, _setPremium] = useState<boolean>(true)
 
   const [images, setImages] = useState<ImageState>({
     image1: null,
@@ -37,7 +37,6 @@ export default function Page() {
   //   let userRole: number = user.publicMetadata.role as number
   //   if( userRole >= 1) setPremium(true)
   // }, [isLoaded])
-
 
   const form = useForm({
     initialValues: {

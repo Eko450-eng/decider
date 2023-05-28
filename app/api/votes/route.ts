@@ -17,7 +17,6 @@ export async function POST(request: NextRequest) {
       )
     );
 
-    console.log(props.option)
   if (currentState.length <= 0) {
     const res = await db
       .insert(QuestionVotes)

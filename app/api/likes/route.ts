@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
         return SLike;
       });
 
-    return NextResponse.json(res)
+    return NextResponse.json(res);
   } else {
     const res = await db
       .delete(QuestionLikes)
@@ -42,6 +42,6 @@ export async function POST(request: NextRequest) {
       .then(() => {
         return SLiked;
       });
-    return NextResponse.json(res)
+    return NextResponse.json(res);
   }
 }

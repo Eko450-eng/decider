@@ -40,15 +40,6 @@ export async function POST(request: NextRequest) {
   const props: questionProps = await request.json();
   const { title, desc, option1, option2, option3, option4, image1, image2, image3, image4, ownerId } = props;
 
-  // TODO: Use S3 Buckets or some other storage alternative for images
-  // const storage =  getStorage()
-  // const storageRef = ref(storage, "")
-
-  // uploadBytes(storageRef, image1).then((snapshot) => {
-  //   console.log("Uploaded a blob or file!");
-  // });
-  console.log(props)
-
   const res = await db
     .insert(Question)
     .values({
