@@ -76,7 +76,6 @@ export function VoteImage(props: ImageProps) {
             }}
           >
             <Image
-                sizes="100%"
               className={fullscreen ? classes.fullscreenImage : undefined}
               alt={altText}
               onClick={() => setModal()}

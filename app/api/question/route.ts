@@ -1,7 +1,8 @@
 import db from "@/db/db";
 import { NextRequest, NextResponse } from "next/server";
+import { SChangedQuestion, SCreateQuestion } from "../messages";
 import { Question } from "@/db/migrations/schema";
-import { eq } from "drizzle-orm";
+import { and, eq, ne } from "drizzle-orm";
 
 export type questionProps = {
   title: string;
@@ -23,20 +24,15 @@ export interface updateProps extends Omit<questionProps, "image1" | "image2"> {
 }
 
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const id = Number(searchParams.get("id"));
-  console.log(id);
-
+  const { searchParams } = new URL(req.url)
+  const id = Number(searchParams.get("id"))
   const res = await db.query.Question.findFirst({
     with: {
       votes: true,
-      likes: true,
-      option: true,
     },
     where: () => eq(Question.id, id),
     orderBy: (Question, { desc }) => [desc(Question.createdAt)],
   });
-  console.log(res);
 
   return NextResponse.json({ status: 200, data: res });
 }

@@ -41,7 +41,7 @@ export default function QuestionPage({ params }: any) {
             <Questioncard
               index={1}
               unmount={() => getData()}
-              questionId={data[0].id}
+              question={data[0]}
               data-superjson
             />
           )}

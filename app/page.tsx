@@ -1,36 +1,37 @@
+import { Question } from "@/db/types";
 import Questioncard from "./Components/Questions/Card";
 import Loading from "./loading";
+import { Suspense } from "react";
 
 async function getData() {
-  const URL =
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:3000"
-      : process.env.NEXT_PUBLIC_HOSTURL;
+  const URL = process.env.NODE_ENV === "development" ? "http://localhost:3000" : process.env.NEXT_PUBLIC_HOSTURL
   const res = await fetch(`${URL}/api/questions`, {
     method: "GET",
     cache: "no-store",
     next: {
-      tags: ["questions"],
-    },
+      tags: ["questions"]
+    }
   });
 
   return await res.json();
 }
 
 export default async function Home() {
-  const { data }: { data: any } = await getData();
+  const { data }: { data: Question[] } = await getData();
+  const prod = true 
 
   return (
     <main className="main">
-      {/*@ts-ignore*/}
       <div className="cards-wrapper">
-        {data
-          ? data.map((question: {id: number}, k: number) => {
+        <Suspense fallback={<Loading />}>
+        {(prod && data)
+          ? data.map((v: any, k: number) => {
+              const { createdAt, ...question } = v;
               return (
                 <Questioncard
                   key={`questionCard-${k}`}
                   index={k}
-                  questionId={question.id}
+                  question={question}
                   data-superjson
                 />
               );
@@ -38,6 +39,7 @@ export default async function Home() {
           : [...Array(20).keys()].map((i: number) => {
               return <Loading key={`placeholder-${i}`} />;
             })}
+            </Suspense>
       </div>
     </main>
   );

@@ -3,9 +3,9 @@ import { ClerkProvider } from "@clerk/nextjs/app-beta";
 import { dark } from "@clerk/themes";
 import { lazy } from "react";
 import { Analytics } from '@vercel/analytics/react'
-import RootStyleRegistry from "./styles/emotion";
-import Navigation from "./(navigation)";
 
+const Navigation = lazy(() => import("./(navigation)"));
+const RootStyleRegistry = lazy(() => import("./styles/emotion"));
 
 export const metadata = {
   title: "Decider",

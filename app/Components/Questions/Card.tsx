@@ -3,7 +3,7 @@
 import { useUser } from "@clerk/nextjs";
 import { AnimatePresence, motion, useCycle } from "framer-motion";
 import { ActionIcon, Card, Group, Stack, Switch } from "@mantine/core";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { boxVariant } from "@/app/framer";
 import { useRouter } from "next/navigation";
 import { useForm } from "@mantine/form";
@@ -18,7 +18,7 @@ import { displayMessage } from "./helpers";
 import { Check, Trash, X } from "tabler-icons-react";
 
 interface IButtonProps {
-  questionId: number;
+  question: QuestionWithVotesAndLikes;
   unmount?: () => void;
   index: number;
 }
@@ -30,51 +30,23 @@ interface updateProps {
   option2: string;
 }
 
-async function getData(id: number) {
-  const URL =
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:3000"
-      : process.env.NEXT_PUBLIC_HOSTURL;
-  const res = await fetch(`http://localhost:3000/api/question?id=${id}`, {
-    method: "GET",
-    cache: "no-store",
-    next: {
-      tags: ["questions"],
-    },
-  });
-
-  return await res.json();
-}
-
 export default function Questioncard(ButtonProps: IButtonProps) {
-  const { questionId } = ButtonProps;
+  const { question } = ButtonProps;
   const [isOpen, toggleOpen] = useCycle(false, true);
   const [deleted, setDeleted] = useState(false);
   const { isSignedIn, user } = useUser();
   const { classes } = useStyles();
   const router = useRouter();
-  const [question, setQuestion] = useState<QuestionWithVotesAndLikes | null>(
-    null
-  );
-
-  async function getQuestion() {
-    const data = await getData(questionId);
-    setQuestion(data.data);
-  }
-
-  useEffect(() => {
-    getQuestion();
-  }, []);
 
   const form = useForm({
     initialValues: {
-      title: question?.title,
-      desc: question?.desc,
+      title: question.title,
+      desc: question.desc,
     },
   });
 
   async function editQuestion(values: updateProps, deleted: boolean) {
-    if (!user || !question) return;
+    if (!user) return;
     await fetch("/api/questions", {
       method: "PATCH",
       body: JSON.stringify({
