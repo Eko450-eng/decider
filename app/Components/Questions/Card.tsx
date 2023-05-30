@@ -35,7 +35,7 @@ async function getData(id: number) {
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
       : process.env.NEXT_PUBLIC_HOSTURL;
-  const res = await fetch(`http://localhost:3000/api/question?id=${id}`, {
+  const res = await fetch(`${URL}/api/question?id=${id}`, {
     method: "GET",
     cache: "no-store",
     next: {
