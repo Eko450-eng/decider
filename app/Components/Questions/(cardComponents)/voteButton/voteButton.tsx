@@ -1,44 +1,119 @@
 "use client";
 import { Stack } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { experimental_useOptimistic as useOptimistic, useEffect, useState } from "react";
 import { EditableVoteButton } from "./voteButtonEditable";
 import { FullscreenImageModal, VoteImage } from "./voteButtonComponents";
 import { useUser } from "@clerk/nextjs";
-import { QuestionVotes, QuestionWithVotes } from "@/db/types";
+import { Option, QuestionVotes, QuestionWithVotesAndLikes } from "@/db/types";
+import { getVoteCount } from "./helpers";
+import { displayMessage, noLogin } from "../../helpers";
+import { useRouter } from "next/navigation";
 
-export type voteNumber = 0 | 1 | 2 | 3 | 4
 interface IButtonProps {
   setOption1: (values: string) => void;
   setOption2: (values: string) => void;
   setOption3: (values: string) => void;
   setOption4: (values: string) => void;
   isOpen: boolean;
-  imageByte1: string;
-  imageByte2: string;
-  imageByte3: string;
-  imageByte4: string;
-  question: QuestionWithVotes;
+  question: QuestionWithVotesAndLikes;
 }
 
+interface IStackProps {
+  isOpen: boolean;
+  question: QuestionWithVotesAndLikes;
+  image: string;
+  option: Option;
+  voted: number;
+  selectedOption: number;
+  setVoted: (vote: number)=>void;
+  setImageModal: (image: string) => void;
+}
+
+function ButtonWithImage(props: IStackProps) {
+  const { question, isOpen, image, option, setImageModal, voted, setVoted } = props;
+  const { user, isSignedIn, isLoaded } = useUser();
+  const router = useRouter()
+
+  const [voteCount, setVoteCount] = useState<number>(0);
+
+  async function getCount() {
+    const resRaw = getVoteCount(question, option.id);
+    const res = await resRaw;
+    setVoteCount(res);
+  }
+
+  useEffect(() => {
+    getCount();
+    if (!isSignedIn) return;
+  }, [isLoaded]);
+
+  async function handleVote() {
+    if (!isSignedIn) return noLogin(router);
+    setVoted(voted == option.id ? 0 : option.id)
+
+    await fetch("/api/votes", {
+      method: "POST",
+      body: JSON.stringify({
+        option: option.id,
+        userId: user.id,
+        question: question.id,
+      }),
+    }).then(async (res: any) => {
+      displayMessage(await res.json(), router);
+    });
+  }
+
+
+  return (
+    <Stack>
+      {!isOpen && image !== "" && (
+        <VoteImage
+          altText="First option Image"
+          image={image}
+          setModal={() => setImageModal(image)}
+        />
+      )}
+      <EditableVoteButton
+        voteCount={voteCount}
+        voted={voted == option.id}
+        isOpen={isOpen}
+        question={question}
+        option={option}
+        handleVote={()=>handleVote()}
+      />
+    </Stack>
+  );
+}
 
 export default function VoteButton(ButtonProps: IButtonProps) {
   const [imageModal, setImageModal] = useState<string | null>(null);
-  const [voteStatus, setVoteStatus] = useState<voteNumber>(0);
+  const [_voteStatus, setVoteStatus] = useState<number>(0);
   const { isSignedIn, user } = useUser();
-  const { question, imageByte1, imageByte2, imageByte3, imageByte4, isOpen, setOption1, setOption2, setOption3, setOption4 } =
-    ButtonProps;
+  const { question, isOpen } = ButtonProps;
+  const [voted, setVoted] = useState<number>(0);
 
   function validateVotes() {
     if (!isSignedIn || !question) return;
     if (question.votes.length <= 0) setVoteStatus(0);
     question.votes.map((vote: QuestionVotes) => {
       if (vote.ownerId === user.id) {
-        setVoteStatus(vote.option as voteNumber);
+        setVoteStatus(vote.option);
       }
     });
   }
 
+  async function getStatus() {
+    if (!user) return;
+    const res = await fetch(`/api/votes?id=${question.id}&user=${user.id}`, {
+      method: "GET",
+      cache: "no-store",
+    });
+    const returnValue = await res.json();
+    setVoted(returnValue.voted[0].option ?? 0);
+  }
+
   useEffect(() => {
+    getStatus();
     validateVotes();
   }, [isSignedIn, user]);
 
@@ -51,86 +126,21 @@ export default function VoteButton(ButtonProps: IButtonProps) {
       />
       {question ? (
         <Stack spacing="sm">
-          <Stack>
-            {!isOpen && imageByte1 !== "" && (
-              <VoteImage
-                altText="First option Image"
-                image={imageByte1}
-                setModal={() => setImageModal(imageByte1)}
+          {question.option.map((opt, index) => {
+            return (
+              <ButtonWithImage
+                key={`${opt.name}${index}`}
+                setImageModal={(image: string) => setImageModal(image)}
+                isOpen={isOpen}
+                question={question}
+                image={opt.image ?? ""}
+                selectedOption={voted}
+                voted={voted}
+                option={opt}
+                setVoted={(vote: number)=>setVoted(vote)}
               />
-            )}
-            <EditableVoteButton
-              setVoteStatus={(index) => setVoteStatus(index)}
-              setValue={setOption1}
-              isOpen={isOpen}
-              question={question}
-              option={question.option1}
-              index={1}
-              voteStatus={voteStatus}
-            />
-          </Stack>
-          <Stack>
-            {!isOpen && imageByte2 !== "" && (
-              <VoteImage
-                altText="Second option Image"
-                image={imageByte2}
-                setModal={() => setImageModal(imageByte2)}
-              />
-            )}
-            <EditableVoteButton
-              setVoteStatus={(index) => setVoteStatus(index)}
-              setValue={setOption2}
-              isOpen={isOpen}
-              question={question}
-              option={question.option2}
-              index={2}
-              voteStatus={voteStatus}
-            />
-          </Stack>
-          {question.option3 && (
-            <>
-              <Stack>
-                {!isOpen && imageByte3 !== "" && (
-                  <VoteImage
-                    altText="Third option Image"
-                    image={imageByte3}
-                    setModal={() => setImageModal(imageByte2)}
-                  />
-                )}
-                <EditableVoteButton
-                  setVoteStatus={(index) => setVoteStatus(index)}
-                  setValue={setOption3}
-                  isOpen={isOpen}
-                  question={question}
-                  option={question.option3}
-                  index={3}
-                  voteStatus={voteStatus}
-                />
-              </Stack>
-            </>
-          )}
-          {question.option4 && (
-            <>
-              <Stack>
-                {!isOpen && imageByte4 !== "" && (
-                  <VoteImage
-                    altText="Second option Image"
-                    image={imageByte4}
-                    setModal={() => setImageModal(imageByte4)}
-                  />
-                )}
-                <EditableVoteButton
-                  setVoteStatus={(index: voteNumber) => setVoteStatus(index)}
-                  setValue={setOption4}
-                  isOpen={isOpen}
-                  question={question}
-                  option={question.option4}
-                  index={4}
-                  voteStatus={voteStatus}
-                />
-              </Stack>
-            </>
-          )}
+            );
+          })}
         </Stack>
       ) : (
         <p>Loading</p>

@@ -1,21 +1,14 @@
 "use client";
 
-import { QuestionVotes, QuestionWithVotes } from "@/db/types";
-import { voteNumber } from "../voteButton/voteButton";
+import { Option, QuestionVotes, QuestionWithVotes, QuestionWithVotesAndLikes } from "@/db/types";
 
 export async function getVoteCount(
-  question: QuestionWithVotes,
+  question: QuestionWithVotesAndLikes ,
   voteNumber: number
 ): Promise<number> {
-  const ret: String[] = [];
-  question.votes.map((ev: QuestionVotes) => {
-    if (ev.option === voteNumber) ret.push(ev.ownerId);
+  const ret: string[] = [];
+  question.option.map((option: Option) => {
+    if (option.id === voteNumber) ret.push(option.ownerId);
   });
   return ret.length;
-}
-
-export async function getAsyncVouteCount(question: QuestionWithVotes, index: voteNumber): Promise<number>{
-  const res = await fetch(`/api/questionVotes?id=${question.id}&option=${index}`);
-  const data = await res.json()
-  return await data.data
 }

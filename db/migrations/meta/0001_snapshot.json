@@ -1,9 +1,43 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "a264e8e0-a19c-4a70-974c-d1a1740d7a14",
-  "prevId": "a7e76b10-b138-44ac-91cb-9a3d88e54b0c",
+  "id": "51ed1587-33f5-48b6-a4bf-e00ed90a5680",
+  "prevId": "2f9a21fe-99c7-4856-b9f6-88c3ac6952fb",
   "tables": {
+    "accounts": {
+      "name": "accounts",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_name": {
+          "name": "user_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 0
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {}
+    },
     "Comment": {
       "name": "Comment",
       "schema": "",
@@ -17,6 +51,59 @@
       },
       "indexes": {},
       "foreignKeys": {},
+      "compositePrimaryKeys": {}
+    },
+    "option": {
+      "name": "option",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "option1": {
+          "name": "option1",
+          "type": "varchar(30)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "image1": {
+          "name": "image1",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "questionId": {
+          "name": "questionId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ownerId": {
+          "name": "ownerId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "option_questionId_question_id_fk": {
+          "name": "option_questionId_question_id_fk",
+          "tableFrom": "option",
+          "tableTo": "question",
+          "columnsFrom": [
+            "questionId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {}
     },
     "Pushdevices": {
@@ -81,47 +168,11 @@
           "notNull": false,
           "default": "now()"
         },
-        "option1": {
-          "name": "option1",
-          "type": "varchar(30)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "option2": {
-          "name": "option2",
-          "type": "varchar(30)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "option3": {
-          "name": "option3",
-          "type": "varchar(30)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "option4": {
-          "name": "option4",
-          "type": "varchar(30)",
-          "primaryKey": false,
-          "notNull": true
-        },
         "ownerId": {
           "name": "ownerId",
           "type": "text",
           "primaryKey": false,
           "notNull": true
-        },
-        "image1": {
-          "name": "image1",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "image2": {
-          "name": "image2",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
         },
         "isDeleted": {
           "name": "isDeleted",
@@ -251,6 +302,19 @@
           "tableTo": "question",
           "columnsFrom": [
             "questionId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "question_votes_option_option_id_fk": {
+          "name": "question_votes_option_option_id_fk",
+          "tableFrom": "question_votes",
+          "tableTo": "option",
+          "columnsFrom": [
+            "option"
           ],
           "columnsTo": [
             "id"

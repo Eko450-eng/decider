@@ -37,17 +37,18 @@ export default function Questioncard(ButtonProps: IButtonProps) {
   const { isSignedIn, user } = useUser();
   const { classes } = useStyles();
   const router = useRouter();
-  const image1 = question.image1 ? question.image1.toString() : ""
-  const image2 = question.image2 ? question.image2.toString() : ""
-  const image3 = question.image3 ? question.image3.toString() : ""
-  const image4 = question.image4 ? question.image4.toString() : ""
+
+  // const image1 = question.image1 ? question.image1.toString() : ""
+  // const image2 = question.image2 ? question.image2.toString() : ""
+  // const image3 = question.image3 ? question.image3.toString() : ""
+  // const image4 = question.image4 ? question.image4.toString() : ""
 
   const form = useForm({
     initialValues: {
       title: question.title,
       desc: question.desc,
-      option1: question.option1,
-      option2: question.option2,
+      // option1: question.option1,
+      // option2: question.option2,
     },
   });
 
@@ -88,9 +89,9 @@ export default function Questioncard(ButtonProps: IButtonProps) {
           >
             <form
               className="unstyled-form"
-              onSubmit={form.onSubmit((values) =>
-                editQuestion(values, deleted)
-              )}
+              // onSubmit={form.onSubmit((values) =>
+              //   editQuestion(values, deleted)
+              // )}
             >
               <Stack className={classes.innerCardWrapper}>
                 <Stack>
@@ -132,10 +133,6 @@ export default function Questioncard(ButtonProps: IButtonProps) {
                       form.setValues((prev) => ({ ...prev, option4: value }));
                     }}
                     isOpen={isOpen}
-                    imageByte1={image1}
-                    imageByte2={image2}
-                    imageByte3={image3}
-                    imageByte4={image4}
                     question={question}
                   />
                   {isOpen ? (

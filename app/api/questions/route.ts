@@ -28,6 +28,7 @@ export async function GET() {
     with: {
       votes: true,
       likes: true,
+      option: true,
     },
     where: () => ne(Question.isDeleted, true),
     orderBy: (Question, { desc }) => [desc(Question.createdAt)],
@@ -45,15 +46,7 @@ export async function POST(request: NextRequest) {
     .values({
       title: title,
       desc: desc,
-      option1: option1,
-      option2: option2,
-      option3: option3,
-      option4: option4,
       ownerId: ownerId,
-      image1: image1,
-      image2: image2,
-      image3: image3,
-      image4: image4,
       isDeleted: false,
     })
     .then(() => {
@@ -71,10 +64,6 @@ export async function PATCH(request: NextRequest) {
     .set({
       title: title,
       desc: desc,
-      option1: option1,
-      option2: option2,
-      option3: option3,
-      option4: option4,
       ownerId: ownerId,
       isDeleted: isDeleted,
     })

@@ -1,121 +1,39 @@
 "use client";
-import { useUser } from "@clerk/nextjs";
-import { Button, Text } from "@mantine/core";
-import { useRouter } from "next/navigation";
-import {
-  useState,
-  experimental_useOptimistic as useOptimistic,
-  useEffect,
-} from "react";
-import { displayMessage, noLogin } from "../../helpers";
+import { Button } from "@mantine/core";
 import { useStyles } from "@/app/styles/styles";
-import { getVoteCount } from "./helpers";
-import { QuestionVotes, QuestionWithVotes } from "@/db/types";
-import { voteNumber } from "../voteButton/voteButton";
+import { Option, QuestionWithVotes } from "@/db/types";
 
 interface IButtonProps {
   question: QuestionWithVotes;
-  option: string;
-  index: voteNumber;
+  option: Option;
   isOpen: boolean;
-  voteStatus: voteNumber;
-  setVoteStatus: (index: voteNumber) => void;
-  setValue: (v: string) => void;
+  voteCount: number;
+  voted: boolean;
+  handleVote: () => void;
 }
 
 export function EditableVoteButton(ButtonProps: IButtonProps) {
-  const router = useRouter();
   const { classes } = useStyles();
-  const { setValue, question, option, index, isOpen } = ButtonProps;
-  const { user, isSignedIn, isLoaded } = useUser();
-
-  const [blockedRequest, setBlockRequest] = useState(false);
-  const [votes, setVotes] = useState<number>(0);
-  const [isVoted, setIsVoted] = useState<boolean>(false);
-
-  async function validateVotes() {
-    if (!isSignedIn || !question) return;
-    question.votes.map((vote: QuestionVotes) => {
-      if (vote.ownerId === user.id && vote.option === index) {
-        console.log(index)
-        changeOptimisticVoteStatus(true);
-      } else {
-        changeOptimisticVoteStatus(false);
-      }
-    });
-    if (question.votes.length <= 0) changeOptimisticVoteStatus(false);
-    const voteCountPromise = await getVoteCount(question, index)
-    setVotes(voteCountPromise)
-  }
-
-  async function handleVote() {
-    setBlockRequest(true);
-    if (!isSignedIn) return noLogin(router);
-
-    // ToDo: Figure out a fix for this
-    changeOptimisticVote(
-      (optimisticVotes.votes = isVoted
-        ? optimisticVotes.votes + 1
-        : optimisticVotes.votes - 1)
-    );
-
-    await fetch("/api/votes", {
-      method: "POST",
-      body: JSON.stringify({
-        option: index,
-        userId: user.id,
-        question: question.id,
-      }),
-    }).then(async (res: any) => {
-      displayMessage(await res.json(), router);
-      setBlockRequest(false);
-    });
-  }
-
-  const [optimisticVoteStatus, changeOptimisticVoteStatus] = useOptimistic(
-    { status: isVoted },
-    (state, newState: boolean) => ({
-      ...state,
-      status: newState,
-    })
-  );
-
-  const [optimisticVotes, changeOptimisticVote] = useOptimistic(
-    { votes },
-    (state, newVoteCount: number) => ({
-      ...state,
-      votes: newVoteCount,
-    })
-  );
-
-  useEffect(() => {
-    validateVotes();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [question, isLoaded]);
+  const { handleVote, option, voted, isOpen } = ButtonProps;
 
   return (
     <>
       <Button
         suppressContentEditableWarning={true}
         contentEditable={isOpen}
-        onInput={(value) => {
+        onInput={(_value) => {
           if (!isOpen) return;
-          setValue(value.currentTarget.children[0].children[0].innerHTML);
+          // setValue(value.currentTarget.children[0].children[0].innerHTML);
         }}
-
-        className={
-          optimisticVoteStatus.status
-            ? classes.buttonSelected
-            : classes.buttonUnselected
-        }
-
+        className={voted ? classes.buttonSelected : classes.buttonUnselected}
         onClick={() => {
-          if (isOpen || blockedRequest) return;
+          if (isOpen) return;
           handleVote();
         }}
       >
-        {option}
-        <Text className={classes.voteText}>{optimisticVotes.votes}</Text>
+        {option.name}
+        {/* ToDo:Removed for now */}
+        {/* <Text className={classes.voteText}>{voteCount}</Text> */}
       </Button>
     </>
   );
