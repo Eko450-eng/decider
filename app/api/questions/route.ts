@@ -26,10 +26,8 @@ export interface updateProps extends Omit<questionProps, "image1" | "image2"> {
 
 export async function GET() {
   const res = await db.query.Question.findMany({
-    with: {
-      votes: true,
-      likes: true,
-      option: true,
+    columns: {
+      id: true,
     },
     where: () => ne(Question.isDeleted, true),
     orderBy: (Question, { desc }) => [desc(Question.createdAt)],
@@ -79,8 +77,7 @@ export async function POST(request: NextRequest) {
             createOptions(q[0], option2, image2).then(() => {
               if (option3)
                 createOptions(q[0], option3, image3).then(() => {
-                  if (option4)
-                    createOptions(q[0], option4, image4);
+                  if (option4) createOptions(q[0], option4, image4);
                 });
             });
         });
@@ -95,10 +92,6 @@ export async function PATCH(request: NextRequest) {
   const {
     title,
     desc,
-    option1,
-    option2,
-    option3,
-    option4,
     ownerId,
     id,
     isDeleted,
