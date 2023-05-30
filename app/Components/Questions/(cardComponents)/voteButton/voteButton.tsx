@@ -78,6 +78,7 @@ function ButtonWithImage(props: IStackProps) {
         voteCount={voteCount}
         isOpen={isOpen}
         option={option}
+        hasVoted={voted}
         handleVote={()=>handleVote()}
       />
     </Stack>

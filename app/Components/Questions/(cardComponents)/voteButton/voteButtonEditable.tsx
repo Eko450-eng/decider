@@ -7,13 +7,15 @@ interface IButtonProps {
   option: Option;
   isOpen: boolean;
   voted: boolean;
+  hasVoted: boolean;
   voteCount: number;
   handleVote: () => void;
 }
 
 export function EditableVoteButton(ButtonProps: IButtonProps) {
   const { classes } = useStyles();
-  const { voteCount, handleVote, option, voted, isOpen } = ButtonProps;
+  const { voteCount, hasVoted, handleVote, option, voted, isOpen } =
+    ButtonProps;
 
   return (
     <>
@@ -31,8 +33,7 @@ export function EditableVoteButton(ButtonProps: IButtonProps) {
         }}
       >
         {option.name}
-        {/* ToDo:Removed for now */}
-        <Text className={classes.voteText}>{voteCount}</Text>
+        {hasVoted && <Text className={classes.voteText}>{voteCount}</Text>}
       </Button>
     </>
   );
