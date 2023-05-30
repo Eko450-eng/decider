@@ -7,6 +7,7 @@ const withPWA = require("@ducanh2912/next-pwa").default({
 
 module.exports = withPWA({
   reactStrictMode: true,
+  compress: true,
   images: {
     domains: ["firebasestorage.googleapis.com", "images.clerk.dev", "www.gravatar.com", "gravatar.com"],
   },

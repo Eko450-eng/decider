@@ -56,6 +56,7 @@ export function VoteImage(props: ImageProps) {
               src={imageUrl}
               fill
               sizes="80vw"
+              quality={70}
               style={{
                 maxWidth: "90%",
                 maxHeight: "90%",
@@ -67,15 +68,23 @@ export function VoteImage(props: ImageProps) {
             />
           </div>
         ) : (
-          <Image
-            className={fullscreen ? classes.fullscreenImage : undefined}
-            alt={altText}
-            onClick={() => setModal()}
-            src={imageUrl}
-            width={500}
-            height={500}
-            style={fullscreen ? {} : { maxWidth: "5rem", maxHeight: "5rem" }}
-          />
+          <div
+            style={{
+              position: "relative",
+              height: "5rem",
+              width: "5rem",
+            }}
+          >
+            <Image
+              className={fullscreen ? classes.fullscreenImage : undefined}
+              alt={altText}
+              onClick={() => setModal()}
+              src={imageUrl}
+              quality={70}
+              fill
+              style={fullscreen ? {} : { maxWidth: "5rem", maxHeight: "5rem" }}
+            />
+          </div>
         ))}
     </Center>
   );
