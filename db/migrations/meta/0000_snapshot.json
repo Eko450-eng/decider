@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "2f9a21fe-99c7-4856-b9f6-88c3ac6952fb",
+  "id": "87897c2b-9a84-4a2f-9330-963e068a6d22",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "accounts": {
@@ -302,6 +302,19 @@
           "tableTo": "question",
           "columnsFrom": [
             "questionId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "question_votes_option_option_id_fk": {
+          "name": "question_votes_option_option_id_fk",
+          "tableFrom": "question_votes",
+          "tableTo": "option",
+          "columnsFrom": [
+            "option"
           ],
           "columnsTo": [
             "id"
