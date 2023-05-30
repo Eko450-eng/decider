@@ -50,12 +50,13 @@
     "@types/react-is": "^17.0.4",
     "@types/resolve": "^1.20.2",
     "@types/scheduler": "^0.16.3",
+    "@types/uuid": "^9.0.1",
     "@vercel/postgres": "^0.3.0",
     "bcryptjs-react": "^2.4.6",
     "browser-image-compression": "^2.0.2",
     "dayjs": "^1.11.7",
     "drizzle-kit": "^0.18.0",
-    "drizzle-orm": "^0.26.0",
+    "drizzle-orm": "^0.26.1",
     "eslint": "8.40.0",
     "eslint-config-next": "13.4.2",
     "firebase": "^9.21.0",
@@ -63,9 +64,12 @@
     "framer-motion": "^10.12.10",
     "fs": "0.0.1-security",
     "next": "13.4.2",
+    "postgres": "^3.3.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "tabler-icons-react": "^1.56.0"
+    "svix": "^0.85.1",
+    "tabler-icons-react": "^1.56.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "react-test-renderer": "^18.2.0",

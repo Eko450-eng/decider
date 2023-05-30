@@ -1,0 +1,1 @@
+ALTER TABLE "option" RENAME COLUMN "option" TO "name";

@@ -1,18 +1,31 @@
 import { relations } from "drizzle-orm";
 import { pgTable, serial, text, varchar, timestamp, boolean, date, integer } from "drizzle-orm/pg-core"
 
+export const Accounts = pgTable("accounts", {
+	id: serial("id").notNull().primaryKey(),
+	userName: varchar("user_name", { length: 100 }).notNull(),
+  userId: text("user_id").notNull(),
+  role: integer("role").default(0)
+})
+
 export const Question = pgTable("question", {
 	id: serial("id").notNull().primaryKey(),
 	title: varchar("title", { length: 100 }).notNull(),
 	desc: varchar("desc", { length: 100 }),
 	createdAt: timestamp("createdAt", { precision: 6, mode: 'string' }).defaultNow(),
-	option1: varchar("option1", { length: 30 }).notNull(),
-	option2: varchar("option2", { length: 30 }).notNull(),
 	ownerId: text("ownerId").notNull(),
-	image1: text("image1"),
-	image2: text("image2"),
 	isDeleted: boolean("isDeleted").notNull(),
 });
+
+export const Option = pgTable("option", {
+	id: serial("id").notNull().primaryKey(),
+  name: varchar("name", { length: 30 }).notNull(),
+	image: text("image"),
+
+	questionId: integer("questionId").notNull().references(()=>Question.id),
+	ownerId: text("ownerId").notNull(),
+})
+
 
 export const Pushdevices = pgTable("Pushdevices", {
 	id: serial("id").notNull().primaryKey(),
@@ -33,7 +46,7 @@ export const QuestionVotes = pgTable("question_votes", {
 	id: serial("id").notNull().primaryKey(),
 	questionId: integer("questionId").notNull().references(()=>Question.id),
 	ownerId: text("ownerId").notNull(),
-	option: integer("option").notNull(),
+	option: integer("option").notNull().references(()=>Option.id)
 });
 
 export const Comment = pgTable("Comment", {
@@ -48,7 +61,8 @@ export const QuestionLikes = pgTable("question_likes", {
 
 export const questionRelations = relations(Question, ({many})=>({
   votes: many(QuestionVotes),
-  likes: many(QuestionLikes)
+  likes: many(QuestionLikes),
+  option: many(Option)
 }))
 
 export const likesRelation = relations(QuestionLikes, ({one})=>({
@@ -56,5 +70,10 @@ export const likesRelation = relations(QuestionLikes, ({one})=>({
 }))
 
 export const votesRelation = relations(QuestionVotes, ({one})=>({
-  question:   one(Question, {fields: [QuestionVotes.questionId], references: [Question.id]})
+  question:   one(Question, {fields: [QuestionVotes.questionId], references: [Question.id]}),
+  option:   one(Option, {fields: [QuestionVotes.questionId], references: [Option.id]})
+}))
+
+export const optionRelation = relations(Option, ({one})=>({
+  question:   one(Question, {fields: [Option.questionId], references: [Question.id]})
 }))

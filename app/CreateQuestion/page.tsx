@@ -1,30 +1,42 @@
 "use client";
 
 import { Button, FileInput, TextInput } from "@mantine/core";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 import { useForm } from "@mantine/form";
 import { useRouter } from "next/navigation";
 import { PleaseLogin } from "../(PleaseLogin)";
 import { useUser } from "@clerk/nextjs";
 import { useState } from "react";
-import { convertToBase64 } from "./helpers";
 import { Check } from "tabler-icons-react";
 import { displayMessage } from "../Components/Questions/helpers";
-import { showNotification } from "@mantine/notifications";
 import { Question } from "@/db/types";
+import {v4 as uuid} from 'uuid'
 
 export interface ImageState {
-  image1: string | undefined | null;
-  image2: string | undefined | null;
+  image1: Blob | undefined | null;
+  image2: Blob | undefined | null;
+  image3: Blob | undefined | null;
+  image4: Blob | undefined | null;
 }
 
 export default function Page() {
   const router = useRouter();
   const { user, isSignedIn } = useUser();
+  //ToDo: This auth
+  const [premium, _setPremium] = useState<boolean>(true)
 
   const [images, setImages] = useState<ImageState>({
-    image1: "",
-    image2: "",
+    image1: null,
+    image2: null,
+    image3: null,
+    image4: null,
   });
+
+  // useEffect(()=>{
+  //   if(!user)return
+  //   let userRole: number = user.publicMetadata.role as number
+  //   if( userRole >= 1) setPremium(true)
+  // }, [isLoaded])
 
   const form = useForm({
     initialValues: {
@@ -32,51 +44,62 @@ export default function Page() {
       desc: "",
       option1: "",
       option2: "",
+      option3: "",
+      option4: "",
+    },
+    validate: {
+      title: (value) =>
+        value.replaceAll(" ", "").length >= 2 ? null : "Please enter a title",
+      option1: (value) =>
+        value.replaceAll(" ", "").length >= 2
+          ? null
+          : "Please enter a first option",
+      option2: (value) =>
+        value.replaceAll(" ", "").length >= 2
+          ? null
+          : "Please enter a second option",
     },
   });
 
   async function handleCreation(
     values: Omit<
       Question,
-      "image1" | "image2" | "id" | "createdAt" | "ownerId" | "isDeleted"
+      "image1" | "image2" | "image3" | "image4" | "id" | "createdAt" | "ownerId" | "isDeleted"
     >
   ) {
     if (!user) return;
+    const option1Name = uuid() 
+    const option2Name = uuid()
+    const option3Name = uuid()
+    const option4Name = uuid()
+
     await fetch("/api/questions", {
       method: "POST",
       body: JSON.stringify({
         ...values,
-        image1: images.image1 ?? null,
-        image2: images.image2 ?? null,
+        image1: images.image1 ? option1Name : null,
+        image2: images.image2 ? option2Name : null,
+        image3: images.image2 ? option3Name : null,
+        image4: images.image2 ? option4Name : null,
         isDeleted: false,
         ownerId: user.id,
       }),
-    }).then(async(res) => {
-      const r = await res.json()
+    }).then(async (res) => {
+      const r = await res.json();
       if (r.status === 200) {
         displayMessage(r, router, true);
       }
     });
-  }
 
-  async function saveImage(option: 1 | 2, image: File | null) {
-    if (!image) return;
-
-    try {
-      const base64String = await convertToBase64(image);
-
-      if (option === 1) {
-        setImages({ ...images, image1: base64String });
-      } else {
-        setImages({ ...images, image2: base64String });
-      }
-    } catch (e: any) {
-      showNotification({
-        title: "Well uhhh",
-        message: "Seems like that image is too big",
-        color: "red",
-      });
-    }
+    const storage = getStorage();
+    const storageRef1 = ref(storage, option1Name);
+    const storageRef2 = ref(storage, option2Name);
+    const storageRef3 = ref(storage, option3Name);
+    const storageRef4 = ref(storage, option4Name);
+    if (images.image1) uploadBytes(storageRef1, images.image1 as Blob);
+    if (images.image2) uploadBytes(storageRef2, images.image2 as Blob);
+    if (images.image3) uploadBytes(storageRef3, images.image3 as Blob);
+    if (images.image4) uploadBytes(storageRef4, images.image4 as Blob);
   }
 
   return (
@@ -136,7 +159,11 @@ export default function Page() {
             placeholder="Image 1"
             label="Image for first option"
             accept="image/png,image/jpeg"
-            onChange={(v) => saveImage(1, v)}
+            onChange={(v) =>
+              setImages((prev: ImageState) => {
+                return { ...prev, image1: v };
+              })
+            }
           />
 
           <TextInput
@@ -155,12 +182,71 @@ export default function Page() {
           />
 
           <FileInput
-            placeholder="Image 1"
+            placeholder="Image 2"
             label="Image for first option"
             accept="image/png,image/jpeg"
-            onChange={(v) => saveImage(2, v)}
+            onChange={(v) =>
+              setImages((prev: ImageState) => {
+                return { ...prev, image2: v };
+              })
+            }
           />
 
+          {premium && (
+            <>
+              <TextInput
+                label="Option Three"
+                placeholder="How'd you get three options?"
+                sx={{
+                  input: {
+                    color: `${
+                      form.getInputProps("option3").value.length > 30
+                        ? "red"
+                        : "white"
+                    }`,
+                  },
+                }}
+                {...form.getInputProps("option3")}
+              />
+
+              <FileInput
+                placeholder="Image 3"
+                label="Image for third option"
+                accept="image/png,image/jpeg"
+                onChange={(v) =>
+                  setImages((prev: ImageState) => {
+                    return { ...prev, image3: v };
+                  })
+                }
+              />
+
+              <TextInput
+                label="Option Four"
+                placeholder="Wait whaaat?"
+                sx={{
+                  input: {
+                    color: `${
+                      form.getInputProps("option4").value.length > 30
+                        ? "red"
+                        : "white"
+                    }`,
+                  },
+                }}
+                {...form.getInputProps("option4")}
+              />
+
+              <FileInput
+                placeholder="Image 4"
+                label="Image for fourth option"
+                accept="image/png,image/jpeg"
+                onChange={(v) =>
+                  setImages((prev: ImageState) => {
+                    return { ...prev, image4: v };
+                  })
+                }
+              />
+            </>
+          )}
           <Button type="submit" rightIcon={<Check />}>
             Create
           </Button>

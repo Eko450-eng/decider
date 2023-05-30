@@ -57,7 +57,7 @@ export default function Navigation() {
         })}
       >
         <Center>
-          <Tabs variant="outline" defaultValue={path}>
+          <Tabs variant="default" defaultValue={path}>
             <Tabs.List>
               <LinkButton link="/" icon={<Home />} />
               {!user.isSignedIn ? (

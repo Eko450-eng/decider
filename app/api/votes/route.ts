@@ -1,5 +1,5 @@
 import db from "@/db/db";
-import { QuestionVotes } from "@/db/migrations/schema";
+import { Question, QuestionVotes } from "@/db/migrations/schema";
 import { VoteProps } from "@/db/types";
 import { and, eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
@@ -36,16 +36,11 @@ export async function POST(request: NextRequest) {
         };
       });
     return NextResponse.json(res);
-  } else {
+  } else if (currentState[0].option !== props.option) {
     const res = await db
       .update(QuestionVotes)
       .set({
-        // remove vote
-        option:
-          currentState[0].option === props.option
-            ? 0
-            : // Change vote
-              props.option,
+        option: props.option,
       })
       .where(
         and(
@@ -59,10 +54,7 @@ export async function POST(request: NextRequest) {
           notification: {
             title: "Ok",
             message:
-              currentState[0].option === props.option
-                ? "Your vote was removed"
-                : currentState[0].option !== 0 &&
-                  currentState[0].option !== props.option
+              currentState[0].option !== props.option
                 ? "You changed your vote"
                 : "You have voted",
             color: "green",
@@ -70,5 +62,43 @@ export async function POST(request: NextRequest) {
         };
       });
     return NextResponse.json(res);
+  } else {
+    const res = await db
+      .delete(QuestionVotes)
+      .where(
+        and(
+          eq(QuestionVotes.ownerId, props.userId),
+          eq(QuestionVotes.questionId, props.question)
+        )
+      )
+      .then(() => {
+        return {
+          status: 200,
+          notification: {
+            title: "Ok",
+            message: "Your vote was removed",
+            color: "green",
+          },
+        };
+      });
   }
+}
+
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const questionId = Number(searchParams.get("id"));
+  const ownerId = searchParams.get("user");
+
+  console.log(ownerId, questionId)
+  if (!ownerId) return;
+  const res = await db
+    .select()
+    .from(QuestionVotes)
+    .where(
+      and(
+        eq(QuestionVotes.questionId, questionId),
+        eq(QuestionVotes.ownerId, ownerId)
+      )
+    );
+  return NextResponse.json({ voted: res });
 }
