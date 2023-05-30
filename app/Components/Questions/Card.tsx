@@ -38,17 +38,10 @@ export default function Questioncard(ButtonProps: IButtonProps) {
   const { classes } = useStyles();
   const router = useRouter();
 
-  // const image1 = question.image1 ? question.image1.toString() : ""
-  // const image2 = question.image2 ? question.image2.toString() : ""
-  // const image3 = question.image3 ? question.image3.toString() : ""
-  // const image4 = question.image4 ? question.image4.toString() : ""
-
   const form = useForm({
     initialValues: {
       title: question.title,
       desc: question.desc,
-      // option1: question.option1,
-      // option2: question.option2,
     },
   });
 

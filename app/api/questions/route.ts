@@ -1,8 +1,9 @@
 import db from "@/db/db";
 import { NextRequest, NextResponse } from "next/server";
 import { SChangedQuestion, SCreateQuestion } from "../messages";
-import { Question } from "@/db/migrations/schema";
+import { Option, Question } from "@/db/migrations/schema";
 import { and, eq, ne } from "drizzle-orm";
+import { Question as QuestionType } from "@/db/types";
 
 export type questionProps = {
   title: string;
@@ -39,7 +40,28 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   const props: questionProps = await request.json();
-  const { title, desc, option1, option2, option3, option4, image1, image2, image3, image4, ownerId } = props;
+  const {
+    title,
+    desc,
+    option1,
+    option2,
+    option3,
+    option4,
+    image1,
+    image2,
+    image3,
+    image4,
+    ownerId,
+  } = props;
+
+  async function createOptions(q: QuestionType, name: string, image: string) {
+    await db.insert(Option).values({
+      name: name,
+      questionId: q.id,
+      ownerId: ownerId,
+      image: image,
+    });
+  }
 
   const res = await db
     .insert(Question)
@@ -49,15 +71,38 @@ export async function POST(request: NextRequest) {
       ownerId: ownerId,
       isDeleted: false,
     })
-    .then(() => {
+    .returning()
+    .then(async (q) => {
+      if (option1)
+        createOptions(q[0], option1, image1).then(() => {
+          if (option2)
+            createOptions(q[0], option2, image2).then(() => {
+              if (option3)
+                createOptions(q[0], option3, image3).then(() => {
+                  if (option4)
+                    createOptions(q[0], option4, image4);
+                });
+            });
+        });
       return SCreateQuestion;
     });
+
   return NextResponse.json(res);
 }
 
 export async function PATCH(request: NextRequest) {
   const props: updateProps = await request.json();
-  const { title, desc, option1, option2, option3, option4, ownerId, id, isDeleted } = props;
+  const {
+    title,
+    desc,
+    option1,
+    option2,
+    option3,
+    option4,
+    ownerId,
+    id,
+    isDeleted,
+  } = props;
 
   const res = await db
     .update(Question)

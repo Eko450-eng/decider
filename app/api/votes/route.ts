@@ -89,7 +89,6 @@ export async function GET(req: NextRequest) {
   const questionId = Number(searchParams.get("id"));
   const ownerId = searchParams.get("user");
 
-  console.log(ownerId, questionId)
   if (!ownerId) return;
   const res = await db
     .select()
