@@ -3,7 +3,8 @@ import Questioncard from "./Components/Questions/Card";
 import Loading from "./loading";
 
 async function getData() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_HOSTURL}/api/questions`, {
+  const URL = process.env.NODE_ENV === "development" ? "http://localhost:3000" : process.env.NEXT_PUBLIC_HOSTURL
+  const res = await fetch(`${URL}/api/questions`, {
     method: "GET",
     cache: "no-store",
     next: {
