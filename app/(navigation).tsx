@@ -13,13 +13,16 @@ import Link from "next/link";
 interface LinkButtonProps {
   link?: any;
   icon: any;
+  label: string;
 }
 
-function LinkButton({ link, icon }: LinkButtonProps) {
+function LinkButton({ link, icon, label }: LinkButtonProps) {
   return (
-    <Link href={link}>
-      <Tabs.Tab value={link}>{icon}</Tabs.Tab>{" "}
-    </Link>
+    <Tabs.Tab aria-label={label} value={link}>
+      <Link aria-label={label}  href={link}>
+        {icon}
+      </Link>
+    </Tabs.Tab>
   );
 }
 
@@ -59,13 +62,18 @@ export default function Navigation() {
         <Center>
           <Tabs variant="default" defaultValue={path}>
             <Tabs.List>
-              <LinkButton link="/" icon={<Home />} />
+              <LinkButton label="Home" link="/" icon={<Home />} />
               {!user.isSignedIn ? (
-                <LinkButton link="/Signin" icon={<Login />} />
+                <LinkButton label="Sign in" link="/Signin" icon={<Login />} />
               ) : (
                 <>
-                  <LinkButton link="/CreateQuestion" icon={<Plus />} />
                   <LinkButton
+                    label="Create a question"
+                    link="/CreateQuestion"
+                    icon={<Plus />}
+                  />
+                  <LinkButton
+                    label="Profile"
                     link="/user-profile"
                     icon={
                       image == "" ? (
@@ -85,6 +93,7 @@ export default function Navigation() {
               )}
 
               <Tabs.Tab
+                aria-label="Reload"
                 onClick={() => {
                   startTransition(() => {
                     router.refresh();
