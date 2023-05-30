@@ -2,6 +2,7 @@ import "./styles/globals.scss";
 import { ClerkProvider } from "@clerk/nextjs/app-beta";
 import { dark } from "@clerk/themes";
 import { lazy } from "react";
+import { Analytics } from '@vercel/analytics/react'
 
 const Navigation = lazy(() => import("./(navigation)"));
 const RootStyleRegistry = lazy(() => import("./styles/emotion"));
@@ -41,6 +42,7 @@ export default function RootLayout({
             <Navigation />
           </RootStyleRegistry>
         </ClerkProvider>
+        <Analytics />
       </body>
     </html>
   );
