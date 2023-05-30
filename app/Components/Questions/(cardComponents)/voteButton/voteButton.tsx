@@ -1,7 +1,7 @@
 "use client";
 import { Stack } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { EditableVoteButton } from "../buttonComponents/editableButton";
+import { EditableVoteButton } from "./voteButtonEditable";
 import { FullscreenImageModal, VoteImage } from "./voteButtonComponents";
 import { useUser } from "@clerk/nextjs";
 import { QuestionVotes, QuestionWithVotes } from "@/db/types";

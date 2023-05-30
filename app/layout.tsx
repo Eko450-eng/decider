@@ -4,7 +4,7 @@ import { dark } from "@clerk/themes";
 import { lazy } from "react";
 
 const Navigation = lazy(() => import("./(navigation)"));
-const RootStyleRegistry = lazy(() => import("./emotion"));
+const RootStyleRegistry = lazy(() => import("./styles/emotion"));
 
 export const metadata = {
   title: "Decider",
