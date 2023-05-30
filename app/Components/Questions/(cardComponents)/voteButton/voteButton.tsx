@@ -1,11 +1,10 @@
 "use client";
 import { Stack } from "@mantine/core";
-import { experimental_useOptimistic as useOptimistic, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { EditableVoteButton } from "./voteButtonEditable";
 import { FullscreenImageModal, VoteImage } from "./voteButtonComponents";
 import { useUser } from "@clerk/nextjs";
 import { Option, QuestionVotes, QuestionWithVotesAndLikes } from "@/db/types";
-import { getVoteCount } from "./helpers";
 import { displayMessage, noLogin } from "../../helpers";
 import { useRouter } from "next/navigation";
 
@@ -25,27 +24,28 @@ interface IStackProps {
   option: Option;
   voted: number;
   selectedOption: number;
+  votes: QuestionVotes[];
   setVoted: (vote: number)=>void;
   setImageModal: (image: string) => void;
 }
 
 function ButtonWithImage(props: IStackProps) {
-  const { question, isOpen, image, option, setImageModal, voted, setVoted } = props;
-  const { user, isSignedIn, isLoaded } = useUser();
+  const { question, isOpen, image,votes, option, setImageModal, voted, setVoted } = props;
+  const { user, isSignedIn } = useUser();
+  const [voteCount, setVoteCount] = useState<number>(0)
   const router = useRouter()
 
-  const [voteCount, setVoteCount] = useState<number>(0);
-
-  async function getCount() {
-    const resRaw = getVoteCount(question, option.id);
-    const res = await resRaw;
-    setVoteCount(res);
+  function countVotes() {
+    let res: number[] = []
+    votes.map((vote)=>{
+      if(vote.option === option.id) res.push(1)
+    })
+    setVoteCount(res.length)
   }
 
-  useEffect(() => {
-    getCount();
-    if (!isSignedIn) return;
-  }, [isLoaded]);
+  useEffect(()=>{
+    countVotes()
+  }, [question, option])
 
   async function handleVote() {
     if (!isSignedIn) return noLogin(router);
@@ -60,9 +60,9 @@ function ButtonWithImage(props: IStackProps) {
       }),
     }).then(async (res: any) => {
       displayMessage(await res.json(), router);
+      countVotes()
     });
   }
-
 
   return (
     <Stack>
@@ -74,11 +74,11 @@ function ButtonWithImage(props: IStackProps) {
         />
       )}
       <EditableVoteButton
-        voteCount={voteCount}
         voted={voted == option.id}
+        voteCount={voteCount}
         isOpen={isOpen}
-        question={question}
         option={option}
+        votes={votes}
         handleVote={()=>handleVote()}
       />
     </Stack>
@@ -109,7 +109,7 @@ export default function VoteButton(ButtonProps: IButtonProps) {
       cache: "no-store",
     });
     const returnValue = await res.json();
-    setVoted(returnValue.voted[0].option ?? 0);
+    if(returnValue.voted[0]) setVoted(returnValue.voted[0].option ?? 0);
   }
 
   useEffect(() => {
@@ -137,6 +137,7 @@ export default function VoteButton(ButtonProps: IButtonProps) {
                 selectedOption={voted}
                 voted={voted}
                 option={opt}
+                votes={question.votes}
                 setVoted={(vote: number)=>setVoted(vote)}
               />
             );

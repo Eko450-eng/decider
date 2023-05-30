@@ -1,20 +1,19 @@
 "use client";
-import { Button } from "@mantine/core";
+import { Button, Text } from "@mantine/core";
 import { useStyles } from "@/app/styles/styles";
-import { Option, QuestionWithVotes } from "@/db/types";
+import { Option } from "@/db/types";
 
 interface IButtonProps {
-  question: QuestionWithVotes;
   option: Option;
   isOpen: boolean;
-  voteCount: number;
   voted: boolean;
+  voteCount: number;
   handleVote: () => void;
 }
 
 export function EditableVoteButton(ButtonProps: IButtonProps) {
   const { classes } = useStyles();
-  const { handleVote, option, voted, isOpen } = ButtonProps;
+  const { voteCount, handleVote, option, voted, isOpen } = ButtonProps;
 
   return (
     <>
@@ -33,7 +32,7 @@ export function EditableVoteButton(ButtonProps: IButtonProps) {
       >
         {option.name}
         {/* ToDo:Removed for now */}
-        {/* <Text className={classes.voteText}>{voteCount}</Text> */}
+        <Text className={classes.voteText}>{voteCount}</Text>
       </Button>
     </>
   );

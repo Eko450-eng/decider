@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "b8c4d821-f463-46c1-a313-21963e25e433",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "932f8ffa-b421-447c-bf35-f1f3becb8486",
+  "prevId": "b8c4d821-f463-46c1-a313-21963e25e433",
   "tables": {
     "accounts": {
       "name": "accounts",
@@ -63,8 +63,8 @@
           "primaryKey": true,
           "notNull": true
         },
-        "option": {
-          "name": "option",
+        "name": {
+          "name": "name",
           "type": "varchar(30)",
           "primaryKey": false,
           "notNull": true
@@ -331,6 +331,8 @@
   "_meta": {
     "schemas": {},
     "tables": {},
-    "columns": {}
+    "columns": {
+      "\"option\".\"option\"": "\"option\".\"name\""
+    }
   }
 }

@@ -19,8 +19,8 @@ export const Question = pgTable("question", {
 
 export const Option = pgTable("option", {
 	id: serial("id").notNull().primaryKey(),
-  name: varchar("option1", { length: 30 }).notNull(),
-	image: text("image1"),
+  name: varchar("name", { length: 30 }).notNull(),
+	image: text("image"),
 
 	questionId: integer("questionId").notNull().references(()=>Question.id),
 	ownerId: text("ownerId").notNull(),

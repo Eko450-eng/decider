@@ -11,8 +11,8 @@ CREATE TABLE IF NOT EXISTS "Comment" (
 
 CREATE TABLE IF NOT EXISTS "option" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"option1" varchar(30) NOT NULL,
-	"image1" text,
+	"option" varchar(30) NOT NULL,
+	"image" text,
 	"questionId" integer NOT NULL,
 	"ownerId" text NOT NULL
 );
