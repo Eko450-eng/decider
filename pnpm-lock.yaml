@@ -142,6 +142,9 @@ dependencies:
   drizzle-orm:
     specifier: ^0.26.1
     version: 0.26.1(@vercel/postgres@0.3.0)(postgres@3.3.4)
+  encoding:
+    specifier: ^0.1.13
+    version: 0.1.13
   eslint:
     specifier: 8.40.0
     version: 8.40.0
@@ -150,10 +153,10 @@ dependencies:
     version: 13.4.2(eslint@8.40.0)(typescript@5.0.4)
   firebase:
     specifier: ^9.21.0
-    version: 9.21.0
+    version: 9.21.0(encoding@0.1.13)
   firebase-admin:
     specifier: ^11.8.0
-    version: 11.8.0
+    version: 11.8.0(encoding@0.1.13)
   framer-motion:
     specifier: ^10.12.10
     version: 10.12.10(react-dom@18.2.0)(react@18.2.0)
@@ -174,7 +177,7 @@ dependencies:
     version: 18.2.0(react@18.2.0)
   svix:
     specifier: ^0.85.1
-    version: 0.85.1
+    version: 0.85.1(encoding@0.1.13)
   tabler-icons-react:
     specifier: ^1.56.0
     version: 1.56.0(react@18.2.0)
@@ -1749,17 +1752,17 @@ packages:
       tslib: 2.5.0
     dev: false
 
-  /@firebase/auth-compat@0.4.1(@firebase/app-compat@0.2.9)(@firebase/app-types@0.9.0)(@firebase/app@0.9.9):
+  /@firebase/auth-compat@0.4.1(@firebase/app-compat@0.2.9)(@firebase/app-types@0.9.0)(@firebase/app@0.9.9)(encoding@0.1.13):
     resolution: {integrity: sha512-wCw+6Jz7zCWzMA2bN8vphqEUmxuIFxHfBJiF3rKFTCEFPPXG4ulIcmMT98uuZVVq4xDPk/hxm105xwHBFAwBng==}
     peerDependencies:
       '@firebase/app-compat': 0.x
     dependencies:
       '@firebase/app-compat': 0.2.9
-      '@firebase/auth': 0.23.1(@firebase/app@0.9.9)
+      '@firebase/auth': 0.23.1(@firebase/app@0.9.9)(encoding@0.1.13)
       '@firebase/auth-types': 0.12.0(@firebase/app-types@0.9.0)(@firebase/util@1.9.3)
       '@firebase/component': 0.6.4
       '@firebase/util': 1.9.3
-      node-fetch: 2.6.7
+      node-fetch: 2.6.7(encoding@0.1.13)
       tslib: 2.5.0
     transitivePeerDependencies:
       - '@firebase/app'
@@ -1781,7 +1784,7 @@ packages:
       '@firebase/util': 1.9.3
     dev: false
 
-  /@firebase/auth@0.23.1(@firebase/app@0.9.9):
+  /@firebase/auth@0.23.1(@firebase/app@0.9.9)(encoding@0.1.13):
     resolution: {integrity: sha512-QubckPA5Ad92HiY20szjdH7EnFxL8gsZzRLyNCmO2oqebVAVuh9pJp6Zb8EA+P/AuMQYMBo6rQ3oIHi9gUCstg==}
     peerDependencies:
       '@firebase/app': 0.x
@@ -1790,7 +1793,7 @@ packages:
       '@firebase/component': 0.6.4
       '@firebase/logger': 0.4.0
       '@firebase/util': 1.9.3
-      node-fetch: 2.6.7
+      node-fetch: 2.6.7(encoding@0.1.13)
       tslib: 2.5.0
     transitivePeerDependencies:
       - encoding
@@ -1832,14 +1835,14 @@ packages:
       tslib: 2.5.0
     dev: false
 
-  /@firebase/firestore-compat@0.3.8(@firebase/app-compat@0.2.9)(@firebase/app-types@0.9.0)(@firebase/app@0.9.9):
+  /@firebase/firestore-compat@0.3.8(@firebase/app-compat@0.2.9)(@firebase/app-types@0.9.0)(@firebase/app@0.9.9)(encoding@0.1.13):
     resolution: {integrity: sha512-VrTckDEVBqFWFsHGVdQgCb0Tht/Rrg/nKFp2aat0FaIjr8A9t4Pfcuu32Py25SbiCnr98pyh3RmVYs0kbF/lCA==}
     peerDependencies:
       '@firebase/app-compat': 0.x
     dependencies:
       '@firebase/app-compat': 0.2.9
       '@firebase/component': 0.6.4
-      '@firebase/firestore': 3.11.0(@firebase/app@0.9.9)
+      '@firebase/firestore': 3.11.0(@firebase/app@0.9.9)(encoding@0.1.13)
       '@firebase/firestore-types': 2.5.1(@firebase/app-types@0.9.0)(@firebase/util@1.9.3)
       '@firebase/util': 1.9.3
       tslib: 2.5.0
@@ -1859,7 +1862,7 @@ packages:
       '@firebase/util': 1.9.3
     dev: false
 
-  /@firebase/firestore@3.11.0(@firebase/app@0.9.9):
+  /@firebase/firestore@3.11.0(@firebase/app@0.9.9)(encoding@0.1.13):
     resolution: {integrity: sha512-r9qUbjuIKOXAVYwqZaamgXuUJBuV8I2X0Kao5PUxQAPueV2mRapdIlby6awYgjknE8kq1Tlys5Nf5/TV6WtnAg==}
     engines: {node: '>=10.10.0'}
     peerDependencies:
@@ -1872,20 +1875,20 @@ packages:
       '@firebase/webchannel-wrapper': 0.10.0
       '@grpc/grpc-js': 1.7.3
       '@grpc/proto-loader': 0.6.13
-      node-fetch: 2.6.7
+      node-fetch: 2.6.7(encoding@0.1.13)
       tslib: 2.5.0
     transitivePeerDependencies:
       - encoding
     dev: false
 
-  /@firebase/functions-compat@0.3.4(@firebase/app-compat@0.2.9)(@firebase/app@0.9.9):
+  /@firebase/functions-compat@0.3.4(@firebase/app-compat@0.2.9)(@firebase/app@0.9.9)(encoding@0.1.13):
     resolution: {integrity: sha512-kxVxTGyLV1MBR3sp3mI+eQ6JBqz0G5bk310F8eX4HzDFk4xjk5xY0KdHktMH+edM2xs1BOg0vwvvsAHczIjB+w==}
     peerDependencies:
       '@firebase/app-compat': 0.x
     dependencies:
       '@firebase/app-compat': 0.2.9
       '@firebase/component': 0.6.4
-      '@firebase/functions': 0.9.4(@firebase/app@0.9.9)
+      '@firebase/functions': 0.9.4(@firebase/app@0.9.9)(encoding@0.1.13)
       '@firebase/functions-types': 0.6.0
       '@firebase/util': 1.9.3
       tslib: 2.5.0
@@ -1898,7 +1901,7 @@ packages:
     resolution: {integrity: sha512-hfEw5VJtgWXIRf92ImLkgENqpL6IWpYaXVYiRkFY1jJ9+6tIhWM7IzzwbevwIIud/jaxKVdRzD7QBWfPmkwCYw==}
     dev: false
 
-  /@firebase/functions@0.9.4(@firebase/app@0.9.9):
+  /@firebase/functions@0.9.4(@firebase/app@0.9.9)(encoding@0.1.13):
     resolution: {integrity: sha512-3H2qh6U+q+nepO5Hds+Ddl6J0pS+zisuBLqqQMRBHv9XpWfu0PnDHklNmE8rZ+ccTEXvBj6zjkPfdxt6NisvlQ==}
     peerDependencies:
       '@firebase/app': 0.x
@@ -1909,7 +1912,7 @@ packages:
       '@firebase/component': 0.6.4
       '@firebase/messaging-interop-types': 0.2.0
       '@firebase/util': 1.9.3
-      node-fetch: 2.6.7
+      node-fetch: 2.6.7(encoding@0.1.13)
       tslib: 2.5.0
     transitivePeerDependencies:
       - encoding
@@ -2055,14 +2058,14 @@ packages:
       tslib: 2.5.0
     dev: false
 
-  /@firebase/storage-compat@0.3.2(@firebase/app-compat@0.2.9)(@firebase/app-types@0.9.0)(@firebase/app@0.9.9):
+  /@firebase/storage-compat@0.3.2(@firebase/app-compat@0.2.9)(@firebase/app-types@0.9.0)(@firebase/app@0.9.9)(encoding@0.1.13):
     resolution: {integrity: sha512-wvsXlLa9DVOMQJckbDNhXKKxRNNewyUhhbXev3t8kSgoCotd1v3MmqhKKz93ePhDnhHnDs7bYHy+Qa8dRY6BXw==}
     peerDependencies:
       '@firebase/app-compat': 0.x
     dependencies:
       '@firebase/app-compat': 0.2.9
       '@firebase/component': 0.6.4
-      '@firebase/storage': 0.11.2(@firebase/app@0.9.9)
+      '@firebase/storage': 0.11.2(@firebase/app@0.9.9)(encoding@0.1.13)
       '@firebase/storage-types': 0.8.0(@firebase/app-types@0.9.0)(@firebase/util@1.9.3)
       '@firebase/util': 1.9.3
       tslib: 2.5.0
@@ -2082,7 +2085,7 @@ packages:
       '@firebase/util': 1.9.3
     dev: false
 
-  /@firebase/storage@0.11.2(@firebase/app@0.9.9):
+  /@firebase/storage@0.11.2(@firebase/app@0.9.9)(encoding@0.1.13):
     resolution: {integrity: sha512-CtvoFaBI4hGXlXbaCHf8humajkbXhs39Nbh6MbNxtwJiCqxPy9iH3D3CCfXAvP0QvAAwmJUTK3+z9a++Kc4nkA==}
     peerDependencies:
       '@firebase/app': 0.x
@@ -2090,7 +2093,7 @@ packages:
       '@firebase/app': 0.9.9
       '@firebase/component': 0.6.4
       '@firebase/util': 1.9.3
-      node-fetch: 2.6.7
+      node-fetch: 2.6.7(encoding@0.1.13)
       tslib: 2.5.0
     transitivePeerDependencies:
       - encoding
@@ -2140,14 +2143,14 @@ packages:
       tabbable: 6.1.2
     dev: false
 
-  /@google-cloud/firestore@6.5.0:
+  /@google-cloud/firestore@6.5.0(encoding@0.1.13):
     resolution: {integrity: sha512-U0QwG6pEQxO5c0v0eUylswozmuvlvz7iXSW+I18jzqR2hAFrUq2Weu1wm3NaH8wGD4ZL7W9Be4cMHG5CYU8LuQ==}
     engines: {node: '>=12.0.0'}
     requiresBuild: true
     dependencies:
       fast-deep-equal: 3.1.3
       functional-red-black-tree: 1.0.1
-      google-gax: 3.6.0
+      google-gax: 3.6.0(encoding@0.1.13)
       protobufjs: 7.2.3
     transitivePeerDependencies:
       - encoding
@@ -2176,7 +2179,7 @@ packages:
     dev: false
     optional: true
 
-  /@google-cloud/storage@6.10.1:
+  /@google-cloud/storage@6.10.1(encoding@0.1.13):
     resolution: {integrity: sha512-EtLlT0YbXtrbUxaNbEfTyTytrjELtl4i42flf8COg+Hu5+apdNjsFO9XEY39wshxAuVjLf4fCSm7GTSW+BD3gQ==}
     engines: {node: '>=12'}
     requiresBuild: true
@@ -2190,13 +2193,13 @@ packages:
       duplexify: 4.1.2
       ent: 2.2.0
       extend: 3.0.2
-      gaxios: 5.1.0
-      google-auth-library: 8.8.0
+      gaxios: 5.1.0(encoding@0.1.13)
+      google-auth-library: 8.8.0(encoding@0.1.13)
       mime: 3.0.0
       mime-types: 2.1.35
       p-limit: 3.1.0
       retry-request: 5.0.2
-      teeny-request: 8.0.3
+      teeny-request: 8.0.3(encoding@0.1.13)
       uuid: 8.3.2
     transitivePeerDependencies:
       - encoding
@@ -5005,6 +5008,12 @@ packages:
     resolution: {integrity: sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==}
     dev: false
 
+  /encoding@0.1.13:
+    resolution: {integrity: sha512-ETBauow1T35Y/WZMkio9jiM0Z5xjHHmJ4XmjZOq1l/dXz3lr2sRn87nJy20RupqSh1F2m3HHPSp8ShIPQJrJ3A==}
+    dependencies:
+      iconv-lite: 0.6.3
+    dev: false
+
   /end-of-stream@1.4.4:
     resolution: {integrity: sha512-+uw1inIHVPQoaVuHzRyXd21icM+cnt4CzD5rW+NC1wjOUSTOs+Te7FOv7AhN7vS9x/oIyhLP5PR1H+phQAHu5Q==}
     dependencies:
@@ -5872,7 +5881,7 @@ packages:
       path-exists: 4.0.0
     dev: false
 
-  /firebase-admin@11.8.0:
+  /firebase-admin@11.8.0(encoding@0.1.13):
     resolution: {integrity: sha512-RxO0wWDnuqVikXExhVjnhVaaXpziKCad4D1rOX5c1WJdk1jAu9hfE4rbrFKZQZgF1okZS04kgCBIFJro7xn8NQ==}
     engines: {node: '>=14'}
     dependencies:
@@ -5885,14 +5894,14 @@ packages:
       node-forge: 1.3.1
       uuid: 9.0.0
     optionalDependencies:
-      '@google-cloud/firestore': 6.5.0
-      '@google-cloud/storage': 6.10.1
+      '@google-cloud/firestore': 6.5.0(encoding@0.1.13)
+      '@google-cloud/storage': 6.10.1(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
       - supports-color
     dev: false
 
-  /firebase@9.21.0:
+  /firebase@9.21.0(encoding@0.1.13):
     resolution: {integrity: sha512-kQpT+YjusVhqj8feSmb+9Fpmyfy7ayGSd6GVk2k0qJjt+AwYgHZ9tuHuIgFdEHGsvqxYRZJpu067ck9ZQwbqQw==}
     dependencies:
       '@firebase/analytics': 0.10.0(@firebase/app@0.9.9)
@@ -5902,14 +5911,14 @@ packages:
       '@firebase/app-check-compat': 0.3.6(@firebase/app-compat@0.2.9)(@firebase/app@0.9.9)
       '@firebase/app-compat': 0.2.9
       '@firebase/app-types': 0.9.0
-      '@firebase/auth': 0.23.1(@firebase/app@0.9.9)
-      '@firebase/auth-compat': 0.4.1(@firebase/app-compat@0.2.9)(@firebase/app-types@0.9.0)(@firebase/app@0.9.9)
+      '@firebase/auth': 0.23.1(@firebase/app@0.9.9)(encoding@0.1.13)
+      '@firebase/auth-compat': 0.4.1(@firebase/app-compat@0.2.9)(@firebase/app-types@0.9.0)(@firebase/app@0.9.9)(encoding@0.1.13)
       '@firebase/database': 0.14.4
       '@firebase/database-compat': 0.3.4
-      '@firebase/firestore': 3.11.0(@firebase/app@0.9.9)
-      '@firebase/firestore-compat': 0.3.8(@firebase/app-compat@0.2.9)(@firebase/app-types@0.9.0)(@firebase/app@0.9.9)
-      '@firebase/functions': 0.9.4(@firebase/app@0.9.9)
-      '@firebase/functions-compat': 0.3.4(@firebase/app-compat@0.2.9)(@firebase/app@0.9.9)
+      '@firebase/firestore': 3.11.0(@firebase/app@0.9.9)(encoding@0.1.13)
+      '@firebase/firestore-compat': 0.3.8(@firebase/app-compat@0.2.9)(@firebase/app-types@0.9.0)(@firebase/app@0.9.9)(encoding@0.1.13)
+      '@firebase/functions': 0.9.4(@firebase/app@0.9.9)(encoding@0.1.13)
+      '@firebase/functions-compat': 0.3.4(@firebase/app-compat@0.2.9)(@firebase/app@0.9.9)(encoding@0.1.13)
       '@firebase/installations': 0.6.4(@firebase/app@0.9.9)
       '@firebase/installations-compat': 0.2.4(@firebase/app-compat@0.2.9)(@firebase/app-types@0.9.0)(@firebase/app@0.9.9)
       '@firebase/messaging': 0.12.4(@firebase/app@0.9.9)
@@ -5918,8 +5927,8 @@ packages:
       '@firebase/performance-compat': 0.2.4(@firebase/app-compat@0.2.9)(@firebase/app@0.9.9)
       '@firebase/remote-config': 0.4.4(@firebase/app@0.9.9)
       '@firebase/remote-config-compat': 0.2.4(@firebase/app-compat@0.2.9)(@firebase/app@0.9.9)
-      '@firebase/storage': 0.11.2(@firebase/app@0.9.9)
-      '@firebase/storage-compat': 0.3.2(@firebase/app-compat@0.2.9)(@firebase/app-types@0.9.0)(@firebase/app@0.9.9)
+      '@firebase/storage': 0.11.2(@firebase/app@0.9.9)(encoding@0.1.13)
+      '@firebase/storage-compat': 0.3.2(@firebase/app-compat@0.2.9)(@firebase/app-types@0.9.0)(@firebase/app@0.9.9)(encoding@0.1.13)
       '@firebase/util': 1.9.3
     transitivePeerDependencies:
       - encoding
@@ -6018,25 +6027,25 @@ packages:
     resolution: {integrity: sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==}
     dev: false
 
-  /gaxios@5.1.0:
+  /gaxios@5.1.0(encoding@0.1.13):
     resolution: {integrity: sha512-aezGIjb+/VfsJtIcHGcBSerNEDdfdHeMros+RbYbGpmonKWQCOVOes0LVZhn1lDtIgq55qq0HaxymIoae3Fl/A==}
     engines: {node: '>=12'}
     dependencies:
       extend: 3.0.2
       https-proxy-agent: 5.0.1
       is-stream: 2.0.1
-      node-fetch: 2.6.11
+      node-fetch: 2.6.11(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
       - supports-color
     dev: false
     optional: true
 
-  /gcp-metadata@5.2.0:
+  /gcp-metadata@5.2.0(encoding@0.1.13):
     resolution: {integrity: sha512-aFhhvvNycky2QyhG+dcfEdHBF0FRbYcf39s6WNHUDysKSrbJ5vuFbjydxBcmewtXeV248GP8dWT3ByPNxsyHCw==}
     engines: {node: '>=12'}
     dependencies:
-      gaxios: 5.1.0
+      gaxios: 5.1.0(encoding@0.1.13)
       json-bigint: 1.0.0
     transitivePeerDependencies:
       - encoding
@@ -6191,7 +6200,7 @@ packages:
       pinkie-promise: 2.0.1
     dev: false
 
-  /google-auth-library@8.8.0:
+  /google-auth-library@8.8.0(encoding@0.1.13):
     resolution: {integrity: sha512-0iJn7IDqObDG5Tu9Tn2WemmJ31ksEa96IyK0J0OZCpTh6CrC6FrattwKX87h3qKVuprCJpdOGKc1Xi8V0kMh8Q==}
     engines: {node: '>=12'}
     dependencies:
@@ -6199,9 +6208,9 @@ packages:
       base64-js: 1.5.1
       ecdsa-sig-formatter: 1.0.11
       fast-text-encoding: 1.0.6
-      gaxios: 5.1.0
-      gcp-metadata: 5.2.0
-      gtoken: 6.1.2
+      gaxios: 5.1.0(encoding@0.1.13)
+      gcp-metadata: 5.2.0(encoding@0.1.13)
+      gtoken: 6.1.2(encoding@0.1.13)
       jws: 4.0.0
       lru-cache: 6.0.0
     transitivePeerDependencies:
@@ -6210,7 +6219,7 @@ packages:
     dev: false
     optional: true
 
-  /google-gax@3.6.0:
+  /google-gax@3.6.0(encoding@0.1.13):
     resolution: {integrity: sha512-2fyb61vWxUonHiArRNJQmE4tx5oY1ni8VPo08fzII409vDSCWG7apDX4qNOQ2GXXT82gLBn3d3P1Dydh7pWjyw==}
     engines: {node: '>=12'}
     hasBin: true
@@ -6222,9 +6231,9 @@ packages:
       abort-controller: 3.0.0
       duplexify: 4.1.2
       fast-text-encoding: 1.0.6
-      google-auth-library: 8.8.0
+      google-auth-library: 8.8.0(encoding@0.1.13)
       is-stream-ended: 0.1.4
-      node-fetch: 2.6.11
+      node-fetch: 2.6.11(encoding@0.1.13)
       object-hash: 3.0.0
       proto3-json-serializer: 1.1.1
       protobufjs: 7.2.3
@@ -6259,11 +6268,11 @@ packages:
     resolution: {integrity: sha512-bzh50DW9kTPM00T8y4o8vQg89Di9oLJVLW/KaOGIXJWP/iqCN6WKYkbNOF04vFLJhwcpYUh9ydh/+5vpOqV4YQ==}
     dev: false
 
-  /gtoken@6.1.2:
+  /gtoken@6.1.2(encoding@0.1.13):
     resolution: {integrity: sha512-4ccGpzz7YAr7lxrT2neugmXQ3hP9ho2gcaityLVkiUecAiwiy60Ii8gRbZeOsXV19fYaRjgBSshs8kXw+NKCPQ==}
     engines: {node: '>=12.0.0'}
     dependencies:
-      gaxios: 5.1.0
+      gaxios: 5.1.0(encoding@0.1.13)
       google-p12-pem: 4.0.1
       jws: 4.0.0
     transitivePeerDependencies:
@@ -6407,6 +6416,13 @@ packages:
   /human-signals@4.3.1:
     resolution: {integrity: sha512-nZXjEF2nbo7lIw3mgYjItAfgQXog3OjJogSbKa2CQIIvSGWcKgeJnQlNXip6NglNzYH45nSRiEVimMvYL8DDqQ==}
     engines: {node: '>=14.18.0'}
+    dev: false
+
+  /iconv-lite@0.6.3:
+    resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      safer-buffer: 2.1.2
     dev: false
 
   /idb@7.0.1:
@@ -7423,7 +7439,7 @@ packages:
     resolution: {integrity: sha512-VzW+TAk2wE4X9maiKMlT+GsPU4OMmR1U9CrHSmd3DFLn2IcZ9VJ6M6BBugGfYUnPCLSYxXdZy17M0BEJyhUTwg==}
     dev: false
 
-  /node-fetch@2.6.11:
+  /node-fetch@2.6.11(encoding@0.1.13):
     resolution: {integrity: sha512-4I6pdBY1EthSqDmJkiNk3JIT8cswwR9nfeW/cPdUagJYEQG7R95WRH74wpz7ma8Gh/9dI9FP+OU+0E4FvtA55w==}
     engines: {node: 4.x || >=6.0.0}
     peerDependencies:
@@ -7432,10 +7448,11 @@ packages:
       encoding:
         optional: true
     dependencies:
+      encoding: 0.1.13
       whatwg-url: 5.0.0
     dev: false
 
-  /node-fetch@2.6.7:
+  /node-fetch@2.6.7(encoding@0.1.13):
     resolution: {integrity: sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==}
     engines: {node: 4.x || >=6.0.0}
     peerDependencies:
@@ -7444,6 +7461,7 @@ packages:
       encoding:
         optional: true
     dependencies:
+      encoding: 0.1.13
       whatwg-url: 5.0.0
     dev: false
 
@@ -8464,6 +8482,10 @@ packages:
       is-regex: 1.1.4
     dev: false
 
+  /safer-buffer@2.1.2:
+    resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
+    dev: false
+
   /sass@1.62.1:
     resolution: {integrity: sha512-NHpxIzN29MXvWiuswfc1W3I0N8SXBd8UR26WntmDlRYf0bSADnwnOjsyMZ3lMezSlArD33Vs3YFhp7dWvL770A==}
     engines: {node: '>=14.0.0'}
@@ -8819,22 +8841,22 @@ packages:
     engines: {node: '>= 0.4'}
     dev: false
 
-  /svix-fetch@3.0.0:
+  /svix-fetch@3.0.0(encoding@0.1.13):
     resolution: {integrity: sha512-rcADxEFhSqHbraZIsjyZNh4TF6V+koloX1OzZ+AQuObX9mZ2LIMhm1buZeuc5BIZPftZpJCMBsSiBaeszo9tRw==}
     dependencies:
-      node-fetch: 2.6.11
+      node-fetch: 2.6.11(encoding@0.1.13)
       whatwg-fetch: 3.6.2
     transitivePeerDependencies:
       - encoding
     dev: false
 
-  /svix@0.85.1:
+  /svix@0.85.1(encoding@0.1.13):
     resolution: {integrity: sha512-BzBDc9CLuiqR0rZcZIQtutOSO5IGm15ImrChVtu2YxFvZIkhAvZSbO2v1bJdEYlApFHGrI/rGm5/rFBAyLZ4+w==}
     dependencies:
       '@stablelib/base64': 1.0.1
       es6-promise: 4.2.8
       fast-sha256: 1.3.0
-      svix-fetch: 3.0.0
+      svix-fetch: 3.0.0(encoding@0.1.13)
       url-parse: 1.5.10
     transitivePeerDependencies:
       - encoding
@@ -8883,13 +8905,13 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
-  /teeny-request@8.0.3:
+  /teeny-request@8.0.3(encoding@0.1.13):
     resolution: {integrity: sha512-jJZpA5He2y52yUhA7pyAGZlgQpcB+xLjcN0eUFxr9c8hP/H7uOXbBNVo/O0C/xVfJLJs680jvkFgVJEEvk9+ww==}
     engines: {node: '>=12'}
     dependencies:
       http-proxy-agent: 5.0.0
       https-proxy-agent: 5.0.1
-      node-fetch: 2.6.11
+      node-fetch: 2.6.11(encoding@0.1.13)
       stream-events: 1.0.5
       uuid: 9.0.0
     transitivePeerDependencies:

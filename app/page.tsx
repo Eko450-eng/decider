@@ -1,6 +1,7 @@
 import { Question } from "@/db/types";
 import Questioncard from "./Components/Questions/Card";
 import Loading from "./loading";
+import { Suspense } from "react";
 
 async function getData() {
   const URL = process.env.NODE_ENV === "development" ? "http://localhost:3000" : process.env.NEXT_PUBLIC_HOSTURL
@@ -22,6 +23,7 @@ export default async function Home() {
   return (
     <main className="main">
       <div className="cards-wrapper">
+        <Suspense fallback={<Loading />}>
         {(prod && data)
           ? data.map((v: any, k: number) => {
               const { createdAt, ...question } = v;
@@ -37,6 +39,7 @@ export default async function Home() {
           : [...Array(20).keys()].map((i: number) => {
               return <Loading key={`placeholder-${i}`} />;
             })}
+            </Suspense>
       </div>
     </main>
   );

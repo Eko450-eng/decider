@@ -58,6 +58,7 @@
     "dayjs": "^1.11.7",
     "drizzle-kit": "^0.18.0",
     "drizzle-orm": "^0.26.1",
+    "encoding": "^0.1.13",
     "eslint": "8.40.0",
     "eslint-config-next": "13.4.2",
     "firebase": "^9.21.0",
