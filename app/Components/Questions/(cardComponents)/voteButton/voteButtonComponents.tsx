@@ -81,6 +81,7 @@ export function VoteImage(props: ImageProps) {
               onClick={() => setModal()}
               src={imageUrl}
               quality={70}
+              sizes="100%"
               fill
               style={fullscreen ? {} : { maxWidth: "5rem", maxHeight: "5rem" }}
             />
